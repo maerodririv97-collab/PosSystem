@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 29/09/2018 08:57:53 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="pos_system" name="models.Facturas" optimistic-lock="version" table="facturas">
+    <id name="idFactura" type="java.lang.Integer">
+      <column name="id_factura"/>
+      <generator class="identity"/>
+    </id>
+    <property name="codigo" type="string">
+      <column length="100" name="codigo" not-null="true"/>
+    </property>
+    <property name="nombreProveedor" type="string">
+      <column length="450" name="nombre_proveedor" not-null="true"/>
+    </property>
+    <property name="fecha" type="date">
+      <column length="10" name="fecha" not-null="true"/>
+    </property>
+    <set fetch="select" inverse="true" lazy="true" name="ingresoproductoses" table="ingresoproductos">
+      <key>
+        <column name="factura" not-null="true"/>
+      </key>
+      <one-to-many class="models.Ingresoproductos"/>
+    </set>
+  </class>
+</hibernate-mapping>

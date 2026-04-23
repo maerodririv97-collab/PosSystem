@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 29/09/2018 08:57:53 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="pos_system" name="models.Operaciones" optimistic-lock="version" table="operaciones">
+    <id name="idOperacion" type="java.lang.Integer">
+      <column name="id_operacion"/>
+      <generator class="identity"/>
+    </id>
+    <many-to-one class="models.ConceptosOperaciones" fetch="select" name="conceptosOperaciones">
+      <column name="tipo_concepto" not-null="true"/>
+    </many-to-one>
+    <many-to-one class="models.Turnos" fetch="select" name="turnos">
+      <column name="turno" not-null="true"/>
+    </many-to-one>
+    <many-to-one class="models.Usuarios" fetch="select" name="usuarios">
+      <column name="administrador" not-null="true"/>
+    </many-to-one>
+    <property name="tipo" type="string">
+      <column length="8" name="tipo" not-null="true"/>
+    </property>
+    <property name="valor" type="int">
+      <column name="valor" not-null="true"/>
+    </property>
+    <property name="fecha" type="timestamp">
+      <column length="19" name="fecha" not-null="true"/>
+    </property>
+    <property name="concepto" type="string">
+      <column length="100" name="concepto" not-null="true"/>
+    </property>
+  </class>
+</hibernate-mapping>

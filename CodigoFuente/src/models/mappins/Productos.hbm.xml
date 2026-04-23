@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 29/09/2018 08:57:53 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="models.Productos" table="productos" catalog="pos_system" optimistic-lock="version">
+        <id name="idProducto" type="java.lang.Integer">
+            <column name="id_producto" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="categorias" class="models.Categorias" fetch="select">
+            <column name="categoria" not-null="true" />
+        </many-to-one>
+        <property name="codigoBarras" type="string">
+            <column name="codigo_barras" length="100" not-null="true" />
+        </property>
+        <property name="nombre" type="string">
+            <column name="nombre" length="50" not-null="true" />
+        </property>
+        <property name="costo" type="int">
+            <column name="costo" not-null="true" />
+        </property>
+        <property name="valor" type="int">
+            <column name="valor" not-null="true" />
+        </property>
+        <property name="stock" type="big_decimal">
+            <column name="stock" precision="5" not-null="true" />
+        </property>
+        <property name="servicio" type="boolean">
+            <column name="servicio" not-null="true" />
+        </property>
+        <property name="tipoVenta" type="string">
+            <column name="tipo_venta" length="6" not-null="true" />
+        </property>
+        <property name="imagen" type="string">
+            <column name="imagen" length="45" not-null="true" />
+        </property>
+        <property name="estado" type="string">
+            <column name="estado" length="8" not-null="true" />
+        </property>
+        <set name="ingresoproductoses" table="ingresoproductos" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="producto" not-null="true" />
+            </key>
+            <one-to-many class="models.Ingresoproductos" />
+        </set>
+         <set name="subproductosesForProducto" table="subproductos" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="producto" not-null="true" />
+            </key>
+            <one-to-many class="models.Subproductos" />
+        </set>
+         <set name="subproductosesForSubproducto" table="subproductos" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="subproducto" not-null="true" />
+            </key>
+            <one-to-many class="models.Subproductos" />
+        </set>
+     
+    </class>
+</hibernate-mapping>

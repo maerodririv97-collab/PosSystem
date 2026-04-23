@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="200" pageHeight="280" columnWidth="196" leftMargin="1" rightMargin="3" topMargin="1" bottomMargin="1" isIgnorePagination="true" uuid="102a4b5f-1780-4c08-9d9c-a1a67406d4ec">
+	<property name="ireport.zoom" value="4.132231404958688"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="models.Ventas"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["\\src\\reports\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fecha" class="java.util.Date"/>
+	<parameter name="productos" class="java.util.List"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="producto" class="java.lang.String">
+		<fieldDescription><![CDATA[producto]]></fieldDescription>
+	</field>
+	<field name="ingreso" class="java.lang.Integer">
+		<fieldDescription><![CDATA[ingreso]]></fieldDescription>
+	</field>
+	<field name="base" class="java.lang.Integer">
+		<fieldDescription><![CDATA[base]]></fieldDescription>
+	</field>
+	<field name="salida" class="java.lang.Integer">
+		<fieldDescription><![CDATA[salida]]></fieldDescription>
+	</field>
+	<field name="stock" class="java.lang.Integer">
+		<fieldDescription><![CDATA[stock]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="37">
+			<textField pattern="MMM dd &apos;de&apos; YYYY HH:mm">
+				<reportElement x="18" y="15" width="158" height="13" uuid="99a7c22b-54c6-4105-a1de-a0742cc4e0ff"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Aller" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fecha}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="18" y="0" width="158" height="15" uuid="bf9640cd-be47-4262-84a3-cad7ae709eb4"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Aller" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporte Inventario]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="15">
+			<line>
+				<reportElement x="0" y="13" width="198" height="1" uuid="1772936c-aed8-4116-8a19-d332f2102b59"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="0" y="0" width="125" height="14" uuid="2a41c1c6-0b75-4068-a905-ef47f33e6bc3"/>
+				<textElement textAlignment="Center">
+					<font fontName="Aller" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Producto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="125" y="0" width="22" height="14" uuid="bb2feb69-1315-48cb-8038-b2b5e6489d9b"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Aller" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ing]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="169" y="0" width="26" height="14" uuid="50ee0409-7250-4b90-96dc-06f1cfff4fa2"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Aller" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Stock]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="147" y="0" width="22" height="14" uuid="7233e2ed-ef89-4386-84fe-db6639eb24ac"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Aller" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sal]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="125" height="13" uuid="beed51ae-c202-403e-a821-0f5be1aecaa3"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{producto}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement stretchType="RelativeToTallestObject" x="125" y="0" width="22" height="13" uuid="c35ee4c5-6dcd-412e-af6a-a8f18976916e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ingreso}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement stretchType="RelativeToTallestObject" x="147" y="0" width="22" height="13" uuid="ba05d7ce-4f2a-44f8-afc2-5e42724adc50"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{salida}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement stretchType="RelativeToTallestObject" x="169" y="0" width="26" height="13" uuid="b136a041-1514-4024-bf7b-3a61a4325690"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{stock}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="12" width="199" height="1" uuid="7df175fc-683b-440a-97c5-78513984ee55"/>
+				<graphicElement>
+					<pen lineWidth="0.25" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="29">
+			<line>
+				<reportElement x="0" y="0" width="199" height="1" uuid="5b36f132-ed7a-4918-8026-ab1fdceb72d4"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="1" y="14" width="195" height="12" uuid="a38d7ee2-ab9e-40fc-a750-5a657b156c8e"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[POSystem - Powered by &Source Ltda]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

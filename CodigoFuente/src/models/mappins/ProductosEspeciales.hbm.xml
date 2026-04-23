@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 11/09/2018 03:39:04 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="pos_system" name="models.ProductosEspeciales" optimistic-lock="version" table="productos_especiales">
+    <id name="idProductoEspecial" type="java.lang.Integer">
+      <column name="id_producto_especial"/>
+      <generator class="identity"/>
+    </id>
+    <many-to-one class="models.PreciosEspeciales" fetch="select" name="preciosEspeciales">
+      <column name="precio_especial" not-null="true"/>
+    </many-to-one>
+    <many-to-one class="models.Productos" fetch="select" name="productos">
+      <column name="producto" not-null="true"/>
+    </many-to-one>
+    <property name="valor" type="int">
+      <column name="valor" not-null="true"/>
+    </property>
+  </class>
+</hibernate-mapping>

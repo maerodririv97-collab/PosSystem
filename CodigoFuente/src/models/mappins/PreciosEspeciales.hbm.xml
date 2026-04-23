@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 11/09/2018 03:39:04 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="pos_system" name="models.PreciosEspeciales" optimistic-lock="version" table="precios_especiales">
+    <id name="idPrecioEspecial" type="java.lang.Integer">
+      <column name="id_precio_especial"/>
+      <generator class="identity"/>
+    </id>
+    <property name="fechaInicio" type="timestamp">
+      <column length="19" name="fecha_inicio" not-null="true"/>
+    </property>
+    <property name="fechaFin" type="timestamp">
+      <column length="19" name="fecha_fin" not-null="true"/>
+    </property>
+    <property name="estado" type="string">
+      <column length="8" name="estado" not-null="true"/>
+    </property>
+    <set fetch="select" inverse="true" lazy="true" name="productosEspecialeses" table="productos_especiales">
+      <key>
+        <column name="precio_especial" not-null="true"/>
+      </key>
+      <one-to-many class="models.ProductosEspeciales"/>
+    </set>
+  </class>
+</hibernate-mapping>

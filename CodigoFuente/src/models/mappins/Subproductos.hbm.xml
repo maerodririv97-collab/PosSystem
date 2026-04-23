@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 29/08/2018 10:20:13 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="models.Subproductos" table="subproductos" catalog="pos_system" optimistic-lock="version">
+        <id name="idSubproducto" type="java.lang.Integer">
+            <column name="id_subproducto" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="productosByProducto" class="models.Productos" fetch="select">
+            <column name="producto" not-null="true" />
+        </many-to-one>
+        <many-to-one name="productosBySubproducto" class="models.Productos" fetch="select">
+            <column name="subproducto" not-null="true" />
+        </many-to-one>
+        <property name="cantidad" type="big_decimal">
+            <column name="cantidad" precision="5" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

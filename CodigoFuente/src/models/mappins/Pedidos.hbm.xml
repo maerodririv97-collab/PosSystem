@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 29/08/2018 10:20:13 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="pos_system" name="models.Pedidos" optimistic-lock="version" table="pedidos">
+    <id name="idPedido" type="java.lang.Integer">
+      <column name="id_pedido"/>
+      <generator class="identity"/>
+    </id>
+    <many-to-one class="models.Productos" fetch="select" name="producto">
+      <column name="producto" not-null="true"/>
+    </many-to-one>
+    <many-to-one class="models.Ventas" fetch="select" name="venta">
+      <column name="venta" not-null="true"/>
+    </many-to-one>
+    <property name="valor" type="int">
+      <column name="valor" not-null="true"/>
+    </property>
+    <property name="cantidad" type="int">
+      <column name="cantidad" not-null="true"/>
+    </property>
+    <property name="compra" type="int">
+      <column name="compra" not-null="true"/>
+    </property>
+    <property name="impreso" type="boolean">
+      <column name="impreso" not-null="true"/>
+    </property>
+    <property name="descuento" type="java.lang.Integer">
+      <column name="descuento"/>
+    </property>
+    <property name="conceptoDesc" type="string">
+      <column length="100" name="concepto_desc"/>
+    </property>
+    <set fetch="select" inverse="true" lazy="true" name="servicioses" table="servicios" cascade="delete">
+      <key>
+        <column name="pedido" not-null="true"/>
+      </key>
+      <one-to-many class="models.Servicios"/>
+    </set>
+  </class>
+</hibernate-mapping>

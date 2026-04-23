@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 29/09/2018 08:57:53 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="pos_system" name="models.ConceptosOperaciones" optimistic-lock="version" table="conceptos_operaciones">
+    <id name="idConceptoOperacion" type="java.lang.Integer">
+      <column name="id_concepto_operacion"/>
+      <generator class="identity"/>
+    </id>
+    <property name="nombre" type="string">
+      <column length="150" name="nombre" not-null="true"/>
+    </property>
+    <property name="descripcion" type="string">
+      <column length="65535" name="descripcion" not-null="true"/>
+    </property>
+    <set fetch="select" inverse="true" lazy="true" name="operacioneses" table="operaciones">
+      <key>
+        <column name="tipo_concepto" not-null="true"/>
+      </key>
+      <one-to-many class="models.Operaciones"/>
+    </set>
+  </class>
+</hibernate-mapping>

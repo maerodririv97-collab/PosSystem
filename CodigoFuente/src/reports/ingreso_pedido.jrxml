@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="200" pageHeight="280" columnWidth="196" leftMargin="1" rightMargin="3" topMargin="1" bottomMargin="1" isIgnorePagination="true" uuid="102a4b5f-1780-4c08-9d9c-a1a67406d4ec">
+	<property name="ireport.zoom" value="4.132231404958688"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="models.Ventas"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["\\src\\reports\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Ingreso" class="models.Ingresoproductos"/>
+	<parameter name="Total" class="java.lang.Double"/>
+	<parameter name="factura" class="models.Facturas"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="cantidad" class="java.lang.Integer">
+		<fieldDescription><![CDATA[cantidad]]></fieldDescription>
+	</field>
+	<field name="costoIngreso" class="java.lang.Double">
+		<fieldDescription><![CDATA[costoIngreso]]></fieldDescription>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<fieldDescription><![CDATA[productos.nombre]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="59">
+			<textField pattern="MMM dd &apos;de&apos; YYYY HH:mm">
+				<reportElement x="1" y="13" width="195" height="14" uuid="7925d9bb-78c2-42b7-a127-32bdcd0f9b1c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Aller" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{factura}.getFecha()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="0" width="197" height="15" uuid="c8e1ef47-050a-4ae3-8859-0cf1841948f5"/>
+				<textElement textAlignment="Center">
+					<font fontName="Aller" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Ingreso Productos N° "+ $P{factura}.getIdFactura()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="9" y="29" width="69" height="15" uuid="a7eb2ca6-359e-48c3-b369-fd09af04ae01"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Aller" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Factura N°]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="81" y="29" width="85" height="15" uuid="fe5257d7-4077-47c7-a9e3-5c94917a05e9"/>
+				<textElement>
+					<font fontName="Aller"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{factura}.getCodigo()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="81" y="42" width="85" height="15" uuid="3c271aaa-e2e3-4729-aa90-86f5f04b5e10"/>
+				<textElement>
+					<font fontName="Aller"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{factura}.getNombreProveedor()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="9" y="42" width="69" height="15" uuid="f519b1c3-319d-4425-b560-709a6bb62ec9"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Aller" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Proveedor:]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="14">
+			<staticText>
+				<reportElement x="144" y="0" width="52" height="14" uuid="2b2ee104-926a-4ba6-90e7-52230e9dafc6"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Aller" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[V. Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="26" height="14" uuid="2a41c1c6-0b75-4068-a905-ef47f33e6bc3"/>
+				<textElement>
+					<font fontName="Aller" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cant]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="0" width="69" height="14" uuid="bc144584-ac55-4559-b6b7-278fbd5eaaec"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Aller" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="95" y="0" width="49" height="13" uuid="fd656d0f-4659-48a4-95de-85e930de0b3f"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Aller" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[V. Und]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="39" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="-1" width="198" height="1" uuid="1772936c-aed8-4116-8a19-d332f2102b59"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<subreport>
+				<reportElement x="1" y="0" width="195" height="39" uuid="0d78284a-53a1-45f1-982c-134ae34152b2"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{factura}.getPedidos())]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "productos_pedido.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="46">
+			<staticText>
+				<reportElement x="1" y="34" width="195" height="12" uuid="02655661-2e03-4ce3-b829-c0c30a735f62"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tahoma" size="8" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[POSystem - Powered by &Source Ltda]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="108" y="7" width="36" height="13" uuid="72fc92f6-a932-455f-aa72-e216fe4ef320"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Aller" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[TOTAL:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="0" width="199" height="1" uuid="5b36f132-ed7a-4918-8026-ab1fdceb72d4"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<textField pattern="¤#,##0">
+				<reportElement x="144" y="7" width="52" height="13" uuid="c4324e3b-fdf9-4c86-aebc-2b35a6660806"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Aller" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{factura}.getTotal()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

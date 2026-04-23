@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 29/09/2018 08:57:53 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="models.Usuarios" table="usuarios" catalog="pos_system" optimistic-lock="version">
+        <id name="idUsuario" type="java.lang.Integer">
+            <column name="id_usuario" />
+            <generator class="identity" />
+        </id>
+        <property name="nombres" type="string">
+            <column name="nombres" length="50" not-null="true" />
+        </property>
+        <property name="apellidos" type="string">
+            <column name="apellidos" length="50" not-null="true" />
+        </property>
+        <property name="pin" type="short">
+            <column name="pin" not-null="true" unique="true" />
+        </property>
+        <property name="perfil" type="string">
+            <column name="perfil" length="13" not-null="true" />
+        </property>
+        <property name="estado" type="string">
+            <column name="estado" length="8" not-null="true" />
+        </property>
+        <set name="operacioneses" table="operaciones" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="administrador" not-null="true" />
+            </key>
+            <one-to-many class="models.Operaciones" />
+        </set>
+    </class>
+</hibernate-mapping>

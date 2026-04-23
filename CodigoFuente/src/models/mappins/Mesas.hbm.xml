@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 29/08/2018 10:20:13 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="models.Mesas" table="mesas" catalog="pos_system" optimistic-lock="version">
+        <id name="idMesa" type="java.lang.Integer">
+            <column name="id_mesa" />
+            <generator class="identity" />
+        </id>
+        <property name="numero" type="string">
+            <column name="numero" length="45" not-null="true" unique="true" />
+        </property>
+        <property name="tipo" type="string">
+            <column name="tipo" length="5" not-null="true" />
+        </property>
+        <property name="estado" type="string">
+            <column name="estado" length="8" not-null="true" />
+        </property>
+        <set name="ventases" table="ventas" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="mesa" not-null="true" />
+            </key>
+            <one-to-many class="models.Ventas" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 29/09/2018 08:57:53 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="models.Turnos" table="turnos" catalog="pos_system" optimistic-lock="version">
+        <id name="idTurno" type="java.lang.Integer">
+            <column name="id_turno" />
+            <generator class="identity" />
+        </id>
+        <property name="apertura" type="timestamp">
+            <column name="apertura" length="19" not-null="true" />
+        </property>
+        <property name="cierre" type="timestamp">
+            <column name="cierre" length="19" not-null="true" />
+        </property>
+        <property name="valorInicial" type="int">
+            <column name="valor_inicial" not-null="true" />
+        </property>
+        <property name="estado" type="string">
+            <column name="estado" length="8" not-null="true" />
+        </property>
+        <set name="operacioneses" table="operaciones" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="turno" not-null="true" />
+            </key>
+            <one-to-many class="models.Operaciones" />
+        </set>
+        <set name="ventases" table="ventas" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="turno" not-null="true" />
+            </key>
+            <one-to-many class="models.Ventas" />
+        </set>
+    </class>
+</hibernate-mapping>
