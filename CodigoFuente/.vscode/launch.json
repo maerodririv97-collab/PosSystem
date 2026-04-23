@@ -9,6 +9,13 @@
             "name": "login",
             "request": "launch",
             "mainClass": "forms.login",
+            "projectName": "CodigoFuente_1368daa6"
+        },
+        {
+            "type": "java",
+            "name": "login",
+            "request": "launch",
+            "mainClass": "forms.login",
             "projectName": "POSystem_955781f"
         },
         {
