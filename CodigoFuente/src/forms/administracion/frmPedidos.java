@@ -47,7 +47,7 @@ public class frmPedidos extends javax.swing.JFrame implements Runnable {
         this.setLocationRelativeTo(this);
         ImageIcon img = new ImageIcon(getClass().getResource("/images/icon_app.png"));
         this.setIconImage(img.getImage().getScaledInstance(180,180, Image.SCALE_SMOOTH));
-        this.setTitle("POSystem - Powered by &Source Ltda");
+        this.setTitle("POSystem - Powered by KIM-Solutions");
         
         hilo = new Thread(this);
         hilo.start();
@@ -140,7 +140,6 @@ public class frmPedidos extends javax.swing.JFrame implements Runnable {
         
         listVentas = q.list();
         
-        System.out.println("CANT:"+listVentas.size());
         
         for(Ventas dataVenta:listVentas) {     
             JButton btnPedido = new JButton("<html>Pedido # "+dataVenta.getIdVenta()+"<br> Ubicacion: "+dataVenta.getMesas().getTipo()+" "+dataVenta.getMesas().getNumero()+"<br>Mesero: "
@@ -158,7 +157,7 @@ public class frmPedidos extends javax.swing.JFrame implements Runnable {
             } );
             
             PanelPedidos.add(btnPedido);
-            System.out.println(dataVenta.getIdVenta());
+            //System.out.println(dataVenta.getIdVenta());
         }
         s.clear();
         s.flush();

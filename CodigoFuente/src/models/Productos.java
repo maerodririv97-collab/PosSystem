@@ -127,7 +127,7 @@ public class Productos  implements java.io.Serializable {
         
         String hora = format_hora_completa.format(date);
         int hora_int = Integer.parseInt(hora);
-        System.out.println("id es : "+getIdProducto()+ "la hora: "+hora_int);
+        //System.out.println("id es : "+getIdProducto()+ "la hora: "+hora_int);
         
         
       if(getIdProducto() != null){

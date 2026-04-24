@@ -46,7 +46,7 @@ public class frmRegistrarOperacion extends javax.swing.JFrame {
          this.setLocationRelativeTo(this);
         ImageIcon img = new ImageIcon(getClass().getResource("/images/icon_app.png"));
         this.setIconImage(img.getImage().getScaledInstance(180,180, Image.SCALE_SMOOTH));
-        this.setTitle("POSystem - Powered by &Source Ltda");
+        this.setTitle("POSystem - Powered by KIM-Solutions");
         
         this.parent = p;
         
