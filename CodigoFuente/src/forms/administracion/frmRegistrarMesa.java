@@ -46,14 +46,17 @@ public class frmRegistrarMesa extends javax.swing.JFrame {
         
         initComponents();
         
+        this.Parent = p;
+        this.modo = modo;
+        this.mesa = objMesa;
         
         
-        if(modo.equalsIgnoreCase("Create")){
+        if ("Create".equalsIgnoreCase(modo)) {
             lblEstado.setVisible(false);
             txtEstado.setVisible(false);
         }
         
-        txtNumero.setText(String.valueOf(objMesa.getNumero()));
+       txtNumero.setText((objMesa != null && objMesa.getNumero() != null) ? String.valueOf(objMesa.getNumero()) : "");
         
         if(objMesa.getTipo()== null){
            

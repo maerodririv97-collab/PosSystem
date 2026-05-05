@@ -22,6 +22,8 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
+import net.sf.jasperreports.view.JasperViewer;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -45,7 +47,7 @@ public class frmModoPago extends javax.swing.JFrame {
         this.setLocationRelativeTo(this);
         ImageIcon img = new ImageIcon(getClass().getResource("/images/icon_app.png"));
         this.setIconImage(img.getImage().getScaledInstance(180,180, Image.SCALE_SMOOTH));
-        this.setTitle("POSystem - Powered by &Source Ltda");
+        this.setTitle("POSystem - Powered by KIM-Solutions");
         
     }
 
@@ -152,6 +154,7 @@ public class frmModoPago extends javax.swing.JFrame {
                         
                         JasperPrint jasperPrint = JasperFillManager.fillReport("src\\reports\\venta.jasper",params,new JREmptyDataSource());
                         
+                        //JasperViewer.viewReport(jasperPrint, false);
                         JasperPrintManager.printReport(jasperPrint, false);   
                             new Home_Administracion().setVisible(true);
                         }catch (JRException ex){

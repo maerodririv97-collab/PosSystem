@@ -209,11 +209,11 @@ public class Ventas  implements java.io.Serializable {
         }
         
         if(venta != null){
-            System.out.println("Si Existe");
+            //System.out.println("Si Existe");
             return true;
             
         }else{
-            System.out.println("No Existe");
+            //System.out.println("No Existe");
             return false;
         }
        

@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "JasperCompiler",
+            "request": "launch",
+            "mainClass": "models.JasperCompiler",
+            "projectName": "CodigoFuente_1368daa6"
+        },
+        {
+            "type": "java",
             "name": "login",
             "request": "launch",
             "mainClass": "forms.login",

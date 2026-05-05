@@ -85,7 +85,7 @@ public class frmMesas extends javax.swing.JFrame {
         this.setLocationRelativeTo(this);
         ImageIcon img = new ImageIcon(getClass().getResource("/images/icon_app.png"));
         this.setIconImage(img.getImage().getScaledInstance(180,180, Image.SCALE_SMOOTH));
-        this.setTitle("POSystem - Powered by &Source Ltda");
+        this.setTitle("POSystem - Powered by KIM-Solutions");
         
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         
@@ -152,7 +152,7 @@ public class frmMesas extends javax.swing.JFrame {
                 Isla.setForeground(Color.blue);
                 Isla.setText("<html><center>"+dataIsla.getTipo()+" "+dataIsla.getNumero()+"</center>SIN PEDIDOS</html>");
             }
-            System.out.println(Objmesa.mtdDisponibilidad(dataIsla.getIdMesa(), turno.getIdTurno()).getIdVenta());
+            //System.out.println(Objmesa.mtdDisponibilidad(dataIsla.getIdMesa(), turno.getIdTurno()).getIdVenta());
          }else{
             System.out.println("Vacio ");
         }
@@ -170,7 +170,7 @@ public class frmMesas extends javax.swing.JFrame {
                                 
                                
                                 venta.setMesas(dataIsla);
-                                System.out.println(getTurno().getApertura()+" estado: "+turno.getEstado());
+                                //System.out.println(getTurno().getApertura()+" estado: "+turno.getEstado());
                                 
                                 session.beginTransaction();
                                 session.save(venta);
@@ -194,7 +194,7 @@ public class frmMesas extends javax.swing.JFrame {
                     formPrincipal.setVisible(true);
                     formPrincipal.setVenta(venta);
                     
-                    System.out.println("la venta: "+venta.getIdVenta());
+                    //System.out.println("la venta: "+venta.getIdVenta());
                     
 
                      p.setVisible(false);
@@ -246,7 +246,7 @@ public class frmMesas extends javax.swing.JFrame {
                                
                                 venta.setMesas(dataBarra);
                                 
-                                System.out.println(turno.getApertura()+" estado: "+turno.getEstado()+" Id: "+turno.getIdTurno());
+                                //System.out.println(turno.getApertura()+" estado: "+turno.getEstado()+" Id: "+turno.getIdTurno());
                                 trns = session.beginTransaction();
                                 session.save(venta);
                                 session.getTransaction().commit();
@@ -313,7 +313,7 @@ public class frmMesas extends javax.swing.JFrame {
                                
                                 venta.setMesas(dataMesa);
                                 
-                                System.out.println(turno.getApertura()+" estado: "+turno.getEstado());
+                                //System.out.println(turno.getApertura()+" estado: "+turno.getEstado());
                                 session.beginTransaction();
                                 session.save(venta);
                                 session.getTransaction().commit();

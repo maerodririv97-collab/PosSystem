@@ -1,303 +1,165 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="200" pageHeight="400" columnWidth="196" leftMargin="1" rightMargin="3" topMargin="1" bottomMargin="1" isIgnorePagination="true" uuid="102a4b5f-1780-4c08-9d9c-a1a67406d4ec">
-	<property name="ireport.zoom" value="4.132231404958688"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="187"/>
-	<import value="models.Ventas"/>
-	<style name="Crosstab Data Text" hAlign="Center"/>
-	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["\\src\\reports\\"]]></defaultValueExpression>
-	</parameter>
-	<parameter name="turno" class="models.Turnos"/>
-	<queryString>
-		<![CDATA[]]>
-	</queryString>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
-	<pageHeader>
-		<band height="39">
-			<staticText>
-				<reportElement x="11" y="0" width="52" height="15" uuid="48785cd5-0717-4d0d-8d35-28598e85737f"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Aller" size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Turno #]]></text>
-			</staticText>
-			<textField pattern="###0">
-				<reportElement x="26" y="16" width="26" height="15" uuid="ae311012-5b72-401a-8f1d-7a35f4670204"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="Aller" size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{turno}.getIdTurno()]]></textFieldExpression>
-			</textField>
-			<textField pattern="MMM dd &apos;de&apos; YYYY HH:mm">
-				<reportElement x="108" y="4" width="88" height="13" uuid="7925d9bb-78c2-42b7-a127-32bdcd0f9b1c"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Aller" size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{turno}.getApertura()]]></textFieldExpression>
-			</textField>
-			<textField pattern="MMM dd &apos;de&apos; YYYY HH:mm">
-				<reportElement x="108" y="19" width="88" height="13" uuid="99a7c22b-54c6-4105-a1de-a0742cc4e0ff"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Aller" size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{turno}.getCierre()]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="80" y="4" width="28" height="13" uuid="968a60f5-d88b-4bed-af87-0fb56869de31"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Aller" size="5" isBold="true"/>
-				</textElement>
-				<text><![CDATA[F. Apertura:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="80" y="19" width="28" height="13" uuid="53d68e90-0ba2-4a9c-9d30-efdf78bf9e41"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Aller" size="5" isBold="true"/>
-				</textElement>
-				<text><![CDATA[F. Cierre:]]></text>
-			</staticText>
-			<line>
-				<reportElement x="81" y="18" width="115" height="1" uuid="74c342f8-4107-4770-83e2-eed0f636430f"/>
-				<graphicElement>
-					<pen lineWidth="0.5" lineStyle="Dotted"/>
-				</graphicElement>
-			</line>
-		</band>
-	</pageHeader>
-	<columnHeader>
-		<band height="16">
-			<staticText>
-				<reportElement x="145" y="2" width="51" height="14" uuid="2b2ee104-926a-4ba6-90e7-52230e9dafc6"/>
-				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font fontName="Aller" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Valor]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="2" width="26" height="14" uuid="2a41c1c6-0b75-4068-a905-ef47f33e6bc3"/>
-				<textElement textAlignment="Center">
-					<font fontName="Aller" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Fact.]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="27" y="2" width="42" height="14" uuid="bc144584-ac55-4559-b6b7-278fbd5eaaec"/>
-				<textElement verticalAlignment="Top">
-					<font fontName="Aller" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Mesa]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="89" y="2" width="55" height="14" uuid="8aa5fe75-ebb8-4169-8c50-642a246d7d83"/>
-				<textElement verticalAlignment="Top">
-					<font fontName="Aller" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Forma Pago]]></text>
-			</staticText>
-		</band>
-	</columnHeader>
-	<detail>
-		<band height="52" splitType="Stretch">
-			<line>
-				<reportElement x="0" y="-1" width="198" height="1" uuid="1772936c-aed8-4116-8a19-d332f2102b59"/>
-				<graphicElement>
-					<pen lineWidth="0.5"/>
-				</graphicElement>
-			</line>
-			<subreport>
-				<reportElement x="0" y="1" width="196" height="50" uuid="7bf9bf57-c518-4531-91ac-8f735b1e994b"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{turno}.getVentas(false))]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "turno_ventas.jasper"]]></subreportExpression>
-			</subreport>
-		</band>
-		<band height="32">
-			<staticText>
-				<reportElement x="1" y="1" width="195" height="12" uuid="e6ac3882-d9c5-4a75-89a4-ea5007cd40d8"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Aller" size="8" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Cortesías]]></text>
-			</staticText>
-			<subreport>
-				<reportElement x="0" y="13" width="196" height="17" uuid="db5c1ea2-0372-4fe1-93c8-afb234c87d41"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{turno}.getCortesias())]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "turno_ventas.jasper"]]></subreportExpression>
-			</subreport>
-			<line>
-				<reportElement x="-1" y="0" width="199" height="1" uuid="b7abb75d-0b35-42d6-9870-6d49cd2e9844"/>
-				<graphicElement>
-					<pen lineWidth="0.5" lineStyle="Dashed"/>
-				</graphicElement>
-			</line>
-		</band>
-		<band height="39">
-			<line>
-				<reportElement x="0" y="0" width="199" height="1" uuid="412ce107-b1bb-4297-8967-a6e7738e0765"/>
-				<graphicElement>
-					<pen lineWidth="0.5" lineStyle="Dashed"/>
-				</graphicElement>
-			</line>
-			<staticText>
-				<reportElement x="1" y="0" width="195" height="13" uuid="f17c1f23-f43d-4929-93e2-5b53ebf1a0fb"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Aller" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[DETALLE OPERACIONES]]></text>
-			</staticText>
-			<subreport>
-				<reportElement x="6" y="23" width="190" height="15" uuid="fd070013-9778-4a99-8fbd-a347ce259826"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{turno}.getOperaciones("Salida"))]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "turno_operaciones.jasper"]]></subreportExpression>
-			</subreport>
-			<staticText>
-				<reportElement mode="Transparent" x="1" y="13" width="195" height="10" backcolor="#FFFFFF" uuid="62d14048-151e-42c8-b420-4f1a93f90d6b"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Aller" size="8" isBold="false"/>
-				</textElement>
-				<text><![CDATA[** Egresos **]]></text>
-			</staticText>
-		</band>
-		<band height="26">
-			<subreport>
-				<reportElement x="5" y="10" width="190" height="15" uuid="4efcd54a-9534-4bf9-a9dd-0e09c745c6ff"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{turno}.getOperaciones("Ingreso"))]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "turno_operaciones.jasper"]]></subreportExpression>
-			</subreport>
-			<staticText>
-				<reportElement mode="Transparent" x="0" y="0" width="195" height="10" backcolor="#FFFFFF" uuid="afd6c8c2-0913-4233-ba59-a72b21717446"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Aller" size="8" isBold="false"/>
-				</textElement>
-				<text><![CDATA[** Ingresos **]]></text>
-			</staticText>
-		</band>
-	</detail>
-	<pageFooter>
-		<band height="127">
-			<staticText>
-				<reportElement x="38" y="18" width="87" height="10" uuid="72fc92f6-a932-455f-aa72-e216fe4ef320"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Aller" size="8" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Efectivo:]]></text>
-			</staticText>
-			<textField pattern="¤#,##0">
-				<reportElement x="125" y="18" width="71" height="10" uuid="c4324e3b-fdf9-4c86-aebc-2b35a6660806"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Aller" size="8" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{turno}.getTotalTPago("Efectivo")]]></textFieldExpression>
-			</textField>
-			<line>
-				<reportElement x="0" y="0" width="199" height="1" uuid="5b36f132-ed7a-4918-8026-ab1fdceb72d4"/>
-				<graphicElement>
-					<pen lineWidth="0.5" lineStyle="Dashed"/>
-				</graphicElement>
-			</line>
-			<textField pattern="¤#,##0">
-				<reportElement x="125" y="5" width="71" height="13" uuid="5fa6abdc-7c87-43ee-b972-52052ab2b34b"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Aller" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{turno}.getTotalVentas()]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤#,##0">
-				<reportElement x="125" y="28" width="71" height="10" uuid="eef0d57f-ae7a-45bc-81ca-d7788ca1f069"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Aller" size="8" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{turno}.getTotalTPago("Tarjeta")]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="38" y="28" width="87" height="10" uuid="a4617f5f-0c7c-429c-a3e0-48a46001183e"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Aller" size="8" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Tarjeta:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="38" y="5" width="87" height="13" uuid="a1e6e58f-d510-4ec0-868d-7bb6a2d3e4c5"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Aller" size="10" isBold="false"/>
-				</textElement>
-				<text><![CDATA[TOTAL VENTAS]]></text>
-			</staticText>
-			<textField pattern="¤#,##0">
-				<reportElement x="125" y="91" width="71" height="13" uuid="6200ddfc-7708-47fb-b9f4-4f967eaf5239"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Aller" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{turno}.getTotalCaja()]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="64" y="91" width="60" height="13" uuid="3a7cbe55-76b4-42e8-b063-72b563a52db7"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Aller" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Saldo Final:]]></text>
-			</staticText>
-			<textField pattern="¤#,##0">
-				<reportElement x="125" y="78" width="71" height="13" uuid="5aba5a92-4e1b-40b5-88ad-3df4e5643517"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Aller" size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{turno}.getValorInicial()]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="64" y="78" width="60" height="13" uuid="20f9329b-cf02-4cce-a42f-036dc3c494b7"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Aller" size="10" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Saldo Inicial:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="1" y="115" width="195" height="12" uuid="a38d7ee2-ab9e-40fc-a750-5a657b156c8e"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Tahoma" size="8" isBold="false" isItalic="true"/>
-				</textElement>
-				<text><![CDATA[POSystem - Powered by &Source Ltda]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="37" y="54" width="87" height="10" uuid="f0747205-3b6d-47d8-ba15-c8f9b36d2853"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Aller" size="8" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Egresos:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="37" y="64" width="87" height="10" uuid="1a57a380-f5b9-4fe4-9ad3-7c89d3bcd3da"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Aller" size="8" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Ingresos:]]></text>
-			</staticText>
-			<textField pattern="¤#,##0">
-				<reportElement x="124" y="54" width="71" height="10" uuid="bc07bf18-8ef0-494a-820c-f8856bda61e2"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Aller" size="8" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{turno}.getTotalOperaciones("Salida")]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤#,##0">
-				<reportElement x="124" y="64" width="71" height="10" uuid="41600411-e572-4a71-bfac-ddf11f35c1f6"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Aller" size="8" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{turno}.getTotalOperaciones("Ingreso")]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="38" y="42" width="87" height="13" uuid="8bea278a-fc54-43fe-a4ec-9b822f9cc6db"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Aller" size="10" isBold="false"/>
-				</textElement>
-				<text><![CDATA[OPERACIONES]]></text>
-			</staticText>
-		</band>
-	</pageFooter>
-	<summary>
-		<band/>
-	</summary>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cierre_turno" language="java" pageWidth="200" pageHeight="400" columnWidth="196" leftMargin="1" rightMargin="3" topMargin="1" bottomMargin="1" isIgnorePagination="true" uuid="102a4b5f-1780-4c08-9d9c-a1a67406d4ec">
+    <property name="ireport.zoom" value="3.0"/>
+    <property name="ireport.x" value="0"/>
+    <property name="ireport.y" value="0"/>
+    <import value="java.util.*"/>
+    <import value="net.sf.jasperreports.engine.data.*"/>
+    <import value="models.Turnos"/>
+    <parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+        <defaultValueExpression><![CDATA["\\src\\reports\\"]]></defaultValueExpression>
+    </parameter>
+    <parameter name="turno" class="models.Turnos"/>
+    <queryString>
+        <![CDATA[]]>
+    </queryString>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <pageHeader>
+        <band height="39">
+            <staticText>
+                <reportElement x="11" y="0" width="52" height="15" uuid="48785cd5-0717-4d0d-8d35-28598e85737f"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="Arial" size="12" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Turno #]]></text>
+            </staticText>
+            <textField pattern="###0">
+                <reportElement x="26" y="16" width="26" height="15" uuid="ae311012-5b72-401a-8f1d-7a35f4670204"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="Arial" size="12" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{turno}.getIdTurno()]]></textFieldExpression>
+            </textField>
+            <textField pattern="MMM dd &apos;de&apos; YYYY HH:mm">
+                <reportElement x="108" y="4" width="88" height="13" uuid="7925d9bb-78c2-42b7-a127-32bdcd0f9b1c"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="Arial" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{turno}.getApertura()]]></textFieldExpression>
+            </textField>
+            <textField pattern="MMM dd &apos;de&apos; YYYY HH:mm">
+                <reportElement x="108" y="19" width="88" height="13" uuid="99a7c22b-54c6-4105-a1de-a0742cc4e0ff"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="Arial" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{turno}.getCierre()]]></textFieldExpression>
+            </textField>
+            <line>
+                <reportElement x="81" y="18" width="115" height="1" uuid="74c342f8-4107-4770-83e2-eed0f636430f"/>
+                <graphicElement>
+                    <pen lineWidth="0.5" lineStyle="Dotted"/>
+                </graphicElement>
+            </line>
+        </band>
+    </pageHeader>
+    <columnHeader>
+        <band height="16">
+            <staticText>
+                <reportElement x="145" y="2" width="51" height="14" uuid="2b2ee104-926a-4ba6-90e7-52230e9dafc6"/>
+                <textElement textAlignment="Center" verticalAlignment="Top">
+                    <font fontName="Arial" size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Valor]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="2" width="26" height="14" uuid="2a41c1c6-0b75-4068-a905-ef47f33e6bc3"/>
+                <textElement textAlignment="Center">
+                    <font fontName="Arial" size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Fact.]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="27" y="2" width="42" height="14" uuid="bc144584-ac55-4559-b6b7-278fbd5eaaec"/>
+                <textElement verticalAlignment="Top">
+                    <font fontName="Arial" size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Mesa]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="52" splitType="Stretch">
+            <subreport>
+                <reportElement x="0" y="1" width="196" height="50" uuid="7bf9bf57-c518-4531-91ac-8f735b1e994b"/>
+                <dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource((java.util.Collection)$P{turno}.getVentas())]]></dataSourceExpression>
+                <subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "turno_ventas.jasper"]]></subreportExpression>
+            </subreport>
+        </band>
+        <band height="32">
+            <subreport>
+                <reportElement x="0" y="13" width="196" height="17" uuid="db5c1ea2-0372-4fe1-93c8-afb234c87d41"/>
+                <dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource((java.util.Collection)$P{turno}.getCortesias())]]></dataSourceExpression>
+                <subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "turno_ventas.jasper"]]></subreportExpression>
+            </subreport>
+        </band>
+        <band height="39">
+            <subreport>
+                <reportElement x="6" y="23" width="190" height="15" uuid="fd070013-9778-4a99-8fbd-a347ce259826"/>
+                <dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource((java.util.Collection)$P{turno}.getOperaciones("Salida"))]]></dataSourceExpression>
+                <subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "turno_operaciones.jasper"]]></subreportExpression>
+            </subreport>
+        </band>
+        <band height="26">
+            <subreport>
+                <reportElement x="5" y="10" width="190" height="15" uuid="4efcd54a-9534-4bf9-a9dd-0e09c745c6ff"/>
+                <dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource((java.util.Collection)$P{turno}.getOperaciones("Ingreso"))]]></dataSourceExpression>
+                <subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "turno_operaciones.jasper"]]></subreportExpression>
+            </subreport>
+        </band>
+    </detail>
+    <pageFooter>
+        <band height="120">
+            <textField pattern="¤#,##0">
+                <reportElement x="125" y="18" width="71" height="10" uuid="c4324e3b-fdf9-4c86-aebc-2b35a6660806"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="Arial" size="8" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{turno}.getTotalTPago("Efectivo")]]></textFieldExpression>
+            </textField>
+            <textField pattern="¤#,##0">
+                <reportElement x="125" y="5" width="71" height="13" uuid="5fa6abdc-7c87-43ee-b972-52052ab2b34b"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="Arial" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{turno}.getTotalVentas()]]></textFieldExpression>
+            </textField>
+            <textField pattern="¤#,##0">
+                <reportElement x="125" y="28" width="71" height="10" uuid="eef0d57f-ae7a-45bc-81ca-d7788ca1f069"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="Arial" size="8" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{turno}.getTotalTPago("Tarjeta")]]></textFieldExpression>
+            </textField>
+            <textField pattern="¤#,##0">
+                <reportElement x="125" y="91" width="71" height="13" uuid="6200ddfc-7708-47fb-b9f4-4f967eaf5239"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="Arial" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{turno}.getTotalCaja()]]></textFieldExpression>
+            </textField>
+            <textField pattern="¤#,##0">
+                <reportElement x="125" y="78" width="71" height="13" uuid="5aba5a92-4e1b-40b5-88ad-3df4e5643517"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="Arial" size="10"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{turno}.getValorInicial()]]></textFieldExpression>
+            </textField>
+            <textField pattern="¤#,##0">
+                <reportElement x="124" y="54" width="71" height="10" uuid="bc07bf18-8ef0-494a-820c-f8856bda61e2"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="Arial" size="8" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{turno}.getTotalOperaciones("Salida")]]></textFieldExpression>
+            </textField>
+            <textField pattern="¤#,##0">
+                <reportElement x="124" y="64" width="71" height="10" uuid="41600411-e572-4a71-bfac-ddf11f35c1f6"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="Arial" size="8" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{turno}.getTotalOperaciones("Ingreso")]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
 </jasperReport>
