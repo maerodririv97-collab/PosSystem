@@ -113,6 +113,24 @@ public class Mesas  implements java.io.Serializable {
         return mesas;
     }
     
+      public models.Mesas mtdGetMesaLlevar() {
+        
+        models.Mesas mesa = null;
+        Transaction trns = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            session.getTransaction().begin();
+            mesa = (Mesas) session.createQuery("SELECT M FROM Mesas M WHERE M.numero = '00'").uniqueResult();
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return mesa;
+    }
+    
     
   public models.Ventas mtdDisponibilidad(int IdMesa,int IdTurno){
       int cantidad = 0;

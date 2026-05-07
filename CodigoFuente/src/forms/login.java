@@ -21,6 +21,8 @@ import models.Ventas;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.jvnet.substance.SubstanceLookAndFeel;
+import com.formdev.flatlaf.FlatLightLaf;
+import javax.swing.UIManager;
 
 
 /**
@@ -86,6 +88,7 @@ public class login extends javax.swing.JFrame {
 
         jButton_7.setFont(new java.awt.Font("Leelawadee", 0, 40)); // NOI18N
         jButton_7.setText("7");
+        jButton_7.setFocusPainted(false);
         jButton_7.setMinimumSize(null);
         jButton_7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -185,7 +188,7 @@ public class login extends javax.swing.JFrame {
         jPanel1.add(jButton_0);
 
         jBDelete.setFont(new java.awt.Font("Calibri", 0, 40)); // NOI18N
-        jBDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/remove.png"))); // NOI18N
+        jBDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/borrar.png"))); // NOI18N
         jBDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBDeleteActionPerformed(evt);
@@ -205,7 +208,7 @@ public class login extends javax.swing.JFrame {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 388, 430, 250));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente.png"))); // NOI18N
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 11, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, -1, -1));
 
         jPassField.setColumns(5);
         jPassField.setFont(new java.awt.Font("Archive", 0, 48)); // NOI18N
@@ -218,6 +221,7 @@ public class login extends javax.swing.JFrame {
         });
         getContentPane().add(jPassField, new org.netbeans.lib.awtextra.AbsoluteConstraints(166, 271, 255, 70));
 
+        jLblInfo.setBackground(new java.awt.Color(0, 0, 0));
         jLblInfo.setFont(new java.awt.Font("Leelawadee UI", 1, 18)); // NOI18N
         jLblInfo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLblInfo.setText("Ingrese su PIN");
@@ -322,8 +326,18 @@ public class login extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    JFrame.setDefaultLookAndFeelDecorated(false);
-                    SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.RavenGraphiteGlassSkin");
+                    /*////JFrame.setDefaultLookAndFeelDecorated(false);
+                    SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.ModerateSkin");*/
+                    FlatLightLaf.setup();
+                    
+                    UIManager.put("Button.arc", 15);
+                    UIManager.put("Component.arc", 10);
+
+                    UIManager.put("Button.background", new Color(106, 130, 110)); // verde oliva
+                    UIManager.put("Panel.background", new Color(245, 245, 245)); // fondo general
+                    UIManager.put("Button.foreground", Color.WHITE);
+                    UIManager.put("Button.focusPainted", false);
+                    
                 } catch (Exception e2) {
                 }
                 new login().setVisible(true);
@@ -358,13 +372,6 @@ public class login extends javax.swing.JFrame {
                             
                            if(turno != null){
                                
-                                try {
-                                JFrame.setDefaultLookAndFeelDecorated(true);
-                                SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.RavenGraphiteGlassSkin");
-                                } catch (Exception e2) {
-                                }
-                                
-                               
                                 frmMesas formMesas = new frmMesas(new Ventas(),turno,user,"Mesero");
                                 formMesas.setVisible(true);
                                 
@@ -380,8 +387,7 @@ public class login extends javax.swing.JFrame {
 
                         case "Administrador":
                             
-                            JFrame.setDefaultLookAndFeelDecorated(true);
-                            SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.RavenGraphiteGlassSkin");
+                           
                             
                             Home_Administracion.admin = user;
                             new Home_Administracion().setVisible(true);

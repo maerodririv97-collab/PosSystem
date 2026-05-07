@@ -140,8 +140,8 @@ public class NewJFrame extends javax.swing.JFrame {
                 
                 
                 try {
-                    JFrame.setDefaultLookAndFeelDecorated(false);
-                    SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.RavenGraphiteGlassSkin");
+                    ////JFrame.setDefaultLookAndFeelDecorated(false);
+                    //SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.BusinessSkin");
                 } catch (Exception e2) {
                 }
                 new NewJFrame().setVisible(true);

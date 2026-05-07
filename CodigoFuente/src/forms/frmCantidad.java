@@ -18,6 +18,8 @@ import models.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+
+
 /**
  *
  * @author Manuel Rodriguez
@@ -110,7 +112,6 @@ public class frmCantidad extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblCantidad.setFont(new java.awt.Font("Leelawadee UI", 1, 48)); // NOI18N
-        lblCantidad.setForeground(new java.awt.Color(255, 255, 255));
         lblCantidad.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         getContentPane().add(lblCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, 160, 70));
 
@@ -231,7 +232,6 @@ public class frmCantidad extends javax.swing.JFrame {
         getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 480, 90, 60));
 
         lblText.setFont(new java.awt.Font("Leelawadee UI", 1, 36)); // NOI18N
-        lblText.setForeground(new java.awt.Color(255, 255, 255));
         lblText.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblText.setText("Cantidad:");
         getContentPane().add(lblText, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, 160, 70));

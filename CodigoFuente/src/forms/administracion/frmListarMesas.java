@@ -20,6 +20,8 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 //import models.TmMesas;
 /**
  *
@@ -46,12 +48,22 @@ public class frmListarMesas extends javax.swing.JFrame {
         lisMesas = mesa.listarmesas();
        
         DefaultTableModel df = (DefaultTableModel) TablaMesas.getModel();
+        
+        TablaMesas.removeColumn(TablaMesas.getColumnModel().getColumn(1));
             
             for (models.Mesas dataMesa:lisMesas) {
                 
                 df.addRow(new Object[]{dataMesa, dataMesa.getIdMesa(),dataMesa.getTipo(),dataMesa.getNumero(),dataMesa.getEstado() });
                 
             }
+            
+                    DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+                    centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+                    // Aplicamos a las columnas que el usuario sí ve (2, 3 y 4)
+                    TablaMesas.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+                    TablaMesas.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+                    TablaMesas.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
             
             Home_Administracion form = Parent;
         frmListarMesas listForm = this;
@@ -106,7 +118,7 @@ public class frmListarMesas extends javax.swing.JFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente_small.png"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(57, 11, 250, 179));
 
-        TablaMesas.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        TablaMesas.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         TablaMesas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -155,7 +167,7 @@ public class frmListarMesas extends javax.swing.JFrame {
         getContentPane().add(jBDelete12, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 540, 150, 39));
 
         jBExit.setFont(new java.awt.Font("Leelawadee", 0, 40)); // NOI18N
-        jBExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/exit.png"))); // NOI18N
+        jBExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/exit2.png"))); // NOI18N
         jBExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBExitActionPerformed(evt);

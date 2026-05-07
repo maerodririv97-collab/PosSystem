@@ -68,7 +68,7 @@ public class frmModoPago extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
-        btnTarjeta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/tarjeta.png"))); // NOI18N
+        btnTarjeta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/qr.png"))); // NOI18N
         btnTarjeta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTarjetaActionPerformed(evt);
@@ -77,6 +77,7 @@ public class frmModoPago extends javax.swing.JFrame {
 
         btnEfectivo.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
         btnEfectivo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/efectivo.png"))); // NOI18N
+        btnEfectivo.setFocusPainted(false);
         btnEfectivo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnEfectivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -87,7 +88,7 @@ public class frmModoPago extends javax.swing.JFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente_small.png"))); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
-        jLabel2.setText("TARJETA");
+        jLabel2.setText("TRANSFERENCIA / QR");
 
         jLabel3.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
         jLabel3.setText("EFECTIVO");
@@ -109,7 +110,7 @@ public class frmModoPago extends javax.swing.JFrame {
                         .addComponent(btnTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(25, 25, 25))
             .addGroup(layout.createSequentialGroup()
-                .addGap(91, 91, 91)
+                .addGap(141, 141, 141)
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -184,7 +185,7 @@ public class frmModoPago extends javax.swing.JFrame {
 
     private void btnTarjetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTarjetaActionPerformed
            
-           this.venta.setFormaPago("Tarjeta");
+           this.venta.setFormaPago("Transferencia");
            this.venta.setEstado("Pagada");
         
             Transaction trns = null;

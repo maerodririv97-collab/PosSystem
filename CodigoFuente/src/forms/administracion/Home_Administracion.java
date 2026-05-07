@@ -54,22 +54,33 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
     
     public Turnos objTurno = new Turnos();
     public static Turnos turnoAbierto;
+    public static Turnos turnoAnterior;
+    public static double valorCaja;
     public static models.Usuarios admin;
     public Calendar calendario;
     
     public Home_Administracion() {
         initComponents();
-   /* Funcion : centrar  pantalla  y asignar tamaño por defecto 
-    Nota :  esto se adapata en todo tipo de pantalla  pues  sse basa en la lectura de ancho y alto de pantalla 
-  * Desarrollador :(Brayan cristancho) 
-  * Fecha de creacion : 03/08/2018**/
+        
+        
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        
+        
         this.setLocationRelativeTo(this);
         ImageIcon img = new ImageIcon(getClass().getResource("/images/icon_app.png"));
         this.setIconImage(img.getImage().getScaledInstance(180,180, Image.SCALE_SMOOTH));
         this.setTitle("POSystem - Powered by KIM-Solutions");
         
         turnoAbierto = objTurno.mtdTurnoAbierto();
+        turnoAnterior = objTurno.mtdLastTurno();
         
+        if(turnoAnterior != null){
+            valorCaja = turnoAnterior.getTotalCaja();
+        }else if(turnoAbierto != null){
+            valorCaja = turnoAbierto.getTotalCaja();    
+        }else{
+            valorCaja = 0.0;
+        }
         
        
        if(turnoAbierto == null){
@@ -79,7 +90,7 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
            btnOperaciones.setEnabled(false);
            btnPedidos.setEnabled(false);
            btnVentas.setEnabled(false);
-           lblSaldoCaja.setText("<html>Saldo Actual: <br> "+String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(objTurno.mtdLastTurno().getTotalCaja()))+"</html>");
+           lblSaldoCaja.setText("<html>Saldo en Caja: <br> "+String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(valorCaja))+"</html>");
            
        }else{
           
@@ -89,7 +100,7 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
           btnAbrirTurno.setVisible(false);
           
           lblInfoTurno.setText(String.valueOf(fecha.format(turnoAbierto.getApertura())));
-          lblSaldoCaja.setText("<html>Saldo Actual: <br> "+String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(turnoAbierto.getTotalCaja()))+"</html>");
+          lblSaldoCaja.setText("<html>Saldo Actual: <br> "+String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(valorCaja))+"</html>");
        }
        
        
@@ -139,41 +150,40 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
         lblMes = new javax.swing.JLabel();
         btnMesas = new javax.swing.JButton();
         jBTurnos1 = new javax.swing.JButton();
-        btnPreciosEspeciales = new javax.swing.JButton();
         btnFacturas = new javax.swing.JButton();
         lblSaldoCaja = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
-        setMaximumSize(new java.awt.Dimension(1024, 768));
-        setMinimumSize(new java.awt.Dimension(1024, 768));
-        setPreferredSize(new java.awt.Dimension(1024, 768));
+        setMaximumSize(new java.awt.Dimension(1920, 1080));
+        setMinimumSize(new java.awt.Dimension(1920, 1080));
+        setPreferredSize(new java.awt.Dimension(1920, 1080));
+        setSize(new java.awt.Dimension(1920, 1080));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente_small.png"))); // NOI18N
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 250, 170));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente.png"))); // NOI18N
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 30, 300, 240));
 
-        btnUsuarios.setFont(new java.awt.Font("Aller", 0, 24)); // NOI18N
-        btnUsuarios.setText("Usuarios");
+        btnUsuarios.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        btnUsuarios.setText("Gestion Usuarios");
         btnUsuarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUsuariosActionPerformed(evt);
             }
         });
-        getContentPane().add(btnUsuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 470, 210, 60));
+        getContentPane().add(btnUsuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 540, 240, 60));
 
-        btnAbrirTurno.setFont(new java.awt.Font("Aller", 0, 30)); // NOI18N
-        btnAbrirTurno.setForeground(new java.awt.Color(0, 156, 222));
+        btnAbrirTurno.setFont(new java.awt.Font("Arial", 0, 30)); // NOI18N
         btnAbrirTurno.setText("Abrir Turno");
         btnAbrirTurno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAbrirTurnoActionPerformed(evt);
             }
         });
-        getContentPane().add(btnAbrirTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 280, 240, 70));
+        getContentPane().add(btnAbrirTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(1130, 240, 240, 70));
 
-        btnCerrarTurno.setFont(new java.awt.Font("Aller", 0, 30)); // NOI18N
-        btnCerrarTurno.setForeground(new java.awt.Color(185, 54, 129));
+        btnCerrarTurno.setFont(new java.awt.Font("Arial", 0, 30)); // NOI18N
         btnCerrarTurno.setText("Cerrar Turno");
         btnCerrarTurno.setFocusable(false);
         btnCerrarTurno.addActionListener(new java.awt.event.ActionListener() {
@@ -181,134 +191,129 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
                 btnCerrarTurnoActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCerrarTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 350, 240, 60));
+        getContentPane().add(btnCerrarTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(1130, 310, 240, 60));
 
-        btnVentas.setFont(new java.awt.Font("Aller", 0, 24)); // NOI18N
-        btnVentas.setText("Venta");
+        btnVentas.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        btnVentas.setText("Iniciar Venta");
         btnVentas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVentasActionPerformed(evt);
             }
         });
-        getContentPane().add(btnVentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 470, 180, 130));
+        getContentPane().add(btnVentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 320, 390, 260));
 
-        btnProductos.setFont(new java.awt.Font("Aller", 0, 24)); // NOI18N
-        btnProductos.setText("Productos");
+        btnProductos.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        btnProductos.setText("Gestion Productos");
         btnProductos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnProductosActionPerformed(evt);
             }
         });
-        getContentPane().add(btnProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 610, 210, 60));
+        getContentPane().add(btnProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 680, 240, 60));
 
-        btnCategorias.setFont(new java.awt.Font("Aller", 0, 24)); // NOI18N
-        btnCategorias.setText("Categorias");
+        btnCategorias.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        btnCategorias.setText("Gestion Categorias");
         btnCategorias.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCategoriasActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 540, 210, 60));
+        getContentPane().add(btnCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 610, 240, 60));
 
-        jBVentas.setFont(new java.awt.Font("Aller", 0, 24)); // NOI18N
-        jBVentas.setText("Ventas");
+        jBVentas.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jBVentas.setText("Informe de Ventas");
         jBVentas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBVentasActionPerformed(evt);
             }
         });
-        getContentPane().add(jBVentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 610, 210, 60));
+        getContentPane().add(jBVentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 550, 280, 60));
 
-        btnOperaciones.setFont(new java.awt.Font("Aller", 0, 24)); // NOI18N
-        btnOperaciones.setText("Operaciones");
+        btnOperaciones.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        btnOperaciones.setText("Ingreso/Egreso Dinero");
         btnOperaciones.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOperacionesActionPerformed(evt);
             }
         });
-        getContentPane().add(btnOperaciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 540, 210, 60));
+        getContentPane().add(btnOperaciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 620, 280, 90));
 
-        jBExit.setFont(new java.awt.Font("Aller", 0, 30)); // NOI18N
-        jBExit.setForeground(new java.awt.Color(185, 54, 129));
+        jBExit.setFont(new java.awt.Font("Arial", 0, 30)); // NOI18N
         jBExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/exit.png"))); // NOI18N
-        jBExit.setText("   Salir");
+        jBExit.setText("   ");
+        jBExit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jBExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBExitActionPerformed(evt);
             }
         });
-        getContentPane().add(jBExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 620, 180, 70));
+        getContentPane().add(jBExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 720, -1, 70));
 
-        lblInfoTurno.setFont(new java.awt.Font("Aller", 0, 18)); // NOI18N
+        lblInfoTurno.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         lblInfoTurno.setText("domingo 24 de agosto 15:00");
-        getContentPane().add(lblInfoTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 410, 240, 40));
+        getContentPane().add(lblInfoTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(1130, 370, 240, 40));
 
-        btnPedidos.setFont(new java.awt.Font("Aller", 0, 24)); // NOI18N
-        btnPedidos.setText("Facturar");
+        btnPedidos.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        btnPedidos.setText("Cerrar Venta");
         btnPedidos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPedidosActionPerformed(evt);
             }
         });
-        getContentPane().add(btnPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 470, 210, 60));
+        getContentPane().add(btnPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 620, 390, 80));
 
-        lblDia.setFont(new java.awt.Font("Aller", 0, 70)); // NOI18N
+        lblDia.setFont(new java.awt.Font("Arial", 0, 70)); // NOI18N
         lblDia.setText("28");
-        getContentPane().add(lblDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 140, 90, 60));
+        getContentPane().add(lblDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(1150, 150, 90, 60));
 
-        lblHora.setFont(new java.awt.Font("Aller", 1, 52)); // NOI18N
-        lblHora.setForeground(new java.awt.Color(255, 255, 255));
+        lblHora.setFont(new java.awt.Font("Arial", 1, 52)); // NOI18N
         lblHora.setText("07:00   PM");
-        getContentPane().add(lblHora, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 50, 250, 50));
+        getContentPane().add(lblHora, new org.netbeans.lib.awtextra.AbsoluteConstraints(1150, 70, 250, 50));
 
-        lblDiaSemana.setFont(new java.awt.Font("Aller", 0, 24)); // NOI18N
+        lblDiaSemana.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         lblDiaSemana.setText("Sabado");
-        getContentPane().add(lblDiaSemana, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 170, -1, 30));
+        getContentPane().add(lblDiaSemana, new org.netbeans.lib.awtextra.AbsoluteConstraints(1240, 180, -1, 30));
 
-        lblMes.setFont(new java.awt.Font("Aller", 0, 18)); // NOI18N
+        lblMes.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         lblMes.setText("Septiembre");
-        getContentPane().add(lblMes, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 140, -1, 30));
+        getContentPane().add(lblMes, new org.netbeans.lib.awtextra.AbsoluteConstraints(1240, 150, -1, 30));
 
-        btnMesas.setFont(new java.awt.Font("Aller", 0, 24)); // NOI18N
-        btnMesas.setText("Mesas");
+        btnMesas.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        btnMesas.setText("Gestion Mesas");
         btnMesas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMesasActionPerformed(evt);
             }
         });
-        getContentPane().add(btnMesas, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 400, 210, 60));
+        getContentPane().add(btnMesas, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 470, 240, 60));
 
-        jBTurnos1.setFont(new java.awt.Font("Aller", 0, 24)); // NOI18N
-        jBTurnos1.setText("Turnos");
+        jBTurnos1.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jBTurnos1.setText("Reporte de Turnos");
+        jBTurnos1.setToolTipText("");
+        jBTurnos1.setFocusPainted(false);
         jBTurnos1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBTurnos1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jBTurnos1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 610, 180, 60));
+        getContentPane().add(jBTurnos1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 230, 240, 110));
 
-        btnPreciosEspeciales.setFont(new java.awt.Font("Aller", 0, 24)); // NOI18N
-        btnPreciosEspeciales.setText("Devolucion / Cancelacion");
-        btnPreciosEspeciales.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPreciosEspecialesActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnPreciosEspeciales, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 400, 400, 60));
-
-        btnFacturas.setFont(new java.awt.Font("Aller", 0, 24)); // NOI18N
-        btnFacturas.setText("Pedidos Proveedores");
+        btnFacturas.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        btnFacturas.setText("Pedidos y Facturas");
+        btnFacturas.setFocusPainted(false);
+        btnFacturas.setMaximumSize(new java.awt.Dimension(189, 35));
+        btnFacturas.setMinimumSize(new java.awt.Dimension(189, 35));
         btnFacturas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFacturasActionPerformed(evt);
             }
         });
-        getContentPane().add(btnFacturas, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, 620, 60));
+        getContentPane().add(btnFacturas, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 470, 280, 60));
 
-        lblSaldoCaja.setFont(new java.awt.Font("Aller", 0, 24)); // NOI18N
+        lblSaldoCaja.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         lblSaldoCaja.setText("Saldo Actual: $100.000");
         lblSaldoCaja.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        getContentPane().add(lblSaldoCaja, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 50, 220, 80));
+        getContentPane().add(lblSaldoCaja, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 110, 220, 80));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -335,7 +340,7 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
         Date date = calendario.getTime(); 
         SimpleDateFormat fecha = new SimpleDateFormat("EEE, dd MMM yyyy - HH:mm");
        
-       Turnos abrirTurno = new Turnos(date, date, (int) objTurno.mtdLastTurno().getTotalCaja() , "Abierto");
+       Turnos abrirTurno = new Turnos(date, date, (int) valorCaja , "Abierto");
         
         
             Transaction trns = null;
@@ -481,11 +486,6 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
         new frmListarTurnos(this).setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_jBTurnos1ActionPerformed
 
-    private void btnPreciosEspecialesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreciosEspecialesActionPerformed
-        //this.dispose();
-        //new frmPrecioEspecial(this).setVisible(true);        // TODO add your handling code here:
-    }//GEN-LAST:event_btnPreciosEspecialesActionPerformed
-
     private void btnFacturasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFacturasActionPerformed
         this.dispose();
         new frmListadoPedidosProveedores(this).setVisible(true);// TODO add your handling code here:
@@ -523,12 +523,6 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                try {
-                    JFrame.setDefaultLookAndFeelDecorated(false);
-                    SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.RavenGraphiteGlassSkin");
-                } catch (Exception e2) {
-                }
-
                 new Home_Administracion().setVisible(true);
             }
         });
@@ -660,7 +654,7 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
             }
             
             lblHora.setText(hora);
-            lblSaldoCaja.setText("<html>Saldo Actual: <br> "+String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(turnoAbierto.getTotalCaja()))+"</html>");
+            lblSaldoCaja.setText("<html>Saldo Actual: <br> "+String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(valorCaja))+"</html>");
             try{
                 Thread.sleep(1000);
             }catch(Exception e){
@@ -678,7 +672,6 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
     private javax.swing.JButton btnMesas;
     public javax.swing.JButton btnOperaciones;
     public javax.swing.JButton btnPedidos;
-    private javax.swing.JButton btnPreciosEspeciales;
     private javax.swing.JButton btnProductos;
     private javax.swing.JButton btnUsuarios;
     public javax.swing.JButton btnVentas;

@@ -17,18 +17,17 @@
     </background>
     <pageHeader>
         <band height="123">
-            <image>
+            <image scaleImage="RetainShape" hAlign="Center" vAlign="Middle">
                 <reportElement x="43" y="0" width="114" height="68" uuid="4e4472d7-8929-451e-830e-0cc1a82eeb8b"/>
-                <imageExpression><![CDATA["images\\logotipo_cliente.png"]]></imageExpression>
+                <imageExpression><![CDATA["images\\logotipo_cliente_printer.png"]]></imageExpression>
             </image>
             <staticText>
                 <reportElement x="1" y="68" width="196" height="30" uuid="31007acd-4ad5-448c-88c2-f2b3d93649ad"/>
                 <textElement textAlignment="Center">
                     <font fontName="Arial" size="8"/>
                 </textElement>
-                <text><![CDATA[Avenida Universitaria, Nº 75a - 00
-CC Green Hills - Tunja, Boyacá
-Reservas Cel. 317 6650451]]></text>
+                <text><![CDATA[Nizza Apartamentos, Local 103 
+ La Estrella, Ant]]></text>
             </staticText>
             <staticText>
                 <reportElement x="0" y="101" width="40" height="15" uuid="48785cd5-0717-4d0d-8d35-28598e85737f"/>

@@ -94,7 +94,7 @@ public class frmRegistrarCategoria extends javax.swing.JFrame {
         btnSalir = new javax.swing.JButton();
         parent = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        txttipo = new javax.swing.JComboBox<String>();
+        txttipo = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(900, 700));
@@ -155,7 +155,7 @@ public class frmRegistrarCategoria extends javax.swing.JFrame {
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 340, 169, 42));
 
         txttipo.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        txttipo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Licores", "Sin Stock", "Otra" }));
+        txttipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione Tipo", "Contable", "Sin Stock", "Otra" }));
         txttipo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txttipoActionPerformed(evt);

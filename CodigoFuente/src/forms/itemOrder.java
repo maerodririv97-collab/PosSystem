@@ -49,8 +49,8 @@ public class itemOrder extends javax.swing.JPanel {
         
         this.parentDescuento = this;
         initComponents();
-        JFrame.setDefaultLookAndFeelDecorated(true);
-        SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.RavenGraphiteGlassSkin");
+        //JFrame.setDefaultLookAndFeelDecorated(true);
+        //SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.BusinessSkin");
         this.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(97, 97, 97)));
     }
 

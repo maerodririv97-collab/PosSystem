@@ -58,21 +58,6 @@ public class frmRegistrarMesa extends javax.swing.JFrame {
         
        txtNumero.setText((objMesa != null && objMesa.getNumero() != null) ? String.valueOf(objMesa.getNumero()) : "");
         
-        if(objMesa.getTipo()== null){
-           
-        }else{
-             switch(objMesa.getTipo()){
-                case "Mesa":
-                     txttipo.setSelectedIndex(0);
-                break;  
-                case "Barra":
-                     txttipo.setSelectedIndex(1);
-                break;  
-                case "Isla":
-                     txttipo.setSelectedIndex(2);
-                break;  
-            }
-        }
         
         if(objMesa.getEstado() == null){
             
@@ -109,10 +94,8 @@ public class frmRegistrarMesa extends javax.swing.JFrame {
         txtNumero = new javax.swing.JTextField();
         lblEstado = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         btnGuardar = new javax.swing.JButton();
-        txtEstado = new javax.swing.JComboBox<String>();
-        txttipo = new javax.swing.JComboBox<String>();
+        txtEstado = new javax.swing.JComboBox<>();
         btnSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -130,17 +113,12 @@ public class frmRegistrarMesa extends javax.swing.JFrame {
         lblEstado.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         lblEstado.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblEstado.setText("Estado:");
-        getContentPane().add(lblEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 373, 169, 44));
+        getContentPane().add(lblEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 320, 169, 44));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel3.setText("Número:");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 258, 169, -1));
-
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel6.setText("Tipo:");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 312, 169, 42));
 
         btnGuardar.setFont(new java.awt.Font("Leelawadee", 0, 40)); // NOI18N
         btnGuardar.setText("Guardar");
@@ -152,22 +130,13 @@ public class frmRegistrarMesa extends javax.swing.JFrame {
         getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 480, -1, 61));
 
         txtEstado.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        txtEstado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Activa", "Inactiva" }));
+        txtEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activa", "Inactiva" }));
         txtEstado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtEstadoActionPerformed(evt);
             }
         });
-        getContentPane().add(txtEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(317, 373, 416, 44));
-
-        txttipo.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        txttipo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Mesa", "Barra", "Isla" }));
-        txttipo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txttipoActionPerformed(evt);
-            }
-        });
-        getContentPane().add(txttipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(317, 311, 416, 44));
+        getContentPane().add(txtEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 320, 416, 44));
 
         btnSalir.setFont(new java.awt.Font("Leelawadee", 0, 40)); // NOI18N
         btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/exit.png"))); // NOI18N
@@ -184,10 +153,6 @@ public class frmRegistrarMesa extends javax.swing.JFrame {
     private void txtEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEstadoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtEstadoActionPerformed
-
-    private void txttipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txttipoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txttipoActionPerformed
   /*
   * Funcion : Guardar Mesa
     Nota : se utiliza para actualizar e insertar mesa ademas de validacion de la data 
@@ -202,7 +167,7 @@ public class frmRegistrarMesa extends javax.swing.JFrame {
                     
                     Session sesion = HibernateUtil.getSessionFactory().openSession();
                     if (this.modo.equalsIgnoreCase("Create")) {
-                        mesa = new models.Mesas(txtNumero.getText(), txttipo.getSelectedItem().toString(), "Activa");
+                        mesa = new models.Mesas(txtNumero.getText(), "Mesa", "Activa");
                         
                         sesion.beginTransaction();
                         sesion.save(mesa);
@@ -210,7 +175,7 @@ public class frmRegistrarMesa extends javax.swing.JFrame {
                     } else {
                         
                        
-                        mesa.setTipo(txttipo.getSelectedItem().toString());
+                        mesa.setTipo("Mesa");
                         mesa.setEstado(txtEstado.getSelectedItem().toString());
                         mesa.setNumero(txtNumero.getText());
                         
@@ -264,10 +229,8 @@ public class frmRegistrarMesa extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel lblEstado;
     public javax.swing.JComboBox<String> txtEstado;
     public javax.swing.JTextField txtNumero;
-    public javax.swing.JComboBox<String> txttipo;
     // End of variables declaration//GEN-END:variables
 }

@@ -94,8 +94,6 @@ public class frmMesas extends javax.swing.JFrame {
         mtdBtns();
         
         
-        btnSalir.setForeground(new Color(218, 0, 128));
-        
         Calendar calendario = Calendar.getInstance();
         
         Date date = calendario.getTime();             
@@ -134,7 +132,7 @@ public class frmMesas extends javax.swing.JFrame {
         models.Mesas Objmesa = new models.Mesas();
         frmMesas p = this;
          
-        //LISTAO DE ISLAS REGISTRADAS
+        /*//LISTAO DE ISLAS REGISTRADAS
         ListadoIslas = new ArrayList<>();
         ListadoIslas = Objmesa.mtdList("Isla");
         
@@ -146,16 +144,14 @@ public class frmMesas extends javax.swing.JFrame {
         if (Objmesa.mtdDisponibilidad(dataIsla.getIdMesa(), turno.getIdTurno()) != null) {
             
             if(Objmesa.mtdDisponibilidad(dataIsla.getIdMesa(), turno.getIdTurno()).getPedidosAll().size() > 0){
-                Isla.setForeground(Color.green);
+                Isla.setForeground(Color.CYAN);
                 Isla.setText("<html><center>"+dataIsla.getTipo()+" "+dataIsla.getNumero()+"</center>OCUPADA</html>");
             }else{
                 Isla.setForeground(Color.blue);
                 Isla.setText("<html><center>"+dataIsla.getTipo()+" "+dataIsla.getNumero()+"</center>SIN PEDIDOS</html>");
             }
             //System.out.println(Objmesa.mtdDisponibilidad(dataIsla.getIdMesa(), turno.getIdTurno()).getIdVenta());
-         }else{
-            System.out.println("Vacio ");
-        }
+         }
        
         Isla.addActionListener(new ActionListener() { 
                 public void actionPerformed(ActionEvent e) {
@@ -224,7 +220,7 @@ public class frmMesas extends javax.swing.JFrame {
          if(Objmesa.mtdDisponibilidad(dataBarra.getIdMesa(), turno.getIdTurno()) != null){
                      
                 if(Objmesa.mtdDisponibilidad(dataBarra.getIdMesa(), turno.getIdTurno()).getPedidosAll().size() > 0){
-                 Barra.setForeground(Color.green);
+                 Barra.setForeground(Color.CYAN);
                  Barra.setText("<html><center>"+dataBarra.getTipo()+" "+dataBarra.getNumero()+"</center>OCUPADA</html>");
                 }else{
                  Barra.setForeground(Color.blue);
@@ -278,7 +274,7 @@ public class frmMesas extends javax.swing.JFrame {
             PanelBarras.add(Barra);
             PanelBarras.revalidate();
             PanelBarras.repaint();
-        }
+        }*/
         
         //LISTADO DE MESAS REGISTRADAS
         ListadoMesas = new ArrayList<>();
@@ -292,7 +288,7 @@ public class frmMesas extends javax.swing.JFrame {
          if(Objmesa.mtdDisponibilidad(dataMesa.getIdMesa(), turno.getIdTurno()) != null){
                      
                 if(Objmesa.mtdDisponibilidad(dataMesa.getIdMesa(), turno.getIdTurno()).getPedidosAll().size() > 0){
-                     Mesa.setForeground(Color.green);
+                     Mesa.setForeground(Color.CYAN);
                      Mesa.setText("<html><center>"+dataMesa.getTipo()+" "+dataMesa.getNumero()+"</center>OCUPADA</html>");
                 }else{
                      Mesa.setForeground(Color.blue);
@@ -328,9 +324,11 @@ public class frmMesas extends javax.swing.JFrame {
                            }else{
                               venta = ventaExistente;
                           }
+              mainMesero.usuario = mesero;
               mainMesero formPrincipal = new mainMesero(p,turno,venta);
                  formPrincipal.setMesa(dataMesa);         
                  formPrincipal.setVisible(true);
+                
                  
                  
                   p.setVisible(false);
@@ -362,15 +360,8 @@ public class frmMesas extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        ScrollBarra = new javax.swing.JScrollPane();
-        PanelBarras = new javax.swing.JPanel();
         ScrollMesas = new javax.swing.JScrollPane();
         PanelMesas = new javax.swing.JPanel();
-        Scroll_Islas = new javax.swing.JScrollPane();
-        PanelIslas = new javax.swing.JPanel();
-        label1 = new java.awt.Label();
-        label2 = new java.awt.Label();
-        label3 = new java.awt.Label();
         lblDia = new java.awt.Label();
         lblHora = new java.awt.Label();
         lblTextDia = new java.awt.Label();
@@ -378,6 +369,7 @@ public class frmMesas extends javax.swing.JFrame {
         btnSalir = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         btnCuentas_Abiertas = new javax.swing.JButton();
+        btnLlevar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setAlwaysOnTop(true);
@@ -387,15 +379,6 @@ public class frmMesas extends javax.swing.JFrame {
         setPreferredSize(new java.awt.Dimension(1024, 768));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        ScrollBarra.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        ScrollBarra.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        ScrollBarra.setName("ScrollBarras"); // NOI18N
-
-        PanelBarras.setLayout(new java.awt.GridLayout(20, 1, 0, 4));
-        ScrollBarra.setViewportView(PanelBarras);
-
-        getContentPane().add(ScrollBarra, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 190, 360));
-
         ScrollMesas.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         ScrollMesas.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         ScrollMesas.setName("ScrollMesas"); // NOI18N
@@ -403,41 +386,25 @@ public class frmMesas extends javax.swing.JFrame {
         PanelMesas.setLayout(new java.awt.GridLayout(5, 5, 3, 3));
         ScrollMesas.setViewportView(PanelMesas);
 
-        getContentPane().add(ScrollMesas, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 90, 510, 540));
+        getContentPane().add(ScrollMesas, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 260, 610, 360));
 
-        Scroll_Islas.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        Scroll_Islas.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-
-        PanelIslas.setLayout(new java.awt.GridLayout(20, 1, 0, 4));
-        Scroll_Islas.setViewportView(PanelIslas);
-
-        getContentPane().add(Scroll_Islas, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 210, 200, 380));
-
-        label1.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
-        label1.setText("Islas");
-        getContentPane().add(label1, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 140, -1, -1));
-
-        label2.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
-        label2.setText("Barras");
-        getContentPane().add(label2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, -1, -1));
-
-        label3.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
-        label3.setText("Mesas");
-        getContentPane().add(label3, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 50, -1, -1));
-
-        lblDia.setFont(new java.awt.Font("Calibri", 1, 48)); // NOI18N
-        lblDia.setForeground(new java.awt.Color(255, 255, 255));
-        getContentPane().add(lblDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 30, 70, 60));
+        lblDia.setFont(new java.awt.Font("Arial Black", 1, 36)); // NOI18N
+        lblDia.setForeground(new java.awt.Color(0, 0, 0));
+        lblDia.setText("31");
+        getContentPane().add(lblDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 150, -1, 60));
 
         lblHora.setFont(new java.awt.Font("Arial Black", 1, 48)); // NOI18N
-        lblHora.setForeground(new java.awt.Color(255, 255, 255));
-        getContentPane().add(lblHora, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 30, 220, 50));
+        lblHora.setForeground(new java.awt.Color(0, 0, 0));
+        lblHora.setText("00:00:00");
+        getContentPane().add(lblHora, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 250, 60));
 
-        lblTextDia.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        getContentPane().add(lblTextDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 60, 80, 30));
+        lblTextDia.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        lblTextDia.setText("martes");
+        getContentPane().add(lblTextDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 150, 120, 30));
 
-        lblMes.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        getContentPane().add(lblMes, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 30, 80, 30));
+        lblMes.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        lblMes.setText("mayo");
+        getContentPane().add(lblMes, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 180, 120, 30));
 
         btnSalir.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
         btnSalir.setText("SALIR");
@@ -446,10 +413,10 @@ public class frmMesas extends javax.swing.JFrame {
                 btnSalirActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 650, 110, 50));
+        getContentPane().add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 650, 190, 50));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente_small.png"))); // NOI18N
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 240, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 40, 160, -1));
 
         btnCuentas_Abiertas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/cuenta_abierta.png"))); // NOI18N
         btnCuentas_Abiertas.addActionListener(new java.awt.event.ActionListener() {
@@ -458,6 +425,15 @@ public class frmMesas extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnCuentas_Abiertas, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 600, 90, 80));
+
+        btnLlevar.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
+        btnLlevar.setText("PARA LLEVAR");
+        btnLlevar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLlevarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnLlevar, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 650, 390, 50));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -483,6 +459,41 @@ public class frmMesas extends javax.swing.JFrame {
             this.dispose();// TODO add your handling code here:
     }//GEN-LAST:event_btnCuentas_AbiertasActionPerformed
 
+    private void btnLlevarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLlevarActionPerformed
+                    Mesas Objmesallevar = new Mesas();
+                   frmMesas p = this;
+
+                    Transaction trns = null;
+                    Session session = HibernateUtil.getSessionFactory().openSession();
+                            try {
+                                
+                               
+                                venta.setMesas(Objmesallevar.mtdGetMesaLlevar());
+                                
+                                //System.out.println(turno.getApertura()+" estado: "+turno.getEstado());
+                                session.beginTransaction();
+                                session.save(venta);
+                                session.getTransaction().commit();
+                                
+                           }catch (RuntimeException ex) {
+                                ex.printStackTrace();
+                            }finally {
+                                session.clear();
+                                session.flush();
+                                session.close();
+                            }
+                          
+                 mainMesero.usuario = mesero;
+                 mainMesero formPrincipal = new mainMesero(p,turno,venta);
+                 formPrincipal.setMesa(Objmesallevar.mtdGetMesaLlevar());         
+                 formPrincipal.setVisible(true);
+                
+                 
+                 
+                  p.setVisible(false);
+                
+    }//GEN-LAST:event_btnLlevarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -492,18 +503,12 @@ public class frmMesas extends javax.swing.JFrame {
             
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel PanelBarras;
-    private javax.swing.JPanel PanelIslas;
     private javax.swing.JPanel PanelMesas;
-    private javax.swing.JScrollPane ScrollBarra;
     private javax.swing.JScrollPane ScrollMesas;
-    private javax.swing.JScrollPane Scroll_Islas;
     private javax.swing.JButton btnCuentas_Abiertas;
+    private javax.swing.JButton btnLlevar;
     private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel1;
-    private java.awt.Label label1;
-    private java.awt.Label label2;
-    private java.awt.Label label3;
     private java.awt.Label lblDia;
     private java.awt.Label lblHora;
     private java.awt.Label lblMes;

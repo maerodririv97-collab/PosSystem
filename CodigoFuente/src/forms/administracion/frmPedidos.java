@@ -111,7 +111,7 @@ public class frmPedidos extends javax.swing.JFrame implements Runnable {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        hilo.stop();
+        hilo.interrupt();
         this.dispose();
         new Home_Administracion().setVisible(true);
 // TODO add your handling code here:
@@ -179,7 +179,8 @@ public class frmPedidos extends javax.swing.JFrame implements Runnable {
             try{
                 Thread.sleep(5000);
             }catch(Exception e){
-                e.printStackTrace();
+                Thread.currentThread().interrupt(); 
+                break;
             }
         }
     }

@@ -18,13 +18,20 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import javax.swing.*;
 import models.*;
 import models.Ventas;
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperPrintManager;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.jvnet.substance.SubstanceLookAndFeel;
@@ -45,6 +52,7 @@ public class mainMesero extends javax.swing.JFrame {
     Categorias objCategoria = new Categorias();
     private Ventas Venta;
     private Turnos turno;
+    public static models.Usuarios usuario;
 
     public Turnos getTurno() {
         return turno;
@@ -126,8 +134,8 @@ public class mainMesero extends javax.swing.JFrame {
         jBSave.setBackground(new Color(0, 156, 222));
         jBSave.setForeground(new Color(0, 156, 222));
         
-        btnImprimir.setBackground(new Color(218, 0, 128));
-        btnImprimir.setForeground(new Color(218, 0, 128));
+        //btnImprimir.setBackground(new Color(218, 0, 128));
+        //btnImprimir.setForeground(new Color(218, 0, 128));
         
          
         
@@ -190,7 +198,6 @@ public class mainMesero extends javax.swing.JFrame {
         });
         jPOrder.add(jBClearOrder, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 78, -1));
 
-        btnImprimir.setBackground(new java.awt.Color(218, 0, 128));
         btnImprimir.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
         btnImprimir.setForeground(new java.awt.Color(255, 255, 255));
         btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/print.png"))); // NOI18N
@@ -267,17 +274,65 @@ public class mainMesero extends javax.swing.JFrame {
 
     private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
         
-            this.dispose();
+            //this.dispose();
             btnImprimir.setVisible(false);
             pedido.setVenta(getVenta());   
         
-            frmConfirmacionPin formConfirmacion = new frmConfirmacionPin(this,turno,Venta);
+            /*frmConfirmacionPin formConfirmacion = new frmConfirmacionPin(this,turno,Venta);
      
             formConfirmacion.setVisible(true);
             formConfirmacion.modo_acceso = "venta";  
-            formConfirmacion.setVenta(getVenta());
+            formConfirmacion.setVenta(getVenta());*/
             
-            
+            try {
+                                     Transaction trns = null;
+                                     Session session = HibernateUtil.getSessionFactory().openSession();
+                                     
+                                    /*if(getVenta().getUsuarios().getIdUsuario() != user.getIdUsuario()){
+                                        
+                                        getVenta().setUsuarios(user);
+                                        
+                                        trns = session.beginTransaction();
+                                        session.update(getVenta());
+                                        session.getTransaction().commit();
+                                    }*/
+                                 
+                                 
+                                 
+                                    
+                                 Map<String,Object> params = new HashMap<String,Object>();
+                                 Ventas v = (Ventas) session.get(models.Ventas.class, getVenta().getIdVenta());
+                                 params.put("Venta",v );
+                                 //params.put("Pedido", this.pedido);
+                                        
+
+                                    try{
+
+                                    JasperPrint jasperPrintPedido = JasperFillManager.fillReport("src\\reports\\pedidos.jasper",params,new JREmptyDataSource());
+                                    JasperPrintManager.printReport(jasperPrintPedido, false);   
+
+                                    }catch (JRException ex){
+                                        JOptionPane.showMessageDialog(this, "Error iReport: " + ex.getMessage());
+                                        System.err.println( "Error iReport: " + ex.getMessage() );
+                                    }finally{
+                                      v.sendPrint(session);
+                                    }
+
+                                //session.evict(getVenta()); 
+                                session.flush();
+                                session.close();
+                                
+                                
+                                
+                                this.dispose();
+                                frmMesas formMesas = new frmMesas(new Ventas(),turno,usuario,usuario.getPerfil()); 
+                                formMesas.setVisible(true);
+                               
+                              
+                                
+                            } catch (RuntimeException e) {
+                                e.printStackTrace();
+                            }
         
         
         // TODO add your handling code here:
