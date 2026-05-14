@@ -25,6 +25,7 @@ public class frmDetalleVenta extends javax.swing.JFrame {
     
     public frmPedidos parent;
     public Ventas venta;
+    public Usuarios usuario;
     
     public frmDetalleVenta(frmPedidos p,Ventas v) {
         initComponents();
@@ -280,7 +281,7 @@ public class frmDetalleVenta extends javax.swing.JFrame {
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         this.dispose(); 
-        new Home_Administracion().setVisible(true);// TODO add your handling code here:
+        new Home_Administracion(usuario).setVisible(true);// TODO add your handling code here:
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed

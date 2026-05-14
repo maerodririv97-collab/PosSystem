@@ -29,6 +29,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import models.Facturas;
+import models.Usuarios;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -43,6 +44,7 @@ public class frmDetallePedidoProveedor extends javax.swing.JFrame {
    
     private List<models.Facturas> listFacturas;
     private Facturas facturaDetalle;
+    public static Usuarios usuario;
     //private TmProductos modelo;
     
     models.Facturas clFactura = new models.Facturas();
@@ -53,6 +55,8 @@ public class frmDetallePedidoProveedor extends javax.swing.JFrame {
      * Creates new form Usuarios
      */
     public frmDetallePedidoProveedor(Home_Administracion P,Facturas f) {
+        
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         
         initComponents();
         this.Parent = P;
@@ -71,6 +75,10 @@ public class frmDetallePedidoProveedor extends javax.swing.JFrame {
             double totalFactura = dataPed.getCostoIngreso() * dataPed.getCantidad();
           df.addRow(new Object[]{dataPed,dataPed.getIdIngresoProducto(),dataPed.getProductos().getNombre(),dataPed.getCantidad(),String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(dataPed.getCostoIngreso())),String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(totalFactura)),dataPed.getFecha()  });
         }
+        
+        TablaProductos.setRowHeight(TablaProductos.getFontMetrics(TablaProductos.getFont()).getHeight() + 2);
+        TablaProductos.revalidate(); // Fuerza a la interfaz a recalcular el diseño
+        TablaProductos.repaint();   // Fuerza el repintado visual
         TablaProductos.setModel(df);
         
         /*Home_Administracion form = Parent;
@@ -120,16 +128,18 @@ public class frmDetallePedidoProveedor extends javax.swing.JFrame {
         jPopupMenu1.setName("Modificar"); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1024, 800));
+        setMaximumSize(new java.awt.Dimension(1920, 1080));
+        setMinimumSize(new java.awt.Dimension(1920, 1080));
+        setPreferredSize(new java.awt.Dimension(1920, 1080));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente_small.png"))); // NOI18N
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, 250, 179));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 250, 179));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText("PRODUCTOS INGRESADOS");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 30, 520, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 160, 520, -1));
 
         jBExit.setFont(new java.awt.Font("Leelawadee", 0, 40)); // NOI18N
         jBExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/exit.png"))); // NOI18N
@@ -138,9 +148,9 @@ public class frmDetallePedidoProveedor extends javax.swing.JFrame {
                 jBExitActionPerformed(evt);
             }
         });
-        getContentPane().add(jBExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(729, 518, 160, 61));
+        getContentPane().add(jBExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1470, 750, 160, 61));
 
-        TablaProductos.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
+        TablaProductos.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         TablaProductos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -176,19 +186,19 @@ public class frmDetallePedidoProveedor extends javax.swing.JFrame {
             TablaProductos.getColumnModel().getColumn(0).setMaxWidth(0);
         }
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 220, 800, 250));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 330, 1250, 380));
 
         lblInfoFactura.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
         lblInfoFactura.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblInfoFactura.setText("jLabel3");
-        getContentPane().add(lblInfoFactura, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 88, 430, 80));
+        getContentPane().add(lblInfoFactura, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 210, 430, 80));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExitActionPerformed
        this.dispose();
-       new Home_Administracion().setVisible(true);
+       new Home_Administracion(usuario).setVisible(true);
     }//GEN-LAST:event_jBExitActionPerformed
 
     private void TablaProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaProductosMouseClicked

@@ -19,6 +19,9 @@
     <property name="cantidad" type="int">
       <column name="cantidad" not-null="true"/>
     </property>
+    <property name="valor_propina" type="double">
+      <column name="valor_propina" not-null="true"/>
+    </property>
     <property name="compra" type="int">
       <column name="compra" not-null="true"/>
     </property>

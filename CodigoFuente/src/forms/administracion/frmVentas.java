@@ -26,6 +26,7 @@ import models.HibernateUtil;
 import models.Ingresoproductos;
 import models.Pedidos;
 import models.Turnos;
+import models.Usuarios;
 import models.Ventas;
 import models.dataChartVentas;
 import models.dataIProductos;
@@ -56,6 +57,7 @@ public class frmVentas extends javax.swing.JFrame {
     public static models.Usuarios admin;
     public Calendar calendario;
     private Home_Administracion Parent;
+    private Usuarios usuario;
     
     public frmVentas(Home_Administracion p) {
         initComponents();
@@ -165,7 +167,7 @@ public class frmVentas extends javax.swing.JFrame {
   * Fecha de creacion : 01/08/2018**/
     private void jBExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExitActionPerformed
         this.dispose();
-       new Home_Administracion().setVisible(true);
+       new Home_Administracion(usuario).setVisible(true);
     }//GEN-LAST:event_jBExitActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

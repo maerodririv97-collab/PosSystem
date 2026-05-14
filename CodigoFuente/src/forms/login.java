@@ -366,31 +366,16 @@ public class login extends javax.swing.JFrame {
                 if(user.getEstado().equalsIgnoreCase("Activo")){
                     switch (user.getPerfil()){
                         case "Mesero":
-                            
-                            models.Turnos objTurno = new models.Turnos();
-                            turno = objTurno.mtdListTurno();
-                            
-                           if(turno != null){
-                               
-                                frmMesas formMesas = new frmMesas(new Ventas(),turno,user,"Mesero");
-                                formMesas.setVisible(true);
-                                
-                                
-                           }else{
-                               JOptionPane.showMessageDialog(null, "No Hay turnos Abiertos Por favor Contacte al Administrador", "Información", JOptionPane.INFORMATION_MESSAGE);
-                               System.exit(0);
-                           }
+                            Home_Administracion.admin = user;
+                            new Home_Administracion(user).setVisible(true);
                             break;
 
                         case "Gerente":
                             break;
 
                         case "Administrador":
-                            
-                           
-                            
                             Home_Administracion.admin = user;
-                            new Home_Administracion().setVisible(true);
+                            new Home_Administracion(user).setVisible(true);
                             break;
                     }
 

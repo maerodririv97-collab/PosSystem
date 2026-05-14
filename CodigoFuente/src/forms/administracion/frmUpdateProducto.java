@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import models.HibernateUtil;
+import models.Usuarios;
 import models.Ventas;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -36,6 +37,8 @@ public class frmUpdateProducto extends javax.swing.JFrame {
     private models.Productos producto;
     private List<models.Categorias> listCategorias;
     private boolean autorizacion = false;
+    
+     private Usuarios usuario;
     
     public frmUpdateProducto(Home_Administracion P,models.Productos pro) {
         initComponents();
@@ -93,7 +96,7 @@ public class frmUpdateProducto extends javax.swing.JFrame {
         lblValorVenta = new javax.swing.JLabel();
         txtVenta = new javax.swing.JTextField();
         lblCategoria = new javax.swing.JLabel();
-        cmbCategoria = new javax.swing.JComboBox<models.Categorias>();
+        cmbCategoria = new javax.swing.JComboBox<>();
         rdbServicio = new javax.swing.JRadioButton();
         btnEditar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
@@ -282,7 +285,7 @@ public class frmUpdateProducto extends javax.swing.JFrame {
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         this.dispose();
-       new Home_Administracion().setVisible(true);
+       new Home_Administracion(usuario).setVisible(true);
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed

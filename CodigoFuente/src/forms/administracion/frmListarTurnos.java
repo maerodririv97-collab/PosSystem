@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import models.Usuarios;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -30,6 +31,7 @@ public class frmListarTurnos extends javax.swing.JFrame {
     private  models.Turnos objTurno = new models.Turnos();
     private static models.Turnos Turno;
     private Home_Administracion Parent;
+     private Usuarios usuario;
     
     public frmListarTurnos(Home_Administracion p) {
         initComponents();
@@ -262,7 +264,7 @@ public class frmListarTurnos extends javax.swing.JFrame {
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
       this.dispose();
-     new Home_Administracion().setVisible(true); // TODO add your handling code here:
+     new Home_Administracion(usuario).setVisible(true); // TODO add your handling code here:
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void CalendarioPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_CalendarioPropertyChange

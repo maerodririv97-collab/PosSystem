@@ -49,6 +49,7 @@ public class frmRegistrarProductos extends javax.swing.JFrame {
     
     private Facturas factura;
     private Facturas ObjFactura = new Facturas();
+     private Usuarios usuario;
     
     
     public String modo_envio;
@@ -565,14 +566,14 @@ public class frmRegistrarProductos extends javax.swing.JFrame {
             
             if(objFactura.getPedidos().size() > 0){
                  this.dispose();
-                 new Home_Administracion().setVisible(true);
+                 new Home_Administracion(usuario).setVisible(true);
             }else{
                      int resp=JOptionPane.showConfirmDialog(null,"Esta Factura No Tiene Productos \n ¿Deseas Cancelar Factura?");
 
                     if (JOptionPane.OK_OPTION == resp){
                         clFactura.mtdEliminarFactura(objFactura);
                          this.dispose();
-                       new Home_Administracion().setVisible(true);
+                       new Home_Administracion(usuario).setVisible(true);
                     }
             }
 

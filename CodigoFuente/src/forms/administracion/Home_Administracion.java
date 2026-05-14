@@ -59,11 +59,36 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
     public static models.Usuarios admin;
     public Calendar calendario;
     
-    public Home_Administracion() {
-        initComponents();
-        
+    private models.Usuarios usuarioLogeado;
+    
+    public Home_Administracion(models.Usuarios usuario) {
         
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        
+        initComponents();
+        
+        usuarioLogeado = usuario;
+        lblInfoUser.setText(usuarioLogeado.getNombres());
+        
+        /* Validaciones de perfil, para organizar menu principal */
+        if(usuarioLogeado.getPerfil().equals("Administrador")){
+            jBTurnos1.setVisible(true);
+            btnUsuarios.setVisible(true);
+            btnProductos.setVisible(true);
+            btnMesas.setVisible(true);
+            btnCategorias.setVisible(true);
+            jBVentas.setVisible(true);
+        }else{
+            jBTurnos1.setVisible(false);
+            btnUsuarios.setVisible(false);
+            btnProductos.setVisible(false);
+            btnMesas.setVisible(false);
+            btnCategorias.setVisible(false);
+            jBVentas.setVisible(false);
+            lblSaldoCaja.setVisible(false);
+        }
+        
+        
         
         
         this.setLocationRelativeTo(this);
@@ -90,17 +115,21 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
            btnOperaciones.setEnabled(false);
            btnPedidos.setEnabled(false);
            btnVentas.setEnabled(false);
-           lblSaldoCaja.setText("<html>Saldo en Caja: <br> "+String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(valorCaja))+"</html>");
+           if(usuarioLogeado.getPerfil().equals("Administrador")){
+               lblSaldoCaja.setText("<html>Saldo en Caja: <br> "+String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(valorCaja))+"</html>");
+           }
            
        }else{
           
-          SimpleDateFormat fecha = new SimpleDateFormat("EEE, dd MMM yyyy - HH:mm");
+          SimpleDateFormat fecha = new SimpleDateFormat("EEE, dd MMM yyyy - hh:mm a");
           
          
           btnAbrirTurno.setVisible(false);
           
           lblInfoTurno.setText(String.valueOf(fecha.format(turnoAbierto.getApertura())));
-          lblSaldoCaja.setText("<html>Saldo Actual: <br> "+String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(valorCaja))+"</html>");
+          if(usuarioLogeado.getPerfil().equals("Administrador")) {
+              lblSaldoCaja.setText("<html>Saldo Actual: <br> "+String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(valorCaja))+"</html>");
+          }
        }
        
        
@@ -152,6 +181,8 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
         jBTurnos1 = new javax.swing.JButton();
         btnFacturas = new javax.swing.JButton();
         lblSaldoCaja = new javax.swing.JLabel();
+        lblInfoUser = new javax.swing.JLabel();
+        Bienvenido = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
@@ -195,6 +226,7 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
 
         btnVentas.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         btnVentas.setText("Iniciar Venta");
+        btnVentas.setFocusPainted(false);
         btnVentas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVentasActionPerformed(evt);
@@ -251,7 +283,7 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
 
         lblInfoTurno.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         lblInfoTurno.setText("domingo 24 de agosto 15:00");
-        getContentPane().add(lblInfoTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(1130, 370, 240, 40));
+        getContentPane().add(lblInfoTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(1130, 370, 270, 40));
 
         btnPedidos.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         btnPedidos.setText("Cerrar Venta");
@@ -296,7 +328,7 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
                 jBTurnos1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jBTurnos1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 230, 240, 110));
+        getContentPane().add(jBTurnos1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, 240, 110));
 
         btnFacturas.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         btnFacturas.setText("Pedidos y Facturas");
@@ -313,7 +345,17 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
         lblSaldoCaja.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         lblSaldoCaja.setText("Saldo Actual: $100.000");
         lblSaldoCaja.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        getContentPane().add(lblSaldoCaja, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 110, 220, 80));
+        getContentPane().add(lblSaldoCaja, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 250, 220, 50));
+
+        lblInfoUser.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
+        lblInfoUser.setText("******************");
+        lblInfoUser.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        getContentPane().add(lblInfoUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, 390, 50));
+
+        Bienvenido.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
+        Bienvenido.setText("Bienvenid@:");
+        Bienvenido.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        getContentPane().add(Bienvenido, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, 200, 50));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -466,7 +508,8 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
     }//GEN-LAST:event_jBExitActionPerformed
 
     private void btnPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPedidosActionPerformed
-       this.dispose();
+        frmPedidos.usuario = admin;
+        this.dispose();
         new frmPedidos(this).setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_btnPedidosActionPerformed
 
@@ -487,6 +530,8 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
     }//GEN-LAST:event_jBTurnos1ActionPerformed
 
     private void btnFacturasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFacturasActionPerformed
+        
+        frmListadoPedidosProveedores.usuario = admin;
         this.dispose();
         new frmListadoPedidosProveedores(this).setVisible(true);// TODO add your handling code here:
     }//GEN-LAST:event_btnFacturasActionPerformed
@@ -494,39 +539,6 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Home_Administracion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Home_Administracion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Home_Administracion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Home_Administracion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Home_Administracion().setVisible(true);
-            }
-        });
-    }
     
     
     public void printReportInventario(Turnos t){
@@ -654,7 +666,7 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
             }
             
             lblHora.setText(hora);
-            lblSaldoCaja.setText("<html>Saldo Actual: <br> "+String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(valorCaja))+"</html>");
+            if(usuarioLogeado.getPerfil().equals("Administrador")) lblSaldoCaja.setText("<html>Saldo Actual: <br> "+String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(valorCaja))+"</html>");
             try{
                 Thread.sleep(1000);
             }catch(Exception e){
@@ -665,6 +677,7 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Bienvenido;
     public javax.swing.JButton btnAbrirTurno;
     private javax.swing.JButton btnCategorias;
     public javax.swing.JButton btnCerrarTurno;
@@ -683,6 +696,7 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
     public javax.swing.JLabel lblDiaSemana;
     public javax.swing.JLabel lblHora;
     public javax.swing.JLabel lblInfoTurno;
+    private javax.swing.JLabel lblInfoUser;
     public javax.swing.JLabel lblMes;
     private javax.swing.JLabel lblSaldoCaja;
     // End of variables declaration//GEN-END:variables

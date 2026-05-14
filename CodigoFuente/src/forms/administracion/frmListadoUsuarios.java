@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
+import models.Usuarios;
 
 /**
  *
@@ -24,6 +25,7 @@ public class frmListadoUsuarios extends javax.swing.JFrame {
     
     private  Home_Administracion Parent;
     private List<models.Usuarios> ListUsuarios;
+     private Usuarios usuario;
     
     
     public frmListadoUsuarios(Home_Administracion P) {
@@ -170,7 +172,7 @@ public class frmListadoUsuarios extends javax.swing.JFrame {
 
     private void jBExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExitActionPerformed
         this.dispose();
-       new Home_Administracion().setVisible(true);
+       new Home_Administracion(usuario).setVisible(true);
     }//GEN-LAST:event_jBExitActionPerformed
 
     /**

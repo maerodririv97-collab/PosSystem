@@ -157,7 +157,7 @@ public class frmModoPago extends javax.swing.JFrame {
                         
                         //JasperViewer.viewReport(jasperPrint, false);
                         JasperPrintManager.printReport(jasperPrint, false);   
-                            new Home_Administracion().setVisible(true);
+                            new Home_Administracion(venta.getUsuarios()).setVisible(true);
                         }catch (JRException ex){
                         JOptionPane.showMessageDialog(rootPane, "Error iReport: " + ex.getMessage());
                         System.err.println( "Error iReport: " + ex.getMessage() );
@@ -168,7 +168,7 @@ public class frmModoPago extends javax.swing.JFrame {
                            
                         }
                     }else{
-                           new Home_Administracion().setVisible(true);
+                           new Home_Administracion(venta.getUsuarios()).setVisible(true);
                     }
                    
                  }catch (RuntimeException ex) {
@@ -207,7 +207,7 @@ public class frmModoPago extends javax.swing.JFrame {
                         JasperPrint jasperPrint = JasperFillManager.fillReport("src\\reports\\venta.jasper",params,new JREmptyDataSource());
                         
                         JasperPrintManager.printReport(jasperPrint, false);   
-                         new Home_Administracion().setVisible(true);
+                         new Home_Administracion(venta.getUsuarios()).setVisible(true);
                         }catch (JRException ex){
                         JOptionPane.showMessageDialog(rootPane, "Error iReport: " + ex.getMessage());
                         System.err.println( "Error iReport: " + ex.getMessage() );
@@ -217,7 +217,7 @@ public class frmModoPago extends javax.swing.JFrame {
                         
                         }
                     }else{
-                         new Home_Administracion().setVisible(true);
+                         new Home_Administracion(venta.getUsuarios()).setVisible(true);
                     }
                     
                     

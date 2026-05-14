@@ -187,7 +187,7 @@ public class demoPrint extends javax.swing.JFrame {
         
         try{
             //se procesa el archivo jasper
-            JasperPrint jasperPrint = JasperFillManager.fillReport("src/reports/ingreso_productos.jasper",params,new JRBeanCollectionDataSource(productos));
+            JasperPrint jasperPrint = JasperFillManager.fillReport("/reports/ingreso_productos.jasper",params,new JRBeanCollectionDataSource(productos));
             //impresion de reporte
             // TRUE: muestra la ventana de dialogo "preferencias de impresion"
             //JasperPrintManager.printReport(jasperPrint, false);   

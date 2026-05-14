@@ -20,6 +20,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
+import models.Usuarios;
 //import models.TmCategorias;
 //import models.TmMesas;
 /**
@@ -30,6 +31,7 @@ public class frmListarCategorias extends javax.swing.JFrame {
     private List<models.Categorias> lisCategorias;
     //private final TmCategorias modeloCategorias;
    private Home_Administracion Parent;
+    private Usuarios usuario;
     /**
      * Creates new form Usuarios
      */
@@ -179,7 +181,7 @@ public class frmListarCategorias extends javax.swing.JFrame {
 
     private void jBExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExitActionPerformed
         this.dispose();
-       new Home_Administracion().setVisible(true);
+       new Home_Administracion(usuario).setVisible(true);
     }//GEN-LAST:event_jBExitActionPerformed
 
 

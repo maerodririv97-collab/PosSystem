@@ -400,11 +400,11 @@ public class frmMesas extends javax.swing.JFrame {
 
         lblTextDia.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         lblTextDia.setText("martes");
-        getContentPane().add(lblTextDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 150, 120, 30));
+        getContentPane().add(lblTextDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, 120, 30));
 
         lblMes.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         lblMes.setText("mayo");
-        getContentPane().add(lblMes, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 180, 120, 30));
+        getContentPane().add(lblMes, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 180, 120, 30));
 
         btnSalir.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
         btnSalir.setText("SALIR");
@@ -440,13 +440,11 @@ public class frmMesas extends javax.swing.JFrame {
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         
-        if(modo_acceso.equalsIgnoreCase("Administrador")){
+    
             this.dispose();
-            new Home_Administracion().setVisible(true);
+            new Home_Administracion(mesero).setVisible(true);
         
-        }else{
-            System.exit(0);
-        }
+  
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSalirActionPerformed
 

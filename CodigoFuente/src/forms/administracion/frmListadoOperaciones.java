@@ -60,6 +60,8 @@ public class frmListadoOperaciones extends javax.swing.JFrame {
      */
     public frmListadoOperaciones(Home_Administracion P,Turnos turn) {
         
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        
         initComponents();
         this.Parent = P;
         this.turno = turn;
@@ -73,11 +75,18 @@ public class frmListadoOperaciones extends javax.swing.JFrame {
         listOperaciones = clOperaciones.mtdListOperaciones(turno.getIdTurno());
       
         DefaultTableModel df = (DefaultTableModel) TablaOperaciones.getModel();
+         
             
         for (Operaciones dataOperacion:listOperaciones) {
             
            df.addRow(new Object[]{dataOperacion,dataOperacion.getIdOperacion(),dataOperacion.getTipo(),dataOperacion.getConceptosOperaciones().getNombre(),dataOperacion.getFecha(),dataOperacion.getValor(),dataOperacion.getConcepto()});
         }
+        
+        
+        TablaOperaciones.setRowHeight(TablaOperaciones.getFontMetrics(TablaOperaciones.getFont()).getHeight() + 2);
+        TablaOperaciones.revalidate(); // Fuerza a la interfaz a recalcular el diseño
+        TablaOperaciones.repaint();   // Fuerza el repintado visual
+        
         TablaOperaciones.setModel(df);
         
        /* Home_Administracion form = Parent;
@@ -128,7 +137,9 @@ public class frmListadoOperaciones extends javax.swing.JFrame {
         jPopupMenu1.setName("Modificar"); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1024, 800));
+        setMaximumSize(new java.awt.Dimension(1920, 1080));
+        setMinimumSize(new java.awt.Dimension(1920, 1080));
+        setPreferredSize(new java.awt.Dimension(1920, 1080));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente_small.png"))); // NOI18N
@@ -145,9 +156,9 @@ public class frmListadoOperaciones extends javax.swing.JFrame {
                 jBExitActionPerformed(evt);
             }
         });
-        getContentPane().add(jBExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(729, 518, 160, 61));
+        getContentPane().add(jBExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1300, 860, 160, 61));
 
-        TablaOperaciones.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
+        TablaOperaciones.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         TablaOperaciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -183,7 +194,7 @@ public class frmListadoOperaciones extends javax.swing.JFrame {
             TablaOperaciones.getColumnModel().getColumn(0).setMaxWidth(0);
         }
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 220, 800, 250));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 230, 1300, 580));
 
         btnIngresar.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
         btnIngresar.setText("Registrar");
@@ -192,7 +203,7 @@ public class frmListadoOperaciones extends javax.swing.JFrame {
                 btnIngresarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 500, 190, 40));
+        getContentPane().add(btnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 820, 190, 110));
 
         txtFiltro.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
         getContentPane().add(txtFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 130, 370, 50));
@@ -211,7 +222,7 @@ public class frmListadoOperaciones extends javax.swing.JFrame {
                 btnImprimirActionPerformed(evt);
             }
         });
-        getContentPane().add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 490, -1, -1));
+        getContentPane().add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(1180, 840, -1, -1));
 
         btnConceptos.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
         btnConceptos.setText("Conceptos");
@@ -220,14 +231,14 @@ public class frmListadoOperaciones extends javax.swing.JFrame {
                 btnConceptosActionPerformed(evt);
             }
         });
-        getContentPane().add(btnConceptos, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 500, 190, 40));
+        getContentPane().add(btnConceptos, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 820, 190, 110));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExitActionPerformed
        this.dispose();
-       new Home_Administracion().setVisible(true);
+       new Home_Administracion(admin).setVisible(true);
     }//GEN-LAST:event_jBExitActionPerformed
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
@@ -250,7 +261,7 @@ public class frmListadoOperaciones extends javax.swing.JFrame {
        
        
         listOperaciones = new ArrayList<>();
-         listOperaciones = clOperaciones.mtdFiltro(txtFiltro.getText());
+         listOperaciones = clOperaciones.mtdFiltro(txtFiltro.getText(),turno.getIdTurno());
       
          if(listOperaciones.size() <= 0){
         
@@ -297,6 +308,8 @@ public class frmListadoOperaciones extends javax.swing.JFrame {
     }//GEN-LAST:event_btnImprimirActionPerformed
 
     private void btnConceptosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConceptosActionPerformed
+            
+            frmListadoConceptosOperacion.usuario = admin;
             this.dispose();
             new frmListadoConceptosOperacion(Parent).setVisible(true);
 // TODO add your handling code here:

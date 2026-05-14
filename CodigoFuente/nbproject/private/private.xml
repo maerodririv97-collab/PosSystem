@@ -17,6 +17,10 @@
             <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/frmListarMesas.java</file>
             <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/frmRegistrarCategoria.java</file>
             <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/models/Mesas.java</file>
+            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/models/Pedidos.java</file>
+            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/models/mappins/Pedidos.hbm.xml</file>
+            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/models/mappins/hibernate.reveng.xml</file>
+            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/hibernate.cfg.xml</file>
         </group>
     </open-files>
 </project-private>

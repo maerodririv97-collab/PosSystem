@@ -254,7 +254,7 @@ public class frmCantidad extends javax.swing.JFrame {
        }else{
        boolean verificacion = mtdVerificarCantidad(Integer.parseInt(lblCantidad.getText()));
        double costoPedido = Integer.parseInt(lblCantidad.getText()) * getProducto().getValor(/*getProducto().getIdProducto()*/);
-       pedido = new Pedidos(getProducto(), venta, (int) costoPedido, Integer.parseInt(lblCantidad.getText()),false); //Carga el Objeto Pedido Con Su Información
+       pedido = new Pedidos(getProducto(), venta, (int) costoPedido, Integer.parseInt(lblCantidad.getText()),false,0); //Carga el Objeto Pedido Con Su Información
        pedido.setCompra(getProducto().getCosto());
        
           

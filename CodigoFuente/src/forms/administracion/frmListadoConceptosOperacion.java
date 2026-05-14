@@ -49,13 +49,18 @@ public class frmListadoConceptosOperacion extends javax.swing.JFrame {
     models.ConceptosOperaciones clConceptosOperaciones = new models.ConceptosOperaciones();
     //
     private Home_Administracion Parent;
+     public static Usuarios usuario;
     
     /**
      * Creates new form Usuarios
      */
     public frmListadoConceptosOperacion(Home_Administracion P) {
         
+        
+        
         initComponents();
+        
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.Parent = P;
        
         this.setLocationRelativeTo(this);
@@ -73,6 +78,11 @@ public class frmListadoConceptosOperacion extends javax.swing.JFrame {
             
            df.addRow(new Object[]{dataConcepto,dataConcepto.getIdConceptoOperacion(),dataConcepto.getNombre(),dataConcepto.getDescripcion()});
         }
+        
+        TablaConceptoOperaciones.setRowHeight(TablaConceptoOperaciones.getFontMetrics(TablaConceptoOperaciones.getFont()).getHeight() + 2);
+        TablaConceptoOperaciones.revalidate(); // Fuerza a la interfaz a recalcular el diseño
+        TablaConceptoOperaciones.repaint();   // Fuerza el repintado visual
+        
         TablaConceptoOperaciones.setModel(df);
         
         Home_Administracion form = Parent;
@@ -124,14 +134,11 @@ public class frmListadoConceptosOperacion extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1024, 800));
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente_small.png"))); // NOI18N
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(52, 13, 250, 179));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
         jLabel2.setText("Gestion de Operaciones");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 30, 430, 50));
 
         jBExit.setFont(new java.awt.Font("Leelawadee", 0, 40)); // NOI18N
         jBExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/exit.png"))); // NOI18N
@@ -140,9 +147,8 @@ public class frmListadoConceptosOperacion extends javax.swing.JFrame {
                 jBExitActionPerformed(evt);
             }
         });
-        getContentPane().add(jBExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(729, 518, 160, 61));
 
-        TablaConceptoOperaciones.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
+        TablaConceptoOperaciones.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         TablaConceptoOperaciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -178,8 +184,6 @@ public class frmListadoConceptosOperacion extends javax.swing.JFrame {
             TablaConceptoOperaciones.getColumnModel().getColumn(0).setMaxWidth(0);
         }
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 220, 800, 250));
-
         btnIngresar.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
         btnIngresar.setText("Nuevo");
         btnIngresar.addActionListener(new java.awt.event.ActionListener() {
@@ -187,10 +191,8 @@ public class frmListadoConceptosOperacion extends javax.swing.JFrame {
                 btnIngresarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 500, 190, 40));
 
         txtFiltro.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
-        getContentPane().add(txtFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 130, 370, 50));
 
         btnFiltro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/reload.png"))); // NOI18N
         btnFiltro.addActionListener(new java.awt.event.ActionListener() {
@@ -198,18 +200,69 @@ public class frmListadoConceptosOperacion extends javax.swing.JFrame {
                 btnFiltroActionPerformed(evt);
             }
         });
-        getContentPane().add(btnFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 130, 90, 50));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jBExit, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 951, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(52, 52, 52)
+                                .addComponent(btnFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(378, 378, 378)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(424, 424, 424)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(515, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(42, 42, 42)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(112, 112, 112)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(41, 41, 41)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 469, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jBExit, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(114, 114, 114))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExitActionPerformed
        this.dispose();
-       new Home_Administracion().setVisible(true);
+       new Home_Administracion(usuario).setVisible(true);
     }//GEN-LAST:event_jBExitActionPerformed
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
        
+        
+        frmRegistrarConceptoOperacion.usuario = usuario;
          this.setVisible(false);
         new frmRegistrarConceptoOperacion(Parent,"Create",new ConceptosOperaciones()).setVisible(true);           // TODO add your handling code here:
     }//GEN-LAST:event_btnIngresarActionPerformed

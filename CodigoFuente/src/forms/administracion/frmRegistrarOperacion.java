@@ -41,6 +41,9 @@ public class frmRegistrarOperacion extends javax.swing.JFrame {
     public List<models.ConceptosOperaciones> listConceptos;
     
     public frmRegistrarOperacion(Home_Administracion p) {
+        
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        
         initComponents();
         
          this.setLocationRelativeTo(this);
@@ -83,46 +86,37 @@ public class frmRegistrarOperacion extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(710, 708));
-        setMinimumSize(new java.awt.Dimension(710, 708));
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        setMaximumSize(new java.awt.Dimension(1920, 1080));
+        setMinimumSize(new java.awt.Dimension(1920, 1080));
+        setPreferredSize(new java.awt.Dimension(1920, 1080));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente_small.png"))); // NOI18N
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(217, 30, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("NUEVA OPERACIÓN");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(149, 186, 336, 70));
 
-        jLabel3.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel3.setText("Valor:");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(75, 381, 93, 27));
 
-        jLabel4.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText("Observaciones:");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 434, -1, 27));
 
-        jLabel5.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel5.setText("Concepto:");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(67, 266, 121, 27));
 
-        comboTipoOperacion.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
+        comboTipoOperacion.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         comboTipoOperacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "INGRESO", "SALIDA" }));
         comboTipoOperacion.setToolTipText("");
         comboTipoOperacion.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        getContentPane().add(comboTipoOperacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(225, 315, 360, 41));
 
-        txtValor.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
-        getContentPane().add(txtValor, new org.netbeans.lib.awtextra.AbsoluteConstraints(222, 374, 360, 40));
+        txtValor.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
 
-        txtConcepto.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
+        txtConcepto.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         jScrollPane1.setViewportView(txtConcepto);
-
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(222, 434, 360, 108));
 
         jButton1.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
         jButton1.setText("GUARDAR");
@@ -131,7 +125,6 @@ public class frmRegistrarOperacion extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(472, 583, 149, 59));
 
         jBExit1.setFont(new java.awt.Font("Leelawadee", 0, 40)); // NOI18N
         jBExit1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/exit.png"))); // NOI18N
@@ -140,27 +133,96 @@ public class frmRegistrarOperacion extends javax.swing.JFrame {
                 jBExit1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jBExit1, new org.netbeans.lib.awtextra.AbsoluteConstraints(283, 583, 120, -1));
 
-        cmbConceptos.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        cmbConceptos.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         cmbConceptos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbConceptosActionPerformed(evt);
             }
         });
-        getContentPane().add(cmbConceptos, new org.netbeans.lib.awtextra.AbsoluteConstraints(225, 262, 360, -1));
 
-        jLabel6.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel6.setText("Tipo:");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(87, 322, 93, 27));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(cmbConceptos, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(640, 640, 640)
+                        .addComponent(jBExit1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(220, 220, 220)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(452, 452, 452)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(39, 39, 39)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(comboTipoOperacion, 0, 520, Short.MAX_VALUE)
+                                    .addComponent(txtValor)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(49, 49, 49)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(841, 841, 841)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(745, 745, 745)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(670, 670, 670))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(77, 77, 77)
+                .addComponent(jLabel1)
+                .addGap(54, 54, 54)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(69, 69, 69)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(comboTipoOperacion, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(40, 40, 40)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbConceptos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(58, 58, 58)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(62, 62, 62)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jBExit1)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBExit1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExit1ActionPerformed
         this.dispose();
-       new Home_Administracion().setVisible(true);
+       new Home_Administracion(admin).setVisible(true);
     }//GEN-LAST:event_jBExit1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -197,7 +259,7 @@ public class frmRegistrarOperacion extends javax.swing.JFrame {
             
             
             this.dispose();
-            new Home_Administracion().setVisible(true);
+            new Home_Administracion(admin).setVisible(true);
             
             
         } catch (RuntimeException e) {

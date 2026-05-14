@@ -22,6 +22,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
+import models.Usuarios;
 //import models.TmMesas;
 /**
  *
@@ -31,6 +32,7 @@ public class frmListarMesas extends javax.swing.JFrame {
     private List<models.Mesas> lisMesas;
     //private TmMesas modelomesas;
         private Home_Administracion Parent;
+         private Usuarios usuario;
     /**
      * Creates new form Usuarios
      */
@@ -167,7 +169,7 @@ public class frmListarMesas extends javax.swing.JFrame {
         getContentPane().add(jBDelete12, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 540, 150, 39));
 
         jBExit.setFont(new java.awt.Font("Leelawadee", 0, 40)); // NOI18N
-        jBExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/exit2.png"))); // NOI18N
+        jBExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/exit.png"))); // NOI18N
         jBExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBExitActionPerformed(evt);
@@ -189,7 +191,7 @@ public class frmListarMesas extends javax.swing.JFrame {
 
     private void jBExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExitActionPerformed
         this.dispose();
-        new Home_Administracion().setVisible(true);
+        new Home_Administracion(usuario).setVisible(true);
     }//GEN-LAST:event_jBExitActionPerformed
 
     /**

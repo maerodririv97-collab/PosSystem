@@ -29,6 +29,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import models.Facturas;
+import models.Usuarios;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -47,11 +48,14 @@ public class frmListadoPedidosProveedores extends javax.swing.JFrame {
     models.Facturas clFactura = new models.Facturas();
     //
     private Home_Administracion Parent;
+     public static Usuarios usuario;
     
     /**
      * Creates new form Usuarios
      */
     public frmListadoPedidosProveedores(Home_Administracion P) {
+        
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         
         initComponents();
         this.Parent = P;
@@ -70,6 +74,11 @@ public class frmListadoPedidosProveedores extends javax.swing.JFrame {
             
           df.addRow(new Object[]{dataPed,dataPed.getIdFactura(),dataPed.getCodigo(),dataPed.getNombreProveedor(),String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(dataPed.getTotal())),dataPed.getFecha()  });
         }
+        
+        TablaFacturas.setRowHeight(TablaFacturas.getFontMetrics(TablaFacturas.getFont()).getHeight() + 2);
+        TablaFacturas.revalidate(); // Fuerza a la interfaz a recalcular el diseño
+        TablaFacturas.repaint();   // Fuerza el repintado visual
+        
         TablaFacturas.setModel(df);
         
         Home_Administracion form = Parent;
@@ -83,6 +92,8 @@ public class frmListadoPedidosProveedores extends javax.swing.JFrame {
                       
                         models.Facturas p = (models.Facturas) TablaFacturas.getValueAt(fila, 0);
                         
+                        
+                        frmDetallePedidoProveedor.usuario = usuario;
                        listForm.dispose();
                        new frmDetallePedidoProveedor(Parent, p).setVisible(true);
                 }
@@ -117,15 +128,18 @@ public class frmListadoPedidosProveedores extends javax.swing.JFrame {
         jPopupMenu1.setName("Modificar"); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1024, 800));
+        setMaximumSize(new java.awt.Dimension(1920, 1080));
+        setMinimumSize(new java.awt.Dimension(1920, 1080));
+        setPreferredSize(new java.awt.Dimension(1920, 1080));
+        setSize(new java.awt.Dimension(1920, 1080));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente_small.png"))); // NOI18N
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, 250, 179));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, 180, 190));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
         jLabel2.setText("Gestión de Facturas de Compra");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 40, 560, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 80, 680, 130));
 
         jBExit.setFont(new java.awt.Font("Leelawadee", 0, 40)); // NOI18N
         jBExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/exit.png"))); // NOI18N
@@ -134,9 +148,9 @@ public class frmListadoPedidosProveedores extends javax.swing.JFrame {
                 jBExitActionPerformed(evt);
             }
         });
-        getContentPane().add(jBExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(729, 518, 160, 61));
+        getContentPane().add(jBExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1370, 870, 160, 61));
 
-        TablaFacturas.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
+        TablaFacturas.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         TablaFacturas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -172,7 +186,7 @@ public class frmListadoPedidosProveedores extends javax.swing.JFrame {
             TablaFacturas.getColumnModel().getColumn(0).setMaxWidth(0);
         }
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 220, 800, 250));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 360, 1220, 460));
 
         btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/print.png"))); // NOI18N
         btnImprimir.addActionListener(new java.awt.event.ActionListener() {
@@ -180,10 +194,10 @@ public class frmListadoPedidosProveedores extends javax.swing.JFrame {
                 btnImprimirActionPerformed(evt);
             }
         });
-        getContentPane().add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 490, -1, -1));
+        getContentPane().add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 860, -1, -1));
 
         txtFiltro.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
-        getContentPane().add(txtFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 130, 370, 50));
+        getContentPane().add(txtFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 260, 370, 50));
 
         btnFiltro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/reload.png"))); // NOI18N
         btnFiltro.addActionListener(new java.awt.event.ActionListener() {
@@ -191,14 +205,14 @@ public class frmListadoPedidosProveedores extends javax.swing.JFrame {
                 btnFiltroActionPerformed(evt);
             }
         });
-        getContentPane().add(btnFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 130, 90, 50));
+        getContentPane().add(btnFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 260, 90, 50));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExitActionPerformed
        this.dispose();
-       new Home_Administracion().setVisible(true);
+       new Home_Administracion(usuario).setVisible(true);
     }//GEN-LAST:event_jBExitActionPerformed
 
     private void TablaFacturasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaFacturasMouseClicked

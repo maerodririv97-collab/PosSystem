@@ -112,13 +112,13 @@ public class Operaciones  implements java.io.Serializable {
         return Operaciones;
     }
     
-    public List<models.Operaciones> mtdFiltro(String cadena) {
+    public List<models.Operaciones> mtdFiltro(String cadena, int idTurno) {
         List<Operaciones> opera = new ArrayList<Operaciones>();
         Transaction trns = null;
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.getTransaction().begin();
-            Query q = session.createQuery("FROM Operaciones P WHERE P.concepto LIKE :parametro");
+            Query q = session.createQuery("FROM Operaciones P WHERE P.concepto LIKE :parametro AND P.turnos.idTurno ="+idTurno);
             q.setString("parametro",'%'+cadena+'%');
             
             opera = q.list();

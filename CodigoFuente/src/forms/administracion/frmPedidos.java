@@ -37,10 +37,13 @@ public class frmPedidos extends javax.swing.JFrame implements Runnable {
      */
     public Home_Administracion parent;
     public List<Ventas> listVentas;
+    public static Usuarios usuario;
     
     private Thread hilo;
     
     public frmPedidos(Home_Administracion p) {
+        
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         
         initComponents();
         this.parent  = p;
@@ -70,10 +73,10 @@ public class frmPedidos extends javax.swing.JFrame implements Runnable {
         btnSalir = new javax.swing.JButton();
         btnRecargar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(1366, 768));
-        setMinimumSize(new java.awt.Dimension(1024, 750));
-        setPreferredSize(new java.awt.Dimension(1024, 700));
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(1920, 1080));
+        setMinimumSize(new java.awt.Dimension(1920, 1080));
+        setPreferredSize(new java.awt.Dimension(1920, 1080));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente_small.png"))); // NOI18N
@@ -82,14 +85,15 @@ public class frmPedidos extends javax.swing.JFrame implements Runnable {
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
+        PanelPedidos.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         PanelPedidos.setLayout(new java.awt.GridLayout(0, 1));
         jScrollPane1.setViewportView(PanelPedidos);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 940, 440));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 290, 1070, 490));
 
         jLabel2.setFont(new java.awt.Font("Leelawadee", 0, 36)); // NOI18N
         jLabel2.setText("Pedidos Sin Facturar");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 70, 350, 70));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 160, 350, 70));
 
         btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/exit.png"))); // NOI18N
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -97,7 +101,7 @@ public class frmPedidos extends javax.swing.JFrame implements Runnable {
                 btnSalirActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 80, 90, 70));
+        getContentPane().add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 170, 90, 70));
 
         btnRecargar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/reload.png"))); // NOI18N
         btnRecargar.addActionListener(new java.awt.event.ActionListener() {
@@ -105,7 +109,9 @@ public class frmPedidos extends javax.swing.JFrame implements Runnable {
                 btnRecargarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnRecargar, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 80, 90, 70));
+        getContentPane().add(btnRecargar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1190, 170, 90, 70));
+
+        getAccessibleContext().setAccessibleParent(this);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -113,7 +119,7 @@ public class frmPedidos extends javax.swing.JFrame implements Runnable {
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         hilo.interrupt();
         this.dispose();
-        new Home_Administracion().setVisible(true);
+        new Home_Administracion(usuario).setVisible(true);
 // TODO add your handling code here:
     }//GEN-LAST:event_btnSalirActionPerformed
 
@@ -151,6 +157,7 @@ public class frmPedidos extends javax.swing.JFrame implements Runnable {
              btnPedido.addActionListener(new ActionListener() { 
                 public void actionPerformed(ActionEvent e) {            
                    frmDetalleVenta formDetalle = new frmDetalleVenta(p,dataVenta);
+                   formDetalle.usuario = usuario;
                    formDetalle.setVisible(true);
                    p.dispose();
                 } 

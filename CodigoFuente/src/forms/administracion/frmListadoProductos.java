@@ -25,6 +25,7 @@ import java.text.NumberFormat;
 import java.util.Locale;
 import javax.swing.ImageIcon;
 import models.Turnos;
+import models.Usuarios;
 //import models.TmProductos;
 /**
  *
@@ -39,6 +40,7 @@ public class frmListadoProductos extends javax.swing.JFrame {
     models.Productos clProducto = new models.Productos();
     //
     private Home_Administracion Parent;
+     private Usuarios usuario;
     
     /**
      * Creates new form Usuarios
@@ -228,7 +230,7 @@ public class frmListadoProductos extends javax.swing.JFrame {
 
     private void jBExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExitActionPerformed
        this.dispose();
-      new Home_Administracion().setVisible(true);
+      new Home_Administracion(usuario).setVisible(true);
     }//GEN-LAST:event_jBExitActionPerformed
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed

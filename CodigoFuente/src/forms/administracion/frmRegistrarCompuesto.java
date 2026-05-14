@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import models.Categorias;
 import models.HibernateUtil;
+import models.Usuarios;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.jfree.base.modules.DefaultModuleInfo;
@@ -39,6 +40,7 @@ public class frmRegistrarCompuesto extends javax.swing.JFrame {
   private List<models.Subproductos> ArraySubProductos = new ArrayList<>();
   public models.Subproductos subProducto;
   private static DefaultTableModel modelo;
+   private Usuarios usuario;
   
   public int totalCosto = 0;
 
@@ -500,7 +502,7 @@ public class frmRegistrarCompuesto extends javax.swing.JFrame {
                 session.flush();
                 session.close();
                 this.dispose();
-                new Home_Administracion().setVisible(true);
+                new Home_Administracion(usuario).setVisible(true);
             } 
       
 
@@ -540,7 +542,7 @@ public class frmRegistrarCompuesto extends javax.swing.JFrame {
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         this.dispose();  
-        new Home_Administracion().setVisible(true);
+        new Home_Administracion(usuario).setVisible(true);
 // TODO add your handling code here:
     }//GEN-LAST:event_btnSalirActionPerformed
 

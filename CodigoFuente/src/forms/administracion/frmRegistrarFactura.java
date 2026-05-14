@@ -23,6 +23,7 @@ public class frmRegistrarFactura extends javax.swing.JFrame {
     
     private Facturas factura;
     private Home_Administracion Parent;
+     private Usuarios usuario;
     /**
      * Creates new form frmRegistrarFactura
      */
@@ -161,7 +162,7 @@ public class frmRegistrarFactura extends javax.swing.JFrame {
 
     private void jBExit1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExit1ActionPerformed
         this.dispose();
-       new Home_Administracion().setVisible(true);
+       new Home_Administracion(usuario).setVisible(true);
     }//GEN-LAST:event_jBExit1ActionPerformed
 
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
@@ -180,7 +181,7 @@ public class frmRegistrarFactura extends javax.swing.JFrame {
                         new frmRegistrarProductos(Parent, facturaRegistrada).setVisible(true);
                     }else{
                         this.dispose();
-                        new Home_Administracion().setVisible(true);
+                        new Home_Administracion(usuario).setVisible(true);
                     }
         }else{
             
