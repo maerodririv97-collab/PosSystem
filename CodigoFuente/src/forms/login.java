@@ -299,54 +299,33 @@ public class login extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+        // 1. LA PRIMERA LÍNEA SIEMPRE
+        System.setProperty("sun.java2d.uiScale", "1.0");
+
+        // 2. Configuración de FlatLaf (Esto reemplaza al bloque de Nimbus)
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            FlatLightLaf.setup();
+
+            // Tus personalizaciones de UI
+            UIManager.put("Button.arc", 15);
+            UIManager.put("Component.arc", 10);
+            UIManager.put("Button.background", new Color(8,158,45)); 
+            UIManager.put("Panel.background", new Color(245, 245, 245)); 
+            UIManager.put("Button.foreground", Color.BLACK);
+            UIManager.put("Button.focusPainted", false);
+
+        } catch (Exception e) {
+            System.err.println("Error al cargar FlatLaf");
         }
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                try {
-                    /*////JFrame.setDefaultLookAndFeelDecorated(false);
-                    SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.ModerateSkin");*/
-                    FlatLightLaf.setup();
-                    
-                    UIManager.put("Button.arc", 15);
-                    UIManager.put("Component.arc", 10);
-
-                    UIManager.put("Button.background", new Color(106, 130, 110)); // verde oliva
-                    UIManager.put("Panel.background", new Color(245, 245, 245)); // fondo general
-                    UIManager.put("Button.foreground", Color.WHITE);
-                    UIManager.put("Button.focusPainted", false);
-                    
-                } catch (Exception e2) {
-                }
                 new login().setVisible(true);
-                
-                
             }
         });
     }
-    
+
     private void setPassword(int number){
         String pass = new String(jPassField.getPassword());
         
@@ -365,7 +344,7 @@ public class login extends javax.swing.JFrame {
             if(user != null){
                 if(user.getEstado().equalsIgnoreCase("Activo")){
                     switch (user.getPerfil()){
-                        case "Mesero":
+                        case "Barista":
                             Home_Administracion.admin = user;
                             new Home_Administracion(user).setVisible(true);
                             break;

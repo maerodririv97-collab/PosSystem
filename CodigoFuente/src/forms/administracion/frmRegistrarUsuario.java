@@ -25,7 +25,7 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
      */
     private Home_Administracion Parent;
     private String modo;
-    private models.Usuarios usuario;
+    public static models.Usuarios usuario;
     
     public frmRegistrarUsuario(Home_Administracion p,String modo,models.Usuarios objUser) {
         
@@ -59,11 +59,8 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
              switch(objUser.getPerfil()){
                 case "Administrador":
                      txtPerfil.setSelectedIndex(0);
-                break;  
-                case "Gerente":
-                     txtPerfil.setSelectedIndex(1);
-                break;  
-                case "Mesero":
+                break;   
+                case "Barista":
                      txtPerfil.setSelectedIndex(2);
                 break;  
             }
@@ -103,11 +100,11 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         txtapellidos = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        txtPerfil = new javax.swing.JComboBox<String>();
+        txtPerfil = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         jBExit = new javax.swing.JButton();
         lblEstado = new javax.swing.JLabel();
-        cmbEstado = new javax.swing.JComboBox<String>();
+        cmbEstado = new javax.swing.JComboBox<>();
         btnDesbloquear = new javax.swing.JButton();
         txtPin = new javax.swing.JPasswordField();
         btnSalir = new javax.swing.JButton();
@@ -138,7 +135,7 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
         jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         txtPerfil.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
-        txtPerfil.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Administrador", "Gerente", "Mesero" }));
+        txtPerfil.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador", "Barista" }));
         txtPerfil.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPerfilActionPerformed(evt);
@@ -164,7 +161,7 @@ public class frmRegistrarUsuario extends javax.swing.JFrame {
         lblEstado.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         cmbEstado.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
-        cmbEstado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Activo", "Inactivo" }));
+        cmbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo", "Inactivo" }));
         cmbEstado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbEstadoActionPerformed(evt);

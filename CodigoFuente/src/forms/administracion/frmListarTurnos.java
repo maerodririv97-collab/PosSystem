@@ -6,18 +6,22 @@
 package forms.administracion;
 
 import java.awt.Image;
+import static java.lang.String.format;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import models.Turnos;
 import models.Usuarios;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -31,16 +35,39 @@ public class frmListarTurnos extends javax.swing.JFrame {
     private  models.Turnos objTurno = new models.Turnos();
     private static models.Turnos Turno;
     private Home_Administracion Parent;
-     private Usuarios usuario;
+     public static Usuarios usuario;
+     
+     private models.DisenoFormularios desing;
+     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+     
     
     public frmListarTurnos(Home_Administracion p) {
         initComponents();
         this.Parent = p;
         
-        this.setLocationRelativeTo(this);
+        desing.mtdDisenoPantalla(this);
+ 
         ImageIcon img = new ImageIcon(getClass().getResource("/images/icon_app.png"));
         this.setIconImage(img.getImage().getScaledInstance(180,180, Image.SCALE_SMOOTH));
-        this.setTitle("POSystem - Powered by KIM-Solutions");
+        
+    }
+    
+    public void mtdLoadTurno(Turnos obj){
+        
+        if(obj != null){
+                    lblCodigo.setText(String.valueOf(obj.getIdTurno()));
+                    lblFechaApertura.setText(String.valueOf(format.format(obj.getApertura())));
+                    lblFechaCierre.setText(String.valueOf(format.format(obj.getCierre())));
+                    lblVentas.setText(String.valueOf(obj.getVentases().size()));
+            }else{
+                JOptionPane.showMessageDialog(null, "En Esta Fecha No Se Abrio Tuno");
+
+                    lblCodigo.setText(null);
+                    lblFechaApertura.setText(null);
+                    lblFechaCierre.setText(null);
+                    lblVentas.setText(null);
+            } 
+        
     }
 
     /**
@@ -68,6 +95,7 @@ public class frmListarTurnos extends javax.swing.JFrame {
         btnSalir = new javax.swing.JButton();
         btnFind = new javax.swing.JButton();
         txtFecha = new javax.swing.JTextField();
+        cmbTurnos = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(1024, 720));
@@ -183,21 +211,32 @@ public class frmListarTurnos extends javax.swing.JFrame {
 
         txtFecha.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
 
+        cmbTurnos.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        cmbTurnos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbTurnosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(88, 88, 88)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(54, 54, 54)
-                        .addComponent(Calendario, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
+                        .addGap(82, 82, 82)
                         .addComponent(PanelInformacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(79, 79, 79)
-                        .addComponent(btnImprimir)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnImprimir))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(110, 110, 110)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cmbTurnos, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(54, 54, 54)
+                                .addComponent(Calendario, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(50, 50, 50)
@@ -224,17 +263,18 @@ public class frmListarTurnos extends javax.swing.JFrame {
                         .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(42, 42, 42)
                         .addComponent(btnFind, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(44, 44, 44)
+                .addComponent(cmbTurnos, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(PanelInformacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 202, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnImprimir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnSalir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(139, 139, 139))))
+                        .addGap(139, 139, 139))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(PanelInformacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(23, 23, 23))))
         );
 
         pack();
@@ -246,6 +286,7 @@ public class frmListarTurnos extends javax.swing.JFrame {
             params.put("turno", Turno);
             try {
                 JasperPrint jasperPrint = JasperFillManager.fillReport("src\\reports\\turno.jasper", params, new JREmptyDataSource());
+                //JasperViewer.viewReport(jasperPrint, true);
                 JasperPrintManager.printReport(jasperPrint, false);
 
             } catch (JRException e) {
@@ -269,7 +310,7 @@ public class frmListarTurnos extends javax.swing.JFrame {
 
     private void CalendarioPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_CalendarioPropertyChange
         
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        
         Date date = Calendario.getDate();
         String fecha = format.format(date);
         
@@ -278,26 +319,41 @@ public class frmListarTurnos extends javax.swing.JFrame {
 
     private void btnFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindActionPerformed
        
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        
         Date date = Calendario.getDate();
         String fecha = txtFecha.getText();
         
-        Turno = objTurno.mtdTurnoOne(fecha);
+        //Turno = objTurno.mtdTurnoOne(fecha);
         
-        if(Turno != null){
-                lblCodigo.setText(String.valueOf(Turno.getIdTurno()));
-                lblFechaApertura.setText(String.valueOf(format.format(Turno.getApertura())));
-                lblFechaCierre.setText(String.valueOf(format.format(Turno.getCierre())));
-                lblVentas.setText(String.valueOf(Turno.getVentases().size()));
-        }else{
-            JOptionPane.showMessageDialog(null, "En Esta Fecha No Se Abrio Tuno");
-           
-                lblCodigo.setText(null);
-                lblFechaApertura.setText(null);
-                lblFechaCierre.setText(null);
-                lblVentas.setText(null);
-        } // TODO add your handling code here:
+         ArrayList<Turnos> turnos = new ArrayList();
+         
+         turnos = objTurno.mtdTurnosAll(fecha);
+         
+         if(turnos.size() > 1){
+             
+             for (int i = 0; i < turnos.size(); i++) {
+                cmbTurnos.addItem(turnos.get(i));
+          }
+             
+             
+         }else{
+             
+             Turno = turnos.get(0);
+             
+             mtdLoadTurno(Turno);
+        
+            
+         }
     }//GEN-LAST:event_btnFindActionPerformed
+
+    private void cmbTurnosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTurnosActionPerformed
+                    // TODO add your handling code here:
+                    
+                    Turno = (Turnos) cmbTurnos.getSelectedItem();
+                    
+                    mtdLoadTurno(Turno);
+                    
+    }//GEN-LAST:event_cmbTurnosActionPerformed
 
    
 
@@ -307,6 +363,7 @@ public class frmListarTurnos extends javax.swing.JFrame {
     private javax.swing.JButton btnFind;
     private javax.swing.JButton btnImprimir;
     private javax.swing.JButton btnSalir;
+    public javax.swing.JComboBox<models.Turnos> cmbTurnos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

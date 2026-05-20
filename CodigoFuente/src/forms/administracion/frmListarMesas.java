@@ -32,7 +32,7 @@ public class frmListarMesas extends javax.swing.JFrame {
     private List<models.Mesas> lisMesas;
     //private TmMesas modelomesas;
         private Home_Administracion Parent;
-         private Usuarios usuario;
+         public static Usuarios usuario;
     /**
      * Creates new form Usuarios
      */
@@ -58,6 +58,11 @@ public class frmListarMesas extends javax.swing.JFrame {
                 df.addRow(new Object[]{dataMesa, dataMesa.getIdMesa(),dataMesa.getTipo(),dataMesa.getNumero(),dataMesa.getEstado() });
                 
             }
+            
+            TablaMesas.setRowHeight(TablaMesas.getFontMetrics(TablaMesas.getFont()).getHeight() + 2);
+            TablaMesas.getColumnModel().getColumn(1).setPreferredWidth(15);
+            TablaMesas.revalidate(); // Fuerza a la interfaz a recalcular el diseño
+            TablaMesas.repaint();   // Fuerza el repintado visual
             
                     DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
                     centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);

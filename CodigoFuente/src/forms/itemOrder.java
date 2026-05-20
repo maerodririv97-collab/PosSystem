@@ -66,7 +66,6 @@ public class itemOrder extends javax.swing.JPanel {
         lblValorUnitario = new javax.swing.JLabel();
         lblNombreProducto = new javax.swing.JLabel();
         lblTotalPedido = new javax.swing.JLabel();
-        btnDescuento = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
@@ -91,17 +90,6 @@ public class itemOrder extends javax.swing.JPanel {
         lblTotalPedido.setText("$2.500");
         add(lblTotalPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 30, 140, 30));
 
-        btnDescuento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/discount.png"))); // NOI18N
-        btnDescuento.setMaximumSize(new java.awt.Dimension(30, 30));
-        btnDescuento.setMinimumSize(new java.awt.Dimension(30, 30));
-        btnDescuento.setPreferredSize(new java.awt.Dimension(30, 30));
-        btnDescuento.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDescuentoActionPerformed(evt);
-            }
-        });
-        add(btnDescuento, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 30, 40, 30));
-
         btnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/pencil.png"))); // NOI18N
         btnEdit.setMaximumSize(new java.awt.Dimension(30, 30));
         btnEdit.setMinimumSize(new java.awt.Dimension(30, 30));
@@ -111,34 +99,26 @@ public class itemOrder extends javax.swing.JPanel {
                 btnEditActionPerformed(evt);
             }
         });
-        add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 0, 40, 30));
+        add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 10, 60, 50));
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnDescuentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDescuentoActionPerformed
-        // TODO add your handling code here:
-        
-        /*inputDigit iD = new inputDigit(parentP,true);
-        iD.setVisible(true); */
-        
-        frmAplicarDescuento formDescuento = new frmAplicarDescuento(this,this.objetoPedido);
-        
-        formDescuento.setVisible(true);
-        frmAplicarDescuento.objUpdate = this;
-        
-        
-        
-    }//GEN-LAST:event_btnDescuentoActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         
        
-        
+           parentP.setEnabled(false);
         
            frmEditarPedido.objUpdate = this;
            frmEditarPedido.UpdatePedido = this.objetoPedido;
-           new frmEditarPedido(this.parentP).setVisible(true);
-            
-            
+           frmEditarPedido frmNew =  new frmEditarPedido(this.parentP);
+           frmNew.setVisible(true); 
+           
+            frmNew.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+            // Cuando frmCantidad se destruya o se cierre, mainMesero vuelve a la vida
+            parentP.setEnabled(true); 
+            parentP.toFront(); // La trae al frente automáticamente
+            }});
            
         
         
@@ -181,7 +161,6 @@ public class itemOrder extends javax.swing.JPanel {
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnDescuento;
     private javax.swing.JButton btnEdit;
     private javax.swing.JLabel lblNombreProducto;
     private javax.swing.JLabel lblTotalPedido;

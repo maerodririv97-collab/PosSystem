@@ -6,9 +6,9 @@ public class JasperCompiler {
     public static void main(String[] args) {
         try {
             // Ruta del archivo que YA tienes
-            String fuente = "/reports/venta.jrxml"; 
+            String fuente = "src/reports/pedidos.jrxml"; 
             // Ruta del archivo que NECESITAS
-            String destino = "/reports/venta.jasper"; 
+            String destino = "src/reports/pedidos.jasper"; 
             
             System.out.println("Compilando reporte...");
             JasperCompileManager.compileReportToFile(fuente, destino);

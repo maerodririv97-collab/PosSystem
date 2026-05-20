@@ -55,11 +55,16 @@ public class frmListadoPedidosProveedores extends javax.swing.JFrame {
      */
     public frmListadoPedidosProveedores(Home_Administracion P) {
         
-        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+       
         
         initComponents();
+        
+        this.pack(); // Calcula tamaños
+        this.setLocationRelativeTo(null);
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        
+        
         this.Parent = P;
-        this.setLocationRelativeTo(this);
         ImageIcon img = new ImageIcon(getClass().getResource("/images/icon_app.png"));
         this.setIconImage(img.getImage().getScaledInstance(180,180, Image.SCALE_SMOOTH));
         this.setTitle("POSystem - Powered by KIM-Solutions");
@@ -76,6 +81,7 @@ public class frmListadoPedidosProveedores extends javax.swing.JFrame {
         }
         
         TablaFacturas.setRowHeight(TablaFacturas.getFontMetrics(TablaFacturas.getFont()).getHeight() + 2);
+        TablaFacturas.getColumnModel().getColumn(1).setPreferredWidth(15);
         TablaFacturas.revalidate(); // Fuerza a la interfaz a recalcular el diseño
         TablaFacturas.repaint();   // Fuerza el repintado visual
         
@@ -135,11 +141,16 @@ public class frmListadoPedidosProveedores extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente_small.png"))); // NOI18N
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, 180, 190));
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel1MouseClicked(evt);
+            }
+        });
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 30, 180, 190));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
         jLabel2.setText("Gestión de Facturas de Compra");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 80, 680, 130));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 20, 680, 130));
 
         jBExit.setFont(new java.awt.Font("Leelawadee", 0, 40)); // NOI18N
         jBExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/exit.png"))); // NOI18N
@@ -148,7 +159,7 @@ public class frmListadoPedidosProveedores extends javax.swing.JFrame {
                 jBExitActionPerformed(evt);
             }
         });
-        getContentPane().add(jBExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1370, 870, 160, 61));
+        getContentPane().add(jBExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1430, 800, 130, 80));
 
         TablaFacturas.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         TablaFacturas.setModel(new javax.swing.table.DefaultTableModel(
@@ -186,7 +197,7 @@ public class frmListadoPedidosProveedores extends javax.swing.JFrame {
             TablaFacturas.getColumnModel().getColumn(0).setMaxWidth(0);
         }
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 360, 1220, 460));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 280, 1230, 480));
 
         btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/print.png"))); // NOI18N
         btnImprimir.addActionListener(new java.awt.event.ActionListener() {
@@ -194,10 +205,10 @@ public class frmListadoPedidosProveedores extends javax.swing.JFrame {
                 btnImprimirActionPerformed(evt);
             }
         });
-        getContentPane().add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 860, -1, -1));
+        getContentPane().add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 790, -1, -1));
 
         txtFiltro.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
-        getContentPane().add(txtFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 260, 370, 50));
+        getContentPane().add(txtFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 200, 370, 50));
 
         btnFiltro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/reload.png"))); // NOI18N
         btnFiltro.addActionListener(new java.awt.event.ActionListener() {
@@ -205,7 +216,7 @@ public class frmListadoPedidosProveedores extends javax.swing.JFrame {
                 btnFiltroActionPerformed(evt);
             }
         });
-        getContentPane().add(btnFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 260, 90, 50));
+        getContentPane().add(btnFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 200, 90, 50));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -273,6 +284,11 @@ public class frmListadoPedidosProveedores extends javax.swing.JFrame {
         TablaFacturas.setModel(df);   // TODO add your handling code here: 
      
     }//GEN-LAST:event_btnFiltroActionPerformed
+
+    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+        this.dispose();
+        new Home_Administracion(usuario).setVisible(true);        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel1MouseClicked
 
    
 

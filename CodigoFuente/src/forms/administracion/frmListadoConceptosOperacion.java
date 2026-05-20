@@ -60,10 +60,11 @@ public class frmListadoConceptosOperacion extends javax.swing.JFrame {
         
         initComponents();
         
+        this.pack(); // Calcula tamaños
+        this.setLocationRelativeTo(null);
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.Parent = P;
        
-        this.setLocationRelativeTo(this);
         ImageIcon img = new ImageIcon(getClass().getResource("/images/icon_app.png"));
         this.setIconImage(img.getImage().getScaledInstance(180,180, Image.SCALE_SMOOTH));
         this.setTitle("POSystem - Powered by KIM-Solutions");
@@ -80,6 +81,7 @@ public class frmListadoConceptosOperacion extends javax.swing.JFrame {
         }
         
         TablaConceptoOperaciones.setRowHeight(TablaConceptoOperaciones.getFontMetrics(TablaConceptoOperaciones.getFont()).getHeight() + 2);
+        TablaConceptoOperaciones.getColumnModel().getColumn(1).setPreferredWidth(15);
         TablaConceptoOperaciones.revalidate(); // Fuerza a la interfaz a recalcular el diseño
         TablaConceptoOperaciones.repaint();   // Fuerza el repintado visual
         
@@ -96,6 +98,7 @@ public class frmListadoConceptosOperacion extends javax.swing.JFrame {
                       
                         ConceptosOperaciones p = (ConceptosOperaciones) TablaConceptoOperaciones.getValueAt(fila, 0);
                         
+                        frmRegistrarConceptoOperacion.usuario = usuario;
                         listForm.dispose();
                         new frmRegistrarConceptoOperacion(Parent, "update", p).setVisible(true);
                        
@@ -133,12 +136,21 @@ public class frmListadoConceptosOperacion extends javax.swing.JFrame {
         jPopupMenu1.setName("Modificar"); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1024, 800));
+        setMaximumSize(new java.awt.Dimension(1900, 1020));
+        setMinimumSize(new java.awt.Dimension(1900, 1020));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente_small.png"))); // NOI18N
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel1MouseClicked(evt);
+            }
+        });
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 60, 164, 193));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
         jLabel2.setText("Gestion de Operaciones");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 90, 430, 50));
 
         jBExit.setFont(new java.awt.Font("Leelawadee", 0, 40)); // NOI18N
         jBExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/exit.png"))); // NOI18N
@@ -147,6 +159,7 @@ public class frmListadoConceptosOperacion extends javax.swing.JFrame {
                 jBExitActionPerformed(evt);
             }
         });
+        getContentPane().add(jBExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1330, 820, 120, 80));
 
         TablaConceptoOperaciones.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         TablaConceptoOperaciones.setModel(new javax.swing.table.DefaultTableModel(
@@ -172,6 +185,8 @@ public class frmListadoConceptosOperacion extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        TablaConceptoOperaciones.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_NEXT_COLUMN);
+        TablaConceptoOperaciones.setAutoscrolls(false);
         TablaConceptoOperaciones.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 TablaConceptoOperacionesMouseClicked(evt);
@@ -184,6 +199,8 @@ public class frmListadoConceptosOperacion extends javax.swing.JFrame {
             TablaConceptoOperaciones.getColumnModel().getColumn(0).setMaxWidth(0);
         }
 
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(281, 320, 1480, 469));
+
         btnIngresar.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
         btnIngresar.setText("Nuevo");
         btnIngresar.addActionListener(new java.awt.event.ActionListener() {
@@ -191,8 +208,10 @@ public class frmListadoConceptosOperacion extends javax.swing.JFrame {
                 btnIngresarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 820, 150, 90));
 
         txtFiltro.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
+        getContentPane().add(txtFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 230, 370, 50));
 
         btnFiltro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/reload.png"))); // NOI18N
         btnFiltro.addActionListener(new java.awt.event.ActionListener() {
@@ -200,56 +219,7 @@ public class frmListadoConceptosOperacion extends javax.swing.JFrame {
                 btnFiltroActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jBExit, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 951, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(52, 52, 52)
-                                .addComponent(btnFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(378, 378, 378)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(424, 424, 424)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(515, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(42, 42, 42)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(112, 112, 112)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(41, 41, 41)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 469, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jBExit, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(114, 114, 114))
-        );
+        getContentPane().add(btnFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(1360, 230, 90, 50));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -298,6 +268,11 @@ public class frmListadoConceptosOperacion extends javax.swing.JFrame {
         TablaConceptoOperaciones.setModel(df);       // TODO add your handling code here: 
      
     }//GEN-LAST:event_btnFiltroActionPerformed
+
+    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+       this.dispose();
+       new Home_Administracion(usuario).setVisible(true);     // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel1MouseClicked
 
    
 

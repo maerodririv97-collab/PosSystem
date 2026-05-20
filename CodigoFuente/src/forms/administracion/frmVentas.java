@@ -57,7 +57,7 @@ public class frmVentas extends javax.swing.JFrame {
     public static models.Usuarios admin;
     public Calendar calendario;
     private Home_Administracion Parent;
-    private Usuarios usuario;
+    public static Usuarios usuario;
     
     public frmVentas(Home_Administracion p) {
         initComponents();
@@ -142,19 +142,17 @@ public class frmVentas extends javax.swing.JFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente_small.png"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, 250, 160));
 
-        jBExit.setFont(new java.awt.Font("Aller", 0, 30)); // NOI18N
-        jBExit.setForeground(new java.awt.Color(185, 54, 129));
+        jBExit.setFont(new java.awt.Font("Arial", 0, 30)); // NOI18N
         jBExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/exit.png"))); // NOI18N
-        jBExit.setText("Regresar");
         jBExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBExitActionPerformed(evt);
             }
         });
-        getContentPane().add(jBExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 650, -1, 70));
+        getContentPane().add(jBExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 640, 110, 70));
         getContentPane().add(jPEstadisticas, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 170, 1000, 450));
 
-        lblDia.setFont(new java.awt.Font("Aller", 0, 70)); // NOI18N
+        lblDia.setFont(new java.awt.Font("Arial", 0, 70)); // NOI18N
         lblDia.setText("Informe Ventas");
         getContentPane().add(lblDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 50, 500, 60));
 

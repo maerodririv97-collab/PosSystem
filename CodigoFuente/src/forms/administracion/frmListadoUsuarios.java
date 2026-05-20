@@ -25,7 +25,7 @@ public class frmListadoUsuarios extends javax.swing.JFrame {
     
     private  Home_Administracion Parent;
     private List<models.Usuarios> ListUsuarios;
-     private Usuarios usuario;
+    public static Usuarios usuario;
     
     
     public frmListadoUsuarios(Home_Administracion P) {
@@ -47,6 +47,11 @@ public class frmListadoUsuarios extends javax.swing.JFrame {
                 df.addRow(new Object[]{dataUsuario, dataUsuario.getIdUsuario(),dataUsuario.getNombres(),dataUsuario.getApellidos(),dataUsuario.getPerfil(),dataUsuario.getEstado() });
                 
             }
+            
+            TblUsuarios.setRowHeight(TblUsuarios.getFontMetrics(TblUsuarios.getFont()).getHeight() + 2);
+            TblUsuarios.getColumnModel().getColumn(1).setPreferredWidth(15);
+            TblUsuarios.revalidate(); // Fuerza a la interfaz a recalcular el diseño
+            TblUsuarios.repaint();   // Fuerza el repintado visual
             
         Home_Administracion form = Parent;
         frmListadoUsuarios listForm = this;
@@ -100,7 +105,7 @@ public class frmListadoUsuarios extends javax.swing.JFrame {
         jLabel2.setText("Gestion de Usuarios");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(478, 108, 382, 32));
 
-        TblUsuarios.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
+        TblUsuarios.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         TblUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -166,6 +171,8 @@ public class frmListadoUsuarios extends javax.swing.JFrame {
     }//GEN-LAST:event_TblUsuariosMouseClicked
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+        
+        frmRegistrarUsuario.usuario = usuario;
         this.dispose();
         new frmRegistrarUsuario(Parent,"Create",new models.Usuarios()).setVisible(true);
     }//GEN-LAST:event_btnNuevoActionPerformed

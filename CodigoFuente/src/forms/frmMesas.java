@@ -41,6 +41,8 @@ public class frmMesas extends javax.swing.JFrame {
     public models.Ventas ObjVenta = new models.Ventas();
     private models.Ventas ventaExistente;
     
+    private models.DisenoFormularios desing;
+    
     private String modo_acceso;
 
     
@@ -82,14 +84,11 @@ public class frmMesas extends javax.swing.JFrame {
         this.modo_acceso = mod;
         
         initComponents();
-        this.setLocationRelativeTo(this);
+        
         ImageIcon img = new ImageIcon(getClass().getResource("/images/icon_app.png"));
         this.setIconImage(img.getImage().getScaledInstance(180,180, Image.SCALE_SMOOTH));
-        this.setTitle("POSystem - Powered by KIM-Solutions");
         
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        
-        btnCuentas_Abiertas.setVisible(false);
+        desing.mtdDisenoPantalla(this);
         
         mtdBtns();
         
@@ -284,6 +283,7 @@ public class frmMesas extends javax.swing.JFrame {
             
            JButton Mesa = new JButton("<html><center>"+dataMesa.getTipo()+" "+dataMesa.getNumero()+"</center>DISPONIBLE</html>");
          Mesa.setFont(new Font("Leelawadee Ui", Font.PLAIN, 20));
+         Mesa.setFocusPainted(false);
            
          if(Objmesa.mtdDisponibilidad(dataMesa.getIdMesa(), turno.getIdTurno()) != null){
                      
@@ -360,80 +360,93 @@ public class frmMesas extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        ScrollMesas = new javax.swing.JScrollPane();
-        PanelMesas = new javax.swing.JPanel();
+        jpnInformacion = new javax.swing.JPanel();
+        lblLogo = new javax.swing.JLabel();
         lblDia = new java.awt.Label();
         lblHora = new java.awt.Label();
         lblTextDia = new java.awt.Label();
         lblMes = new java.awt.Label();
+        jpnVentas = new javax.swing.JPanel();
+        ScrollMesas = new javax.swing.JScrollPane();
+        PanelMesas = new javax.swing.JPanel();
         btnSalir = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        btnCuentas_Abiertas = new javax.swing.JButton();
         btnLlevar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        lblTitulo = new java.awt.Label();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setAlwaysOnTop(true);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setMaximumSize(new java.awt.Dimension(1024, 768));
-        setMinimumSize(new java.awt.Dimension(1024, 768));
-        setPreferredSize(new java.awt.Dimension(1024, 768));
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        setMaximumSize(new java.awt.Dimension(1900, 1020));
+        setMinimumSize(new java.awt.Dimension(1900, 1020));
+        setPreferredSize(new java.awt.Dimension(1900, 1020));
+
+        jpnInformacion.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente_small.png"))); // NOI18N
+        jpnInformacion.add(lblLogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 30, 160, -1));
+
+        lblDia.setFont(new java.awt.Font("Arial Black", 1, 36)); // NOI18N
+        lblDia.setForeground(new java.awt.Color(0, 0, 0));
+        lblDia.setText("31");
+        jpnInformacion.add(lblDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(1160, 90, -1, 60));
+
+        lblHora.setFont(new java.awt.Font("Arial Black", 1, 48)); // NOI18N
+        lblHora.setForeground(new java.awt.Color(0, 0, 0));
+        lblHora.setText("00:00:00");
+        jpnInformacion.add(lblHora, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 20, 250, 60));
+
+        lblTextDia.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        lblTextDia.setText("martes");
+        jpnInformacion.add(lblTextDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(1220, 90, 120, 30));
+
+        lblMes.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        lblMes.setText("mayo");
+        jpnInformacion.add(lblMes, new org.netbeans.lib.awtextra.AbsoluteConstraints(1220, 120, 120, 30));
+
+        getContentPane().add(jpnInformacion, java.awt.BorderLayout.NORTH);
+
+        jpnVentas.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         ScrollMesas.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         ScrollMesas.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         ScrollMesas.setName("ScrollMesas"); // NOI18N
 
-        PanelMesas.setLayout(new java.awt.GridLayout(5, 5, 3, 3));
+        PanelMesas.setLayout(new java.awt.GridLayout(5, 1, 3, 3));
         ScrollMesas.setViewportView(PanelMesas);
 
-        getContentPane().add(ScrollMesas, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 260, 610, 360));
-
-        lblDia.setFont(new java.awt.Font("Arial Black", 1, 36)); // NOI18N
-        lblDia.setForeground(new java.awt.Color(0, 0, 0));
-        lblDia.setText("31");
-        getContentPane().add(lblDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 150, -1, 60));
-
-        lblHora.setFont(new java.awt.Font("Arial Black", 1, 48)); // NOI18N
-        lblHora.setForeground(new java.awt.Color(0, 0, 0));
-        lblHora.setText("00:00:00");
-        getContentPane().add(lblHora, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 250, 60));
-
-        lblTextDia.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        lblTextDia.setText("martes");
-        getContentPane().add(lblTextDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, 120, 30));
-
-        lblMes.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        lblMes.setText("mayo");
-        getContentPane().add(lblMes, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 180, 120, 30));
+        jpnVentas.add(ScrollMesas, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 120, 1550, 480));
 
         btnSalir.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
+        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/exit.png"))); // NOI18N
         btnSalir.setText("SALIR");
+        btnSalir.setFocusPainted(false);
+        btnSalir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSalir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSalirActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 650, 190, 50));
-
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente_small.png"))); // NOI18N
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 40, 160, -1));
-
-        btnCuentas_Abiertas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/cuenta_abierta.png"))); // NOI18N
-        btnCuentas_Abiertas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCuentas_AbiertasActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnCuentas_Abiertas, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 600, 90, 80));
+        jpnVentas.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(1470, 610, 190, 90));
 
         btnLlevar.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
         btnLlevar.setText("PARA LLEVAR");
+        btnLlevar.setFocusPainted(false);
         btnLlevar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLlevarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnLlevar, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 650, 390, 50));
+        jpnVentas.add(btnLlevar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 620, 390, 90));
+        jpnVentas.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 700, -1, 90));
+
+        lblTitulo.setFont(new java.awt.Font("Arial Black", 0, 36)); // NOI18N
+        lblTitulo.setForeground(new java.awt.Color(0, 0, 0));
+        lblTitulo.setText("Seleccione la Mesa:");
+        jpnVentas.add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 0, 410, 80));
+
+        getContentPane().add(jpnVentas, java.awt.BorderLayout.SOUTH);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -447,15 +460,6 @@ public class frmMesas extends javax.swing.JFrame {
   
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSalirActionPerformed
-
-    private void btnCuentas_AbiertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCuentas_AbiertasActionPerformed
-          
-        frmConfirmacionPin formConfirmacion = new frmConfirmacionPin(this,turno,venta);
-     
-            formConfirmacion.setVisible(true);
-            formConfirmacion.modo_acceso = "ventas_abiertas"; 
-            this.dispose();// TODO add your handling code here:
-    }//GEN-LAST:event_btnCuentas_AbiertasActionPerformed
 
     private void btnLlevarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLlevarActionPerformed
                     Mesas Objmesallevar = new Mesas();
@@ -503,13 +507,16 @@ public class frmMesas extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelMesas;
     private javax.swing.JScrollPane ScrollMesas;
-    private javax.swing.JButton btnCuentas_Abiertas;
     private javax.swing.JButton btnLlevar;
     private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jpnInformacion;
+    private javax.swing.JPanel jpnVentas;
     private java.awt.Label lblDia;
     private java.awt.Label lblHora;
+    private javax.swing.JLabel lblLogo;
     private java.awt.Label lblMes;
     private java.awt.Label lblTextDia;
+    private java.awt.Label lblTitulo;
     // End of variables declaration//GEN-END:variables
 }

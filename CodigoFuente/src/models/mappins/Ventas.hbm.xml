@@ -23,6 +23,9 @@
         <property name="formaPago" type="string">
             <column name="forma_pago" length="9" not-null="true" />
         </property>
+        <property name="valor_propina" type="double">
+            <column name="valor_propina" not-null="true"/>
+        </property>
         <property name="estado" type="string">
             <column name="estado" length="11" not-null="true" />
         </property>

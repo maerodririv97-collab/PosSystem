@@ -139,7 +139,7 @@ public class frmDetallePedidoProveedor extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText("PRODUCTOS INGRESADOS");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 160, 520, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 100, 520, -1));
 
         jBExit.setFont(new java.awt.Font("Leelawadee", 0, 40)); // NOI18N
         jBExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/exit.png"))); // NOI18N
@@ -191,7 +191,7 @@ public class frmDetallePedidoProveedor extends javax.swing.JFrame {
         lblInfoFactura.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
         lblInfoFactura.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblInfoFactura.setText("jLabel3");
-        getContentPane().add(lblInfoFactura, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 210, 430, 80));
+        getContentPane().add(lblInfoFactura, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 190, 430, 80));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

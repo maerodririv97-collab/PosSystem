@@ -37,8 +37,8 @@ public class frmUpdateProducto extends javax.swing.JFrame {
     private models.Productos producto;
     private List<models.Categorias> listCategorias;
     private boolean autorizacion = false;
-    
-     private Usuarios usuario;
+    public static Usuarios usuario;
+
     
     public frmUpdateProducto(Home_Administracion P,models.Productos pro) {
         initComponents();

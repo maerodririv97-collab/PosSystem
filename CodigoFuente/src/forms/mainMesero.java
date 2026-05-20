@@ -91,6 +91,8 @@ public class mainMesero extends javax.swing.JFrame {
     }
     
     public frmMesas Parent;
+    private models.DisenoFormularios desing;
+    
     public mainMesero(frmMesas p,Turnos turn,Ventas venta) {
         
         this.Parent = p;
@@ -99,14 +101,19 @@ public class mainMesero extends javax.swing.JFrame {
         
         
         initComponents();
-        this.setLocationRelativeTo(this);
+
+        desing.mtdDisenoPantalla(this);
+        
         ImageIcon img = new ImageIcon(getClass().getResource("/images/icon_app.png"));
         this.setIconImage(img.getImage().getScaledInstance(180,180, Image.SCALE_SMOOTH));
-        this.setTitle("POSystem - Powered by KIM-Solutions");
+      
         
         arrayPedido = venta.getPedidosAll();
         
         if(arrayPedido.size() > 0){
+            
+            txtPedidos.setText("ESTA VENTA TIENE "+arrayPedido.size()+ " PEDIDOS");
+            
             for (Pedidos dataPedido:arrayPedido) {
                 itemOrder io = new itemOrder(this);
 
@@ -125,21 +132,19 @@ public class mainMesero extends javax.swing.JFrame {
             txtPedidos.setText("ESTA VENTA NO TIENE PEDIDOS");
         }
         
-        jBSave.setVisible(false);
+        //jBSave.setVisible(false);
         jPCategories.removeAll();
         mtdCat();
         jPCategories.setVisible(true);
         
        
-        jBSave.setBackground(new Color(0, 156, 222));
-        jBSave.setForeground(new Color(0, 156, 222));
+        
+        //jBSave.setBackground(new Color(0, 156, 222));
+        //jBSave.setForeground(new Color(0, 156, 222));
         
         //btnImprimir.setBackground(new Color(218, 0, 128));
         //btnImprimir.setForeground(new Color(218, 0, 128));
         
-         
-        
-        this.setExtendedState(this.getExtendedState() | this.MAXIMIZED_BOTH);
         
     }
 
@@ -151,40 +156,88 @@ public class mainMesero extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
+        jpnSuperior = new javax.swing.JPanel();
+        lblTitle = new javax.swing.JLabel();
+        lblLogo = new javax.swing.JLabel();
+        lblMesa = new javax.swing.JLabel();
+        jpnMain = new javax.swing.JPanel();
+        ScrollCategorias = new javax.swing.JScrollPane();
+        jPCategories = new javax.swing.JPanel();
         jPOrder = new javax.swing.JPanel();
-        txtPedidos = new javax.swing.JLabel();
         jBClearOrder = new javax.swing.JButton();
         btnImprimir = new javax.swing.JButton();
         ScrollPedidos = new javax.swing.JScrollPane();
         PanelListadoPedidos = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         lblTotalVenta = new javax.swing.JLabel();
-        lblTitle = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        ScrollCategorias = new javax.swing.JScrollPane();
-        jPCategories = new javax.swing.JPanel();
-        lblMesa = new javax.swing.JLabel();
-        jBSave = new javax.swing.JButton();
+        txtPedidos = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setBackground(new java.awt.Color(82, 81, 82));
         setMaximumSize(new java.awt.Dimension(1024, 700));
         setMinimumSize(new java.awt.Dimension(1024, 700));
         setPreferredSize(new java.awt.Dimension(1024, 700));
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
+        layout.columnWidths = new int[] {0, 7, 0};
+        layout.rowHeights = new int[] {0, 12, 0};
+        getContentPane().setLayout(layout);
 
+        jpnSuperior.setBorder(javax.swing.BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        jpnSuperior.setLayout(new java.awt.GridLayout(1, 3, 50, 0));
+
+        lblTitle.setBackground(new java.awt.Color(255, 255, 255));
+        lblTitle.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
+        lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTitle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/back.png"))); // NOI18N
+        lblTitle.setText(" CATEGORIAS");
+        lblTitle.setToolTipText("");
+        lblTitle.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblTitleMouseClicked(evt);
+            }
+        });
+        jpnSuperior.add(lblTitle);
+
+        lblLogo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jpnSuperior.add(lblLogo);
+
+        lblMesa.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
+        lblMesa.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblMesa.setText("ITEMS");
+        jpnSuperior.add(lblMesa);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 754;
+        gridBagConstraints.ipady = 30;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(54, 10, 0, 0);
+        getContentPane().add(jpnSuperior, gridBagConstraints);
+
+        jpnMain.setBorder(javax.swing.BorderFactory.createEmptyBorder(30, 30, 30, 30));
+        jpnMain.setLayout(new java.awt.GridLayout(1, 2));
+
+        ScrollCategorias.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        ScrollCategorias.setToolTipText("");
+        ScrollCategorias.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+        jPCategories.setAutoscrolls(true);
+        jPCategories.setMaximumSize(new java.awt.Dimension(500, 400));
+        jPCategories.setMinimumSize(new java.awt.Dimension(500, 400));
+        jPCategories.setName(""); // NOI18N
+        jPCategories.setPreferredSize(new java.awt.Dimension(500, 400));
+        jPCategories.setLayout(new java.awt.GridLayout(0, 2, 2, 2));
+        ScrollCategorias.setViewportView(jPCategories);
+
+        jpnMain.add(ScrollCategorias);
+
+        jPOrder.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
         jPOrder.setMaximumSize(new java.awt.Dimension(450, 300));
         jPOrder.setMinimumSize(new java.awt.Dimension(450, 300));
         jPOrder.setPreferredSize(new java.awt.Dimension(450, 300));
         jPOrder.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        txtPedidos.setBackground(new java.awt.Color(65, 65, 65));
-        txtPedidos.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
-        txtPedidos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        txtPedidos.setText("Pedidos");
-        txtPedidos.setOpaque(true);
-        jPOrder.add(txtPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 10, 340, 80));
 
         jBClearOrder.setBackground(new java.awt.Color(82, 81, 82));
         jBClearOrder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/trash.png"))); // NOI18N
@@ -199,75 +252,44 @@ public class mainMesero extends javax.swing.JFrame {
         jPOrder.add(jBClearOrder, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 78, -1));
 
         btnImprimir.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
-        btnImprimir.setForeground(new java.awt.Color(255, 255, 255));
-        btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/print.png"))); // NOI18N
+        btnImprimir.setText("CONFIRMAR PEDIDO");
+        btnImprimir.setFocusPainted(false);
         btnImprimir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnImprimirActionPerformed(evt);
             }
         });
-        jPOrder.add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(278, 590, 160, 90));
+        jPOrder.add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 490, 430, 90));
 
         ScrollPedidos.setMaximumSize(new java.awt.Dimension(465, 445));
         ScrollPedidos.setMinimumSize(new java.awt.Dimension(465, 445));
         ScrollPedidos.setPreferredSize(new java.awt.Dimension(465, 445));
 
+        PanelListadoPedidos.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
         PanelListadoPedidos.setMaximumSize(new java.awt.Dimension(455, 435));
         PanelListadoPedidos.setMinimumSize(new java.awt.Dimension(455, 435));
         PanelListadoPedidos.setPreferredSize(new java.awt.Dimension(455, 435));
         PanelListadoPedidos.setLayout(new java.awt.GridLayout(0, 1));
         ScrollPedidos.setViewportView(PanelListadoPedidos);
 
-        jPOrder.add(ScrollPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 450, 460));
-
-        jLabel2.setText("jLabel2");
-        jPOrder.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 50, -1, -1));
+        jPOrder.add(ScrollPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 460, 360));
         jPOrder.add(lblTotalVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 610, 230, 50));
 
-        getContentPane().add(jPOrder, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 10, 470, 690));
+        txtPedidos.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtPedidos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jPOrder.add(txtPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 300, 70));
 
-        lblTitle.setBackground(new java.awt.Color(255, 255, 255));
-        lblTitle.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
-        lblTitle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/back.png"))); // NOI18N
-        lblTitle.setText(" CATEGORIAS");
-        lblTitle.setToolTipText("");
-        lblTitle.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblTitleMouseClicked(evt);
-            }
-        });
-        getContentPane().add(lblTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 30, 190, 40));
+        jpnMain.add(jPOrder);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente_xsmall.png"))); // NOI18N
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 110, 80));
-
-        ScrollCategorias.setToolTipText("");
-        ScrollCategorias.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-
-        jPCategories.setAutoscrolls(true);
-        jPCategories.setMaximumSize(new java.awt.Dimension(500, 400));
-        jPCategories.setMinimumSize(new java.awt.Dimension(500, 400));
-        jPCategories.setName(""); // NOI18N
-        jPCategories.setPreferredSize(new java.awt.Dimension(500, 400));
-        jPCategories.setLayout(new java.awt.GridLayout(0, 2, 2, 2));
-        ScrollCategorias.setViewportView(jPCategories);
-
-        getContentPane().add(ScrollCategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, -1, 580));
-
-        lblMesa.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
-        lblMesa.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblMesa.setText("Mesa 5");
-        getContentPane().add(lblMesa, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 30, 150, 40));
-
-        jBSave.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
-        jBSave.setForeground(new java.awt.Color(255, 255, 255));
-        jBSave.setText("Guardar");
-        jBSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBSaveActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jBSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 610, 141, 60));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.ipadx = 880;
+        gridBagConstraints.ipady = 310;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(30, 0, 30, 0);
+        getContentPane().add(jpnMain, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -275,14 +297,26 @@ public class mainMesero extends javax.swing.JFrame {
     private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
         
             //this.dispose();
+            
+            if(this.Venta.getPedidosAll().size() > 0){
+            
+            
             btnImprimir.setVisible(false);
             pedido.setVenta(getVenta());   
-        
+            
+            this.dispose();
+            frmMesas formMesas = new frmMesas(new Ventas(),turno,usuario,usuario.getPerfil()); 
+            formMesas.setVisible(true);
+            }else{
+                JOptionPane.showMessageDialog(null,"No cuenta con pedidos, agregue o elimine la venta");
+            }
+                               
+            //SE SUPRIME LA GENERACION DEL REPORTE DE COMANDA 
             /*frmConfirmacionPin formConfirmacion = new frmConfirmacionPin(this,turno,Venta);
      
             formConfirmacion.setVisible(true);
             formConfirmacion.modo_acceso = "venta";  
-            formConfirmacion.setVenta(getVenta());*/
+            formConfirmacion.setVenta(getVenta());
             
             try {
                                      Transaction trns = null;
@@ -295,7 +329,7 @@ public class mainMesero extends javax.swing.JFrame {
                                         trns = session.beginTransaction();
                                         session.update(getVenta());
                                         session.getTransaction().commit();
-                                    }*/
+                                    }
                                  
                                  
                                  
@@ -310,7 +344,7 @@ public class mainMesero extends javax.swing.JFrame {
 
                                     JasperPrint jasperPrintPedido = JasperFillManager.fillReport("src\\reports\\pedidos.jasper",params,new JREmptyDataSource());
                                     JasperPrintManager.printReport(jasperPrintPedido, false);   
-
+                                    
                                     }catch (JRException ex){
                                         JOptionPane.showMessageDialog(this, "Error iReport: " + ex.getMessage());
                                         System.err.println( "Error iReport: " + ex.getMessage() );
@@ -332,7 +366,7 @@ public class mainMesero extends javax.swing.JFrame {
                                 
                             } catch (RuntimeException e) {
                                 e.printStackTrace();
-                            }
+                            }*/
         
         
         // TODO add your handling code here:
@@ -341,8 +375,8 @@ public class mainMesero extends javax.swing.JFrame {
     private void jBClearOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBClearOrderActionPerformed
 
         
-        //int resp=JOptionPane.showConfirmDialog(null,"Si Eliminas esta venta cancelaras todos los pedidos incluidos en ella \n ¿Estas Seguro que deseas eliminar esta venta?");
-        //if (JOptionPane.OK_OPTION == resp){
+        int resp=JOptionPane.showConfirmDialog(null,"Si Eliminas esta venta cancelaras todos los pedidos incluidos en ella \n ¿Estas Seguro que deseas eliminar esta venta?");
+        if (JOptionPane.OK_OPTION == resp){
                     Transaction trns = null;
                     Session session = HibernateUtil.getSessionFactory().openSession();
                     try {
@@ -429,7 +463,7 @@ public class mainMesero extends javax.swing.JFrame {
                     }
                     
                     
-        //}
+        }
         //else{
          //System.out.println("No selecciona una opción afirmativa");
         //}    
@@ -439,22 +473,6 @@ public class mainMesero extends javax.swing.JFrame {
         
                 // TODO add your handling code here:
     }//GEN-LAST:event_jBClearOrderActionPerformed
-
-    private void jBSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSaveActionPerformed
-    
-        
-            pedido.setVenta(Venta);   
-        
-            frmConfirmacionPin formConfirmacion = new frmConfirmacionPin(this,turno,Venta);
-     
-            formConfirmacion.setVisible(true);
-            formConfirmacion.modo_acceso = "venta";
-        
-       
-        
-        
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBSaveActionPerformed
 
     private void lblTitleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTitleMouseClicked
 
@@ -494,14 +512,22 @@ public class mainMesero extends javax.swing.JFrame {
        
         ListadoCategorias = new ArrayList<>();
         ListadoCategorias = objCategoria.listarCategorias();
-        
-        lblMesa.setText("Mesa ");
+       
        
         for (Categorias dataCategoria: ListadoCategorias) {
-            JButton btnCat = new JButton(""+dataCategoria.getNombre()+"");
+          
+            
+            // Concatenamos las etiquetas HTML con el nombre dinámico del producto
+            JButton btnCat = new JButton("<html><body style='text-align: center;'><b>" + dataCategoria.getNombre() + "</b></body></html>");
+
+            // Tu línea de la fuente se mantiene impecable
+            btnCat.setFont(new java.awt.Font("Arial", 0, 20)); 
+
+            // 💡 TIP EXTRA: Asegúrate de que el texto se mantenga centrado en el botón
+            btnCat.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
             
             
-            btnCat.setFont(new java.awt.Font("Leelawadee UI", 0, 18));
+            
             
             btnCat.addActionListener(new ActionListener() { 
                 public void actionPerformed(ActionEvent e) {
@@ -514,13 +540,21 @@ public class mainMesero extends javax.swing.JFrame {
                         
                         Productos dataProducto = (Productos) obj;
                     
-                         JButton btnPro = new JButton(dataProducto.getNombre());
-                            
-                          btnPro.setFont(new java.awt.Font("Leelawadee UI", 0, 24));
+                            // Concatenamos las etiquetas HTML con el nombre dinámico del producto
+                            JButton btnPro = new JButton("<html><body style='text-align: center;'><b>" + dataProducto.getNombre() + "</b></body></html>");
+
+                            // Tu línea de la fuente se mantiene impecable
+                            btnPro.setFont(new java.awt.Font("Arial", 0, 18)); 
+                            btnPro.setFocusPainted(false);
+
+                            // 💡 TIP EXTRA: Asegúrate de que el texto se mantenga centrado en el botón
+                            btnPro.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
                          
                              btnPro.addActionListener(new ActionListener() { 
                                 public void actionPerformed(ActionEvent e) {
                                     
+                                    
+                                  p.setEnabled(false);  
                                     
                                   frmCantidad formCantidad = new frmCantidad(p,Venta);
                                   
@@ -533,6 +567,14 @@ public class mainMesero extends javax.swing.JFrame {
                                     frmCantidad.objUpdate = null;
                                     
                                     mainMesero.pedido = new Pedidos();
+                                    
+                                    formCantidad.addWindowListener(new java.awt.event.WindowAdapter() {
+                                    @Override
+                                    public void windowClosed(java.awt.event.WindowEvent e) {
+                                    // Cuando frmCantidad se destruya o se cierre, mainMesero vuelve a la vida
+                                    mainMesero.this.setEnabled(true); 
+                                    mainMesero.this.toFront(); // La trae al frente automáticamente
+                                    }});
                                     
                                    
                                 }
@@ -904,7 +946,7 @@ public class mainMesero extends javax.swing.JFrame {
     
     public void mtdAplicarDescuento(Pedidos pedido,itemOrder objForm,int NuevoValor){
         
-        pedido.setValor(NuevoValor * pedido.getCantidad());
+        /*pedido.setValor(NuevoValor * pedido.getCantidad());
         
         
         Transaction trns = null;
@@ -936,7 +978,7 @@ public class mainMesero extends javax.swing.JFrame {
         }finally{
         session.flush();
         session.close();
-        }
+        }*/
         
     }
     
@@ -947,11 +989,11 @@ public class mainMesero extends javax.swing.JFrame {
     private javax.swing.JScrollPane ScrollPedidos;
     private javax.swing.JButton btnImprimir;
     private javax.swing.JButton jBClearOrder;
-    private javax.swing.JButton jBSave;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPCategories;
     private javax.swing.JPanel jPOrder;
+    private javax.swing.JPanel jpnMain;
+    private javax.swing.JPanel jpnSuperior;
+    private javax.swing.JLabel lblLogo;
     private javax.swing.JLabel lblMesa;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblTotalVenta;

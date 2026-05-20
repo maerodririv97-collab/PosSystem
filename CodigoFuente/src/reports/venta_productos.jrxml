@@ -1,77 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="venta_productos" language="java" pageWidth="200" pageHeight="300" columnWidth="198" leftMargin="0" rightMargin="2" topMargin="0" bottomMargin="0" uuid="1c75d45c-2f50-4dd8-92ea-a94393bea6c6">
-    <property name="ireport.zoom" value="6.115909044841463"/>
-    <property name="ireport.x" value="0"/>
-    <property name="ireport.y" value="0"/>
-    <queryString>
-        <![CDATA[]]>
-    </queryString>
-    <field name="valor" class="java.lang.Integer">
-        <fieldDescription><![CDATA[valor]]></fieldDescription>
-    </field>
-    <field name="cantidad" class="java.lang.Integer">
-        <fieldDescription><![CDATA[cantidad]]></fieldDescription>
-    </field>
-    <field name="nombre" class="java.lang.String">
-        <fieldDescription><![CDATA[producto.nombre]]></fieldDescription>
-    </field>
-    <field name="descuento" class="java.lang.Integer">
-        <fieldDescription><![CDATA[descuento]]></fieldDescription>
-    </field>
-    <field name="conceptoDesc" class="java.lang.String">
-        <fieldDescription><![CDATA[conceptoDesc]]></fieldDescription>
-    </field>
-    <background>
-        <band splitType="Stretch"/>
-    </background>
-    <title>
-        <band splitType="Stretch"/>
-    </title>
-    <pageHeader>
-        <band splitType="Stretch"/>
-    </pageHeader>
-    <columnHeader>
-        <band splitType="Stretch"/>
-    </columnHeader>
-    <detail>
-        <band height="11" splitType="Stretch">
-            <textField>
-                <reportElement x="0" y="0" width="27" height="11" uuid="44d3ce66-6e0f-478b-bb7f-d537efcf2de0"/>
-                <textElement textAlignment="Center" verticalAlignment="Top">
-                    <font fontName="Arial" size="9"/>
-                </textElement>
-                <textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
-            </textField>
-            <textField>
-                <reportElement x="27" y="0" width="92" height="11" uuid="984a35d9-f0ce-4d93-ac79-7b923d4e2114"/>
-                <textElement verticalAlignment="Top">
-                    <font fontName="Arial" size="9"/>
-                </textElement>
-                <textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
-            </textField>
-            <textField pattern="¤#,##0">
-                <reportElement x="150" y="0" width="48" height="11" uuid="1e6ac896-f822-4bde-989f-beee323d347d"/>
-                <textElement textAlignment="Right" verticalAlignment="Top">
-                    <font fontName="Arial" size="9"/>
-                </textElement>
-                <textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
-            </textField>
-            <textField pattern="(¤#,##0)">
-                <reportElement x="119" y="0" width="31" height="11" uuid="8747e70d-2424-4cd7-92da-ef87b6137f29"/>
-                <textElement verticalAlignment="Middle">
-                    <font fontName="Arial" size="5"/>
-                </textElement>
-                <textFieldExpression><![CDATA[$F{valor} / $F{cantidad}]]></textFieldExpression>
-            </textField>
-        </band>
-    </detail>
-    <columnFooter>
-        <band splitType="Stretch"/>
-    </columnFooter>
-    <pageFooter>
-        <band splitType="Stretch"/>
-    </pageFooter>
-    <summary>
-        <band splitType="Stretch"/>
-    </summary>
+<!-- Created with Jaspersoft Studio version 6.8.0.final using JasperReports Library version 6.8.0-2ed8dfabb690ff337a5797129f2cd92902b0c87b  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="venta_productos" pageWidth="200" pageHeight="300" whenNoDataType="NoDataSection" columnWidth="198" leftMargin="0" rightMargin="2" topMargin="0" bottomMargin="0" uuid="1c75d45c-2f50-4dd8-92ea-a94393bea6c6">
+	<property name="ireport.zoom" value="6.115909044841463"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="valor" class="java.lang.Integer">
+		<fieldDescription><![CDATA[valor]]></fieldDescription>
+	</field>
+	<field name="cantidad" class="java.lang.Integer">
+		<fieldDescription><![CDATA[cantidad]]></fieldDescription>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<fieldDescription><![CDATA[producto.nombre]]></fieldDescription>
+	</field>
+	<field name="descuento" class="java.lang.Integer">
+		<fieldDescription><![CDATA[descuento]]></fieldDescription>
+	</field>
+	<field name="conceptoDesc" class="java.lang.String">
+		<fieldDescription><![CDATA[conceptoDesc]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="11" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="27" height="11" uuid="44d3ce66-6e0f-478b-bb7f-d537efcf2de0"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="27" y="0" width="92" height="11" uuid="984a35d9-f0ce-4d93-ac79-7b923d4e2114"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤#,##0">
+				<reportElement x="150" y="0" width="48" height="11" uuid="1e6ac896-f822-4bde-989f-beee323d347d"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+			</textField>
+			<textField pattern="(¤#,##0)">
+				<reportElement x="119" y="0" width="31" height="11" uuid="8747e70d-2424-4cd7-92da-ef87b6137f29"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valor} / $F{cantidad}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
 </jasperReport>

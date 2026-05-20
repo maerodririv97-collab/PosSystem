@@ -7,6 +7,7 @@ package forms.administracion;
 
 import forms.frmConfirmacionPin;
 import forms.frmMesas;
+import forms.frmVueltas;
 import forms.mainMesero;
 import static forms.mainMesero.pedido;
 import java.awt.Image;
@@ -65,8 +66,13 @@ public class frmModoPago extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        btnCombinado = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        btnSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(791, 616));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnTarjeta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/qr.png"))); // NOI18N
         btnTarjeta.addActionListener(new java.awt.event.ActionListener() {
@@ -74,6 +80,7 @@ public class frmModoPago extends javax.swing.JFrame {
                 btnTarjetaActionPerformed(evt);
             }
         });
+        getContentPane().add(btnTarjeta, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 340, 140, 110));
 
         btnEfectivo.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
         btnEfectivo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/efectivo.png"))); // NOI18N
@@ -84,58 +91,140 @@ public class frmModoPago extends javax.swing.JFrame {
                 btnEfectivoActionPerformed(evt);
             }
         });
+        getContentPane().add(btnEfectivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 340, 144, 108));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente_small.png"))); // NOI18N
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
-        jLabel2.setText("TRANSFERENCIA / QR");
+        jLabel2.setText("MIXTO");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 300, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
         jLabel3.setText("EFECTIVO");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 300, -1, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnEfectivo, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
-                        .addComponent(btnTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(25, 25, 25))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(141, 141, 141)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(26, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEfectivo, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20))
-        );
+        btnCombinado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/combinado.png"))); // NOI18N
+        btnCombinado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCombinadoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnCombinado, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 340, 144, 108));
+
+        jLabel4.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
+        jLabel4.setText("TRANSFERENCIA / QR");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 300, -1, -1));
+
+        btnSalir.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
+        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/exit.png"))); // NOI18N
+        btnSalir.setFocusPainted(false);
+        btnSalir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 50, 144, 110));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEfectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEfectivoActionPerformed
             
-            this.venta.setEstado("Pagada");
+        
+            
+            
+           /*int respVueltos = JOptionPane.showConfirmDialog(null,"¿Necesitas dar Vueltas?");
+        
+        
+            if (JOptionPane.OK_OPTION == respVueltos){
+               
+                frmVueltas.venta = this.venta;
+                
+               frmVueltas formVueltas = new frmVueltas();
+               formVueltas.setVisible(true);
+                
+                
+            }else{
+                         new Home_Administracion(venta.getUsuarios()).setVisible(true);
+            }*/
+        mtdConfirmarPagosEfectivo();
+        
+        
+
+    }//GEN-LAST:event_btnEfectivoActionPerformed
+
+    private void btnTarjetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTarjetaActionPerformed
+           
+           this.venta.setFormaPago("Transferencia");
+           this.venta.setEstado("Pagada");
+        
+            Transaction trns = null;
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            try {
+               trns = session.beginTransaction();
+               session.update(this.venta);
+               session.getTransaction().commit();
+               
+               int resp=JOptionPane.showConfirmDialog(null,"Operacion Exitosa! \n ¿Deseas imprimir la Factura?");
+
+                    if (JOptionPane.OK_OPTION == resp){
+
+                        Map<String,Object> params = new HashMap<String,Object>();
+                        params.put("Venta", this.venta);
+                        
+                        try{
+                        
+                        JasperPrint jasperPrint = JasperFillManager.fillReport("src\\reports\\venta.jasper",params,new JREmptyDataSource());
+                        //JasperViewer.viewReport(jasperPrint, false);
+                        JasperPrintManager.printReport(jasperPrint, false);   
+                         new Home_Administracion(venta.getUsuarios()).setVisible(true);
+                        }catch (JRException ex){
+                        JOptionPane.showMessageDialog(rootPane, "Error iReport: " + ex.getMessage());
+                        System.err.println( "Error iReport: " + ex.getMessage() );
+                        }finally{
+                            this.parent.dispose();
+                         this.dispose();
+                        
+                        }
+                    }else{
+                         new Home_Administracion(venta.getUsuarios()).setVisible(true);
+                    }
+                    
+                    
+             }catch (RuntimeException ex) {
+                ex.printStackTrace();
+            }finally {
+                session.flush();
+                session.close();
+                this.dispose();
+            }
+        
+            this.parent.dispose();
+            this.dispose();          // TODO add your handling code here:
+    }//GEN-LAST:event_btnTarjetaActionPerformed
+
+    private void btnCombinadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCombinadoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCombinadoActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+            
+            this.parent.setVisible(true);
+            this.dispose();
+            
+            
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    
+    public void mtdConfirmarPagosEfectivo(){
+        
+                this.venta.setEstado("Pagada");
            
                 Transaction trns = null;
                 Session session = HibernateUtil.getSessionFactory().openSession();
@@ -181,68 +270,18 @@ public class frmModoPago extends javax.swing.JFrame {
           
             this.parent.dispose();
             this.dispose();
-    }//GEN-LAST:event_btnEfectivoActionPerformed
-
-    private void btnTarjetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTarjetaActionPerformed
-           
-           this.venta.setFormaPago("Transferencia");
-           this.venta.setEstado("Pagada");
         
-            Transaction trns = null;
-            Session session = HibernateUtil.getSessionFactory().openSession();
-            try {
-               trns = session.beginTransaction();
-               session.update(this.venta);
-               session.getTransaction().commit();
-               
-               int resp=JOptionPane.showConfirmDialog(null,"Operacion Exitosa! \n ¿Deseas imprimir la Factura?");
-
-                    if (JOptionPane.OK_OPTION == resp){
-
-                        Map<String,Object> params = new HashMap<String,Object>();
-                        params.put("Venta", this.venta);
-                        
-                        try{
-                        
-                        JasperPrint jasperPrint = JasperFillManager.fillReport("src\\reports\\venta.jasper",params,new JREmptyDataSource());
-                        
-                        JasperPrintManager.printReport(jasperPrint, false);   
-                         new Home_Administracion(venta.getUsuarios()).setVisible(true);
-                        }catch (JRException ex){
-                        JOptionPane.showMessageDialog(rootPane, "Error iReport: " + ex.getMessage());
-                        System.err.println( "Error iReport: " + ex.getMessage() );
-                        }finally{
-                            this.parent.dispose();
-                         this.dispose();
-                        
-                        }
-                    }else{
-                         new Home_Administracion(venta.getUsuarios()).setVisible(true);
-                    }
-                    
-                    
-             }catch (RuntimeException ex) {
-                ex.printStackTrace();
-            }finally {
-                session.flush();
-                session.close();
-                this.dispose();
-            }
-        
-            this.parent.dispose();
-            this.dispose();          // TODO add your handling code here:
-    }//GEN-LAST:event_btnTarjetaActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
+    }
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCombinado;
     private javax.swing.JButton btnEfectivo;
+    private javax.swing.JButton btnSalir;
     private javax.swing.JButton btnTarjeta;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     // End of variables declaration//GEN-END:variables
 }

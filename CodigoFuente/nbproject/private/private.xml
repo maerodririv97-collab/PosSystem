@@ -3,23 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/frmVentas.java</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/frmVentasAbiertas.java</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/frmEditarPedido.java</file>
             <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/Home_Administracion.java</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/frmMesas.java</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/mainMesero.java</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/frmCantidad.java</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/login.java</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/frmConfirmacionPin.java</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/models/Turnos.java</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/frmRegistrarMesa.java</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/frmListarMesas.java</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/frmRegistrarCategoria.java</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/models/Mesas.java</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/models/Pedidos.java</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/models/mappins/Pedidos.hbm.xml</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/models/mappins/hibernate.reveng.xml</file>
+            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/frmDetalleVenta.java</file>
+            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/frmModoPago.java</file>
+            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/frmListadoProductos.java</file>
             <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/hibernate.cfg.xml</file>
         </group>
     </open-files>

@@ -31,7 +31,7 @@ public class frmListarCategorias extends javax.swing.JFrame {
     private List<models.Categorias> lisCategorias;
     //private final TmCategorias modeloCategorias;
    private Home_Administracion Parent;
-    private Usuarios usuario;
+    public static Usuarios usuario;
     /**
      * Creates new form Usuarios
      */
@@ -55,6 +55,11 @@ public class frmListarCategorias extends javax.swing.JFrame {
                 df.addRow(new Object[]{dataCategoria,dataCategoria.getIdCategoria(), dataCategoria.getNombre(),dataCategoria.getTipo()});
                 
             }
+            
+            TablaCategorias.setRowHeight(TablaCategorias.getFontMetrics(TablaCategorias.getFont()).getHeight() + 2);
+            TablaCategorias.getColumnModel().getColumn(1).setPreferredWidth(15);
+            TablaCategorias.revalidate(); // Fuerza a la interfaz a recalcular el diseño
+            TablaCategorias.repaint();   // Fuerza el repintado visual
             
             Home_Administracion form = Parent;
         frmListarCategorias listForm = this;

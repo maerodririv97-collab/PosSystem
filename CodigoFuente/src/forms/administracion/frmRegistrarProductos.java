@@ -49,7 +49,7 @@ public class frmRegistrarProductos extends javax.swing.JFrame {
     
     private Facturas factura;
     private Facturas ObjFactura = new Facturas();
-     private Usuarios usuario;
+     public static Usuarios usuario;
     
     
     public String modo_envio;

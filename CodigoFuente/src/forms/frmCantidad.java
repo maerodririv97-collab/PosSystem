@@ -117,6 +117,7 @@ public class frmCantidad extends javax.swing.JFrame {
 
         btn8.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         btn8.setText("8");
+        btn8.setFocusPainted(false);
         btn8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn8ActionPerformed(evt);
@@ -126,6 +127,7 @@ public class frmCantidad extends javax.swing.JFrame {
 
         btn9.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         btn9.setText("9");
+        btn9.setFocusPainted(false);
         btn9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn9ActionPerformed(evt);
@@ -135,6 +137,7 @@ public class frmCantidad extends javax.swing.JFrame {
 
         btn7.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         btn7.setText("7");
+        btn7.setFocusPainted(false);
         btn7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn7ActionPerformed(evt);
@@ -144,6 +147,7 @@ public class frmCantidad extends javax.swing.JFrame {
 
         btn5.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         btn5.setText("5");
+        btn5.setFocusPainted(false);
         btn5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn5ActionPerformed(evt);
@@ -153,6 +157,7 @@ public class frmCantidad extends javax.swing.JFrame {
 
         btn6.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         btn6.setText("6");
+        btn6.setFocusPainted(false);
         btn6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn6ActionPerformed(evt);
@@ -162,6 +167,7 @@ public class frmCantidad extends javax.swing.JFrame {
 
         btn4.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         btn4.setText("4");
+        btn4.setFocusPainted(false);
         btn4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn4ActionPerformed(evt);
@@ -171,6 +177,7 @@ public class frmCantidad extends javax.swing.JFrame {
 
         btn2.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         btn2.setText("2");
+        btn2.setFocusPainted(false);
         btn2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn2ActionPerformed(evt);
@@ -180,6 +187,7 @@ public class frmCantidad extends javax.swing.JFrame {
 
         btn3.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         btn3.setText("3");
+        btn3.setFocusPainted(false);
         btn3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn3ActionPerformed(evt);
@@ -188,6 +196,7 @@ public class frmCantidad extends javax.swing.JFrame {
         getContentPane().add(btn3, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 290, 100, 80));
 
         btnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/vaciar.png"))); // NOI18N
+        btnLimpiar.setFocusPainted(false);
         btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLimpiarActionPerformed(evt);
@@ -197,6 +206,7 @@ public class frmCantidad extends javax.swing.JFrame {
 
         btnCancel.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         btnCancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/drop.png"))); // NOI18N
+        btnCancel.setFocusPainted(false);
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
@@ -206,6 +216,7 @@ public class frmCantidad extends javax.swing.JFrame {
 
         btn0.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         btn0.setText("0");
+        btn0.setFocusPainted(false);
         btn0.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn0ActionPerformed(evt);
@@ -215,6 +226,7 @@ public class frmCantidad extends javax.swing.JFrame {
 
         btn1.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         btn1.setText("1");
+        btn1.setFocusPainted(false);
         btn1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn1ActionPerformed(evt);
@@ -224,6 +236,7 @@ public class frmCantidad extends javax.swing.JFrame {
 
         btnGuardar.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/check.png"))); // NOI18N
+        btnGuardar.setFocusPainted(false);
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarActionPerformed(evt);
@@ -254,7 +267,7 @@ public class frmCantidad extends javax.swing.JFrame {
        }else{
        boolean verificacion = mtdVerificarCantidad(Integer.parseInt(lblCantidad.getText()));
        double costoPedido = Integer.parseInt(lblCantidad.getText()) * getProducto().getValor(/*getProducto().getIdProducto()*/);
-       pedido = new Pedidos(getProducto(), venta, (int) costoPedido, Integer.parseInt(lblCantidad.getText()),false,0); //Carga el Objeto Pedido Con Su Información
+       pedido = new Pedidos(getProducto(), venta, (int) costoPedido, Integer.parseInt(lblCantidad.getText()),false); //Carga el Objeto Pedido Con Su Información
        pedido.setCompra(getProducto().getCosto());
        
           

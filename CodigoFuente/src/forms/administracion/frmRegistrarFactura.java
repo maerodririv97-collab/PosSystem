@@ -23,7 +23,7 @@ public class frmRegistrarFactura extends javax.swing.JFrame {
     
     private Facturas factura;
     private Home_Administracion Parent;
-     private Usuarios usuario;
+     public static Usuarios usuario;
     /**
      * Creates new form frmRegistrarFactura
      */
@@ -177,10 +177,13 @@ public class frmRegistrarFactura extends javax.swing.JFrame {
              int resp=JOptionPane.showConfirmDialog(null,"Esta Factura Se Encuentra Registrada! \n ¿Deseas Añadir Pedidos a esta Factura?");
 
                     if (JOptionPane.OK_OPTION == resp){
+                         frmRegistrarProductos.usuario = usuario;
                         this.dispose();
+                       
                         new frmRegistrarProductos(Parent, facturaRegistrada).setVisible(true);
                     }else{
                         this.dispose();
+                        
                         new Home_Administracion(usuario).setVisible(true);
                     }
         }else{
@@ -202,6 +205,7 @@ public class frmRegistrarFactura extends javax.swing.JFrame {
                  sesion.flush();
                  sesion.close();
                  
+                 frmRegistrarProductos.usuario = usuario;
                  this.dispose();
                  new frmRegistrarProductos(Parent, factura).setVisible(true);
                 }

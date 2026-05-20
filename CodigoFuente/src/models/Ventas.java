@@ -23,6 +23,15 @@ public class Ventas  implements java.io.Serializable {
      private Usuarios usuarios;
      private Date fecha;
      private String formaPago;
+     private Double valor_propina  = 0.0;
+
+    public Double getValor_propina() {
+        return valor_propina;
+    }
+
+    public void setValor_propina(Double valor_propina) {
+        this.valor_propina = valor_propina;
+    }
      private String estado;
      private Set pedidoses = new HashSet(0);
 
@@ -46,6 +55,17 @@ public class Ventas  implements java.io.Serializable {
        this.formaPago = formaPago;
        this.estado = estado;
        this.pedidoses = pedidoses;
+    }
+    
+       public Ventas(Mesas mesas, Turnos turnos, Usuarios usuarios, Date fecha, String formaPago, String estado, Set pedidoses,Double valor_propina) {
+       this.mesas = mesas;
+       this.turnos = turnos;
+       this.usuarios = usuarios;
+       this.fecha = fecha;
+       this.formaPago = formaPago;
+       this.estado = estado;
+       this.pedidoses = pedidoses;
+       this.valor_propina = valor_propina;
     }
    
     public Integer getIdVenta() {
@@ -158,6 +178,28 @@ public class Ventas  implements java.io.Serializable {
         
         return total;
     }
+    
+    
+    public double calcularPropina(){
+        
+        double propina = 0;
+        
+         propina = this.getTotal() * 0.10;
+        
+        return propina;
+        
+    }
+    
+    public double getTotalConServicio(double valorServicio, int totalVenta){
+        
+        double totalVentaServicio = 0;
+        
+        totalVentaServicio = (int) (valorServicio + totalVenta);
+        
+        return totalVentaServicio;
+        
+    }
+    
     
     public int getGanancias(){
         int compras = 0;

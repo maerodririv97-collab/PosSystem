@@ -2,6 +2,7 @@ package models;
 // Generated 18/08/2018 10:09:30 AM by Hibernate Tools 4.3.1
 
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -26,6 +27,16 @@ public class Turnos  implements java.io.Serializable {
      private Set ventases = new HashSet(0);
 
     public Turnos() {
+    }
+    
+    @Override
+    public String toString() {
+        if (this.apertura != null) {
+            // Definimos el formato latino estándar (Día/Mes/Año)
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
+            return sdf.format(this.apertura); // 👈 Devuelve la fecha formateada como String
+        }
+        return "Sin fecha";
     }
 
 	
@@ -159,6 +170,16 @@ public class Turnos  implements java.io.Serializable {
         }
         return total;
     }
+    
+    public int getTotalProTPago(String tipoPago){
+        int total = 0;
+        for(Object objVen : this.ventases){
+            Ventas venta = (Ventas) objVen;
+            if(venta.getFormaPago().equalsIgnoreCase(tipoPago))
+                total += venta.getValor_propina();
+        }
+        return total;
+    }
 
      public models.Turnos mtdListTurno() {
 
@@ -208,6 +229,35 @@ public class Turnos  implements java.io.Serializable {
 
 
         return turno;
+    }
+      
+      
+      public ArrayList<models.Turnos> mtdTurnosAll(String fecha) {
+
+        
+         ArrayList<Turnos> turnos = new ArrayList();
+        
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        try {
+            session.getTransaction().begin();
+            Query q = session.createQuery("SELECT T FROM Turnos T WHERE DATE(T.apertura) = '"+fecha+"'");
+            
+            
+            turnos = (ArrayList<Turnos>) q.list();
+
+            session.getTransaction().commit();
+
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            session.flush();
+            session.close();
+        }
+
+
+        return turnos;
     }
      
      public models.Turnos mtdTurnoAbierto() {
@@ -271,6 +321,20 @@ public class Turnos  implements java.io.Serializable {
 
          return total;
      }
+      
+       public double getTotalPropinasFormaPago(String form){
+         double total = 0;
+
+         for(Object objVenta : this.getVentasTPago(form)){
+
+             Ventas venta = (Ventas) objVenta;
+            total += venta.getValor_propina();
+        }
+
+         return total;
+     }
+      
+      
 
      public double getTotalOperaciones(String tipo){
          double total = 0;
@@ -312,9 +376,21 @@ public class Turnos  implements java.io.Serializable {
       public double getTotalCaja(){
          double total = 0;
 
-         total = getValorInicial() + getTotalVentasFormaPago("Efectivo") + getTotalOperaciones("Ingreso");
+         total = getValorInicial() + getTotalVentasFormaPago("Efectivo") + getTotalOperaciones("Ingreso") + getTotalPropinasFormaPago("Efectivo");
 
          total = total - getTotalOperaciones("Salida");
+
+         return total;
+     }
+      
+      public double getTotalPropinas(){
+         double total = 0;
+
+         for(Object objVenta : this.getVentases()){
+
+             Ventas venta = (Ventas) objVenta;
+            total += venta.getValor_propina();
+        }
 
          return total;
      }

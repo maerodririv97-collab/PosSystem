@@ -17,7 +17,7 @@ public class Pedidos  implements java.io.Serializable {
      private int valor;
      private int cantidad;
      private int compra;
-     private double valor_propina;
+
 
     public int getCompra() {
         return compra;
@@ -26,16 +26,7 @@ public class Pedidos  implements java.io.Serializable {
     public void setCompra(int compra) {
         this.compra = compra;
     }
-
-    public double getValor_propina() {
-        return valor_propina;
-    }
-
-    public void setValor_propina(double valor_propina) {
-        this.valor_propina = valor_propina;
-    }
-
-    
+   
     
      private boolean impreso;
      private Integer descuento;
@@ -46,13 +37,12 @@ public class Pedidos  implements java.io.Serializable {
     }
 
 	
-    public Pedidos(Productos producto, Ventas venta, int valor, int cantidad, boolean impreso, double valor_propina) {
+    public Pedidos(Productos producto, Ventas venta, int valor, int cantidad, boolean impreso) {
         this.producto = producto;
         this.venta = venta;
         this.valor = valor;
         this.cantidad = cantidad;
         this.impreso = impreso;
-        this.valor_propina = valor_propina;
     }
     public Pedidos(Productos producto, Ventas venta, int valor, int cantidad, boolean impreso, Integer descuento, String conceptoDesc, Set servicioses) {
        this.producto = producto;

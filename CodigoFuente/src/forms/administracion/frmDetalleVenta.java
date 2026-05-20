@@ -5,6 +5,7 @@
  */
 package forms.administracion;
 
+import java.awt.Font;
 import java.awt.Image;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -26,6 +27,8 @@ public class frmDetalleVenta extends javax.swing.JFrame {
     public frmPedidos parent;
     public Ventas venta;
     public Usuarios usuario;
+    private boolean propina = false;
+    private double valorServicio = 0;
     
     public frmDetalleVenta(frmPedidos p,Ventas v) {
         initComponents();
@@ -36,6 +39,8 @@ public class frmDetalleVenta extends javax.swing.JFrame {
         ImageIcon img = new ImageIcon(getClass().getResource("/images/icon_app.png"));
         this.setIconImage(img.getImage().getScaledInstance(180,180, Image.SCALE_SMOOTH));
         this.setTitle("POSystem - Powered by KIM-Solutions");
+        
+        btnIncluirServicio.setFont(new Font("Segoe UI", Font.PLAIN, 28));
         
         mtdInformacionGeneral();
         mtdCargarPedidos();
@@ -70,16 +75,23 @@ public class frmDetalleVenta extends javax.swing.JFrame {
         btnSalir = new javax.swing.JButton();
         btnImprimir = new javax.swing.JButton();
         btnIncluirServicio = new javax.swing.JCheckBox();
+        jLabel14 = new javax.swing.JLabel();
+        lblPropina = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        lblSubtotal = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(1366, 768));
-        setMinimumSize(new java.awt.Dimension(1024, 750));
-        setPreferredSize(new java.awt.Dimension(1024, 750));
+        setMaximumSize(new java.awt.Dimension(1366, 800));
+        setMinimumSize(new java.awt.Dimension(1024, 800));
+        setPreferredSize(new java.awt.Dimension(1024, 800));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente_small.png"))); // NOI18N
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(78, 0, 250, 179));
 
         jLabel2.setFont(new java.awt.Font("Leelawadee", 0, 36)); // NOI18N
         jLabel2.setText("Detalles de Venta");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(504, 34, 290, 70));
 
         jLabel4.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -91,7 +103,7 @@ public class frmDetalleVenta extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel6.setText("Mesero:");
+        jLabel6.setText("Barista:");
 
         jLabel7.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -169,22 +181,29 @@ public class frmDetalleVenta extends javax.swing.JFrame {
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
+        getContentPane().add(PanelInformacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(62, 184, -1, -1));
+
         ScrollPedidos.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPedidos.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         PanelPedidos.setLayout(new java.awt.GridLayout(0, 1));
         ScrollPedidos.setViewportView(PanelPedidos);
 
+        getContentPane().add(ScrollPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(454, 184, 441, 316));
+
         jLabel3.setFont(new java.awt.Font("Leelawadee", 0, 24)); // NOI18N
         jLabel3.setText("Pedidos");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(648, 124, -1, 42));
 
         jLabel13.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel13.setText("Total Venta:");
+        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(559, 685, 150, 40));
 
         lblTotalVenta.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
         lblTotalVenta.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblTotalVenta.setText("$50.000");
+        getContentPane().add(lblTotalVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(727, 687, 168, 40));
 
         btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/exit.png"))); // NOI18N
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -192,6 +211,7 @@ public class frmDetalleVenta extends javax.swing.JFrame {
                 btnSalirActionPerformed(evt);
             }
         });
+        getContentPane().add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(224, 592, 103, 87));
 
         btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/print.png"))); // NOI18N
         btnImprimir.addActionListener(new java.awt.event.ActionListener() {
@@ -199,82 +219,37 @@ public class frmDetalleVenta extends javax.swing.JFrame {
                 btnImprimirActionPerformed(evt);
             }
         });
+        getContentPane().add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 592, -1, -1));
 
         btnIncluirServicio.setFont(new java.awt.Font("Leelawadee", 0, 36)); // NOI18N
         btnIncluirServicio.setText("Desea Incluir Servicio");
+        btnIncluirServicio.setPreferredSize(new java.awt.Dimension(600, 100));
         btnIncluirServicio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIncluirServicioActionPerformed(evt);
             }
         });
+        getContentPane().add(btnIncluirServicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(68, 512, 370, 62));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(78, 78, 78)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(176, 176, 176)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel3)
-                        .addGap(270, 270, 270))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(62, 62, 62)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 33, Short.MAX_VALUE)
-                        .addComponent(btnImprimir)
-                        .addGap(43, 43, 43)
-                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(232, 232, 232)
-                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblTotalVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(PanelInformacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(ScrollPedidos)))
-                .addGap(107, 107, 107))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(68, 68, 68)
-                .addComponent(btnIncluirServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 376, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(PanelInformacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(ScrollPedidos))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnIncluirServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblTotalVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnImprimir))))
-                .addContainerGap(80, Short.MAX_VALUE))
-        );
+        jLabel14.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel14.setText("Valor Servicio:");
+        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(559, 637, 150, 40));
+
+        lblPropina.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
+        lblPropina.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblPropina.setText("$0.0");
+        getContentPane().add(lblPropina, new org.netbeans.lib.awtextra.AbsoluteConstraints(727, 639, 168, 40));
+
+        jLabel15.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
+        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel15.setText("Sub Total:");
+        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(559, 583, 150, 40));
+
+        lblSubtotal.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
+        lblSubtotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblSubtotal.setText("$50.000");
+        getContentPane().add(lblSubtotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(727, 585, 168, 40));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -300,7 +275,35 @@ public class frmDetalleVenta extends javax.swing.JFrame {
     }//GEN-LAST:event_btnImprimirActionPerformed
 
     private void btnIncluirServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirServicioActionPerformed
-        // TODO add your handling code here:
+            
+        double SubTotal = this.venta.getTotal();
+        
+        if(propina){
+            propina = false;
+            valorServicio = 0;
+            lblPropina.setText(String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(valorServicio)));
+            lblValorTotal.setText(String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(this.venta.getTotal())));
+            lblTotalVenta.setText(String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(this.venta.getTotal())));
+            this.venta.setValor_propina(valorServicio);
+        }else{
+            propina = true;
+            
+           valorServicio = this.venta.calcularPropina();
+           this.venta.setValor_propina(valorServicio);
+           
+           lblPropina.setText(String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(valorServicio)));
+           lblValorTotal.setText(String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(this.venta.getTotalConServicio(valorServicio, this.venta.getTotal()))));
+           lblTotalVenta.setText(String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(this.venta.getTotalConServicio(valorServicio, this.venta.getTotal()))));
+           
+            
+        }
+        
+        
+        
+        
+        
+
+
     }//GEN-LAST:event_btnIncluirServicioActionPerformed
 
     /**
@@ -314,6 +317,7 @@ public class frmDetalleVenta extends javax.swing.JFrame {
         lblValorTotal.setText(String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(this.venta.getTotal())));
         lblPedidos.setText(String.valueOf(this.venta.getPedidoses().size()));
         lblTotalVenta.setText(String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(this.venta.getTotal())));
+        lblSubtotal.setText(String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(this.venta.getTotal())));
     }
     
     public void mtdCargarPedidos(){
@@ -345,6 +349,8 @@ public class frmDetalleVenta extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -354,6 +360,8 @@ public class frmDetalleVenta extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel lblMesero;
     private javax.swing.JLabel lblPedidos;
+    private javax.swing.JLabel lblPropina;
+    private javax.swing.JLabel lblSubtotal;
     private javax.swing.JLabel lblTotalVenta;
     private javax.swing.JLabel lblUbicacion;
     private javax.swing.JLabel lblValorTotal;

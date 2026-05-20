@@ -40,7 +40,7 @@ public class frmListadoProductos extends javax.swing.JFrame {
     models.Productos clProducto = new models.Productos();
     //
     private Home_Administracion Parent;
-     private Usuarios usuario;
+     public static Usuarios usuario;
     
     /**
      * Creates new form Usuarios
@@ -67,6 +67,11 @@ public class frmListadoProductos extends javax.swing.JFrame {
             
         df.addRow(new Object[]{dataProducto, dataProducto.getCodigoBarras(),dataProducto.getNombre(),dataProducto.getCategorias(),String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(dataProducto.getCosto())),String.valueOf(NumberFormat.getCurrencyInstance(new Locale("es", "CO")).format(dataProducto.getValor(/*dataProducto.getIdProducto()*/))),stoServicio });
         }
+        
+        jTProductos.setRowHeight(jTProductos.getFontMetrics(jTProductos.getFont()).getHeight() + 2);
+        jTProductos.getColumnModel().getColumn(1).setPreferredWidth(15);
+        jTProductos.revalidate(); // Fuerza a la interfaz a recalcular el diseño
+        jTProductos.repaint();   // Fuerza el repintado visual
         jTProductos.setModel(df);
         
         Home_Administracion form = Parent;
@@ -81,6 +86,9 @@ public class frmListadoProductos extends javax.swing.JFrame {
                         models.Productos p = (models.Productos) jTProductos.getValueAt(fila, 0);
                         
                         if(p.getTipoVenta().equalsIgnoreCase("Unidad")){
+                            
+                         frmUpdateProducto.usuario = usuario;   
+                            
                          new frmUpdateProducto(form, p).setVisible(true);
                          listForm.dispose();
                          //JOptionPane.showMessageDialog(null, "algo esta pasando"); 
@@ -106,7 +114,6 @@ public class frmListadoProductos extends javax.swing.JFrame {
         jPopupMenu1 = new javax.swing.JPopupMenu();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        btnNuevo = new javax.swing.JButton();
         jBExit = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTProductos = new javax.swing.JTable();
@@ -131,16 +138,6 @@ public class frmListadoProductos extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
         jLabel2.setText("Gestion de Productos");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 50, 382, 32));
-
-        btnNuevo.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
-        btnNuevo.setText("Nuevo Compuesto");
-        btnNuevo.setToolTipText("");
-        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 500, 240, 39));
 
         jBExit.setFont(new java.awt.Font("Leelawadee", 0, 40)); // NOI18N
         jBExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/exit.png"))); // NOI18N
@@ -219,14 +216,6 @@ public class frmListadoProductos extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-     /* Funcion : Abrir fram Cusuarios
-    Nota :   toma  la fila selccionada  y envia los datos al frame CUsuarios
-  * Desarrollador :(Brayan cristancho) 
-  * Fecha de creacion : 01/08/2018**/
-    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        this.dispose();
-        new frmRegistrarCompuesto(Parent, new models.Productos()).setVisible(true);
-    }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void jBExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExitActionPerformed
        this.dispose();
@@ -234,6 +223,8 @@ public class frmListadoProductos extends javax.swing.JFrame {
     }//GEN-LAST:event_jBExitActionPerformed
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
+        
+        frmRegistrarFactura.usuario = usuario;
         this.dispose();
         new frmRegistrarFactura(Parent).setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_btnIngresarActionPerformed
@@ -285,7 +276,6 @@ public class frmListadoProductos extends javax.swing.JFrame {
     private javax.swing.JButton btnFiltro;
     private javax.swing.JButton btnImprimir;
     private javax.swing.JButton btnIngresar;
-    private javax.swing.JButton btnNuevo;
     private javax.swing.JButton jBExit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
