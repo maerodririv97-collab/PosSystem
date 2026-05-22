@@ -5,6 +5,8 @@
  */
 package forms;
 
+import forms.administracion.frmDetalleVenta;
+import forms.administracion.frmModoPago;
 import java.awt.Image;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -29,11 +31,19 @@ import org.hibernate.Transaction;
 public class frmVueltas extends javax.swing.JFrame {
 
    public static Ventas venta;
+   public frmModoPago parent;
+   
+   NumberFormat formatoMoneda = NumberFormat.getCurrencyInstance(new Locale("es", "CO"));
+   
     
-    public frmVueltas() {
-        
+    public frmVueltas(frmModoPago p) {
+        this.parent = p;
        
+        
+        
         initComponents();
+        
+        lblValorVueltas.setVisible(false);
         ImageIcon img = new ImageIcon(getClass().getResource("/images/icon_app.png"));
         this.setIconImage(img.getImage().getScaledInstance(180,180, Image.SCALE_SMOOTH));
          this.setLocationRelativeTo(this);
@@ -64,6 +74,9 @@ public class frmVueltas extends javax.swing.JFrame {
         btn0 = new javax.swing.JButton();
         btn1 = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
+        lblValorVueltas = new javax.swing.JLabel();
+        lblValorVueltas1 = new javax.swing.JLabel();
+        btnFinalizarVenta = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(606, 720));
@@ -76,7 +89,7 @@ public class frmVueltas extends javax.swing.JFrame {
 
         lblCantidad.setFont(new java.awt.Font("Leelawadee UI", 1, 48)); // NOI18N
         lblCantidad.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        getContentPane().add(lblCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 70, 340, 70));
+        getContentPane().add(lblCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 20, 320, 60));
 
         btn8.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         btn8.setText("8");
@@ -86,7 +99,7 @@ public class frmVueltas extends javax.swing.JFrame {
                 btn8ActionPerformed(evt);
             }
         });
-        getContentPane().add(btn8, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 160, 100, 80));
+        getContentPane().add(btn8, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 110, 80, 60));
 
         btn9.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         btn9.setText("9");
@@ -96,7 +109,7 @@ public class frmVueltas extends javax.swing.JFrame {
                 btn9ActionPerformed(evt);
             }
         });
-        getContentPane().add(btn9, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 160, 100, 80));
+        getContentPane().add(btn9, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 110, 80, 60));
 
         btn7.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         btn7.setText("7");
@@ -106,7 +119,7 @@ public class frmVueltas extends javax.swing.JFrame {
                 btn7ActionPerformed(evt);
             }
         });
-        getContentPane().add(btn7, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 160, 100, 80));
+        getContentPane().add(btn7, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 110, 80, 60));
 
         btn5.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         btn5.setText("5");
@@ -116,7 +129,7 @@ public class frmVueltas extends javax.swing.JFrame {
                 btn5ActionPerformed(evt);
             }
         });
-        getContentPane().add(btn5, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 250, 100, 80));
+        getContentPane().add(btn5, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 200, 80, 60));
 
         btn6.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         btn6.setText("6");
@@ -126,7 +139,7 @@ public class frmVueltas extends javax.swing.JFrame {
                 btn6ActionPerformed(evt);
             }
         });
-        getContentPane().add(btn6, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 250, 100, 80));
+        getContentPane().add(btn6, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 200, 80, 60));
 
         btn4.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         btn4.setText("4");
@@ -136,7 +149,7 @@ public class frmVueltas extends javax.swing.JFrame {
                 btn4ActionPerformed(evt);
             }
         });
-        getContentPane().add(btn4, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 250, 100, 80));
+        getContentPane().add(btn4, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 200, 80, 60));
 
         btn2.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         btn2.setText("2");
@@ -146,7 +159,7 @@ public class frmVueltas extends javax.swing.JFrame {
                 btn2ActionPerformed(evt);
             }
         });
-        getContentPane().add(btn2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 340, 100, 80));
+        getContentPane().add(btn2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 290, 80, 60));
 
         btn3.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         btn3.setText("3");
@@ -156,7 +169,7 @@ public class frmVueltas extends javax.swing.JFrame {
                 btn3ActionPerformed(evt);
             }
         });
-        getContentPane().add(btn3, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 340, 100, 80));
+        getContentPane().add(btn3, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 290, 80, 60));
 
         btnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/vaciar.png"))); // NOI18N
         btnLimpiar.setFocusPainted(false);
@@ -165,7 +178,7 @@ public class frmVueltas extends javax.swing.JFrame {
                 btnLimpiarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 430, 210, 80));
+        getContentPane().add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 380, 190, 60));
 
         btnCancel.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         btnCancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/drop.png"))); // NOI18N
@@ -175,7 +188,7 @@ public class frmVueltas extends javax.swing.JFrame {
                 btnCancelActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 530, 90, 60));
+        getContentPane().add(btnCancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 620, 80, 60));
 
         btn0.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         btn0.setText("0");
@@ -185,7 +198,7 @@ public class frmVueltas extends javax.swing.JFrame {
                 btn0ActionPerformed(evt);
             }
         });
-        getContentPane().add(btn0, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 430, 100, 80));
+        getContentPane().add(btn0, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 380, 80, 60));
 
         btn1.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
         btn1.setText("1");
@@ -195,17 +208,37 @@ public class frmVueltas extends javax.swing.JFrame {
                 btn1ActionPerformed(evt);
             }
         });
-        getContentPane().add(btn1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 340, 100, 80));
+        getContentPane().add(btn1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 80, 60));
 
         btnGuardar.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
-        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/check.png"))); // NOI18N
+        btnGuardar.setText("CALCULAR");
         btnGuardar.setFocusPainted(false);
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 530, 90, 60));
+        getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 470, 210, 60));
+
+        lblValorVueltas.setFont(new java.awt.Font("Segoe UI", 1, 60)); // NOI18N
+        lblValorVueltas.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblValorVueltas.setText("35000");
+        getContentPane().add(lblValorVueltas, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 600, 490, 100));
+
+        lblValorVueltas1.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
+        lblValorVueltas1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblValorVueltas1.setText("Sus vueltas son:");
+        getContentPane().add(lblValorVueltas1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 540, 490, 50));
+
+        btnFinalizarVenta.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
+        btnFinalizarVenta.setText("FINALIZAR VENTA");
+        btnFinalizarVenta.setFocusPainted(false);
+        btnFinalizarVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFinalizarVentaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnFinalizarVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 470, 320, 60));
 
         pack();
         setLocationRelativeTo(null);
@@ -214,7 +247,36 @@ public class frmVueltas extends javax.swing.JFrame {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         
         
+        
+        btnGuardar.setEnabled(false);
         String textoLimpio = lblCantidad.getText().replaceAll("[^\\d]", "");
+        
+       
+        
+            if (textoLimpio.isEmpty()) {
+            textoLimpio = "0";
+            }
+
+            // 2. Convertir el pago del cliente a un número decimal
+            Double valorPagado = Double.parseDouble(textoLimpio);
+
+            // 3. Obtener el valor total de la venta (lo que ya tenías)
+            Double valorVenta = this.venta.getTotalConServicio(this.venta.getValor_propina(), this.venta.getTotal());
+
+            // 4. CALCULAR LAS VUELTAS
+            Double vueltas = valorPagado - valorVenta;
+
+            // 5. VALIDACIÓN DE SEGURIDAD
+            if (vueltas < 0) {
+
+            JOptionPane.showMessageDialog(this, "El dinero es insuficiente. Falta: " + Math.abs(vueltas));
+            
+            } else {
+                formatoMoneda.setMaximumFractionDigits(0); // ESTA LÍNEA ES CLAVE: quita los centavos
+
+                lblValorVueltas.setText(formatoMoneda.format(vueltas));
+                lblValorVueltas.setVisible(true);
+            }
         
         
         
@@ -240,7 +302,7 @@ public class frmVueltas extends javax.swing.JFrame {
         long valorFinal = Long.parseLong(nuevoValorStr);
 
         // 5. Formatear sin decimales para que el 5 + 0 sea 50 y no 5000
-        NumberFormat formatoMoneda = NumberFormat.getCurrencyInstance(new Locale("es", "CO"));
+        
         formatoMoneda.setMaximumFractionDigits(0); // ESTA LÍNEA ES CLAVE: quita los centavos
 
         lblCantidad.setText(formatoMoneda.format(valorFinal));
@@ -266,7 +328,7 @@ String nuevoValorStr = textoLimpio + "1";
 long valorFinal = Long.parseLong(nuevoValorStr);
 
 // 5. Formatear sin decimales para que el 5 + 0 sea 50 y no 5000
-NumberFormat formatoMoneda = NumberFormat.getCurrencyInstance(new Locale("es", "CO"));
+
 formatoMoneda.setMaximumFractionDigits(0); // ESTA LÍNEA ES CLAVE: quita los centavos
 
 lblCantidad.setText(formatoMoneda.format(valorFinal));
@@ -292,7 +354,7 @@ String nuevoValorStr = textoLimpio + "2";
 long valorFinal = Long.parseLong(nuevoValorStr);
 
 // 5. Formatear sin decimales para que el 5 + 0 sea 50 y no 5000
-NumberFormat formatoMoneda = NumberFormat.getCurrencyInstance(new Locale("es", "CO"));
+
 formatoMoneda.setMaximumFractionDigits(0); // ESTA LÍNEA ES CLAVE: quita los centavos
 
 lblCantidad.setText(formatoMoneda.format(valorFinal));
@@ -314,7 +376,7 @@ String nuevoValorStr = textoLimpio + "3";
 long valorFinal = Long.parseLong(nuevoValorStr);
 
 // 5. Formatear sin decimales para que el 5 + 0 sea 50 y no 5000
-NumberFormat formatoMoneda = NumberFormat.getCurrencyInstance(new Locale("es", "CO"));
+
 formatoMoneda.setMaximumFractionDigits(0); // ESTA LÍNEA ES CLAVE: quita los centavos
 
 lblCantidad.setText(formatoMoneda.format(valorFinal));
@@ -336,7 +398,7 @@ String nuevoValorStr = textoLimpio + "4";
 long valorFinal = Long.parseLong(nuevoValorStr);
 
 // 5. Formatear sin decimales para que el 5 + 0 sea 50 y no 5000
-NumberFormat formatoMoneda = NumberFormat.getCurrencyInstance(new Locale("es", "CO"));
+
 formatoMoneda.setMaximumFractionDigits(0); // ESTA LÍNEA ES CLAVE: quita los centavos
 
 lblCantidad.setText(formatoMoneda.format(valorFinal));
@@ -358,7 +420,7 @@ String nuevoValorStr = textoLimpio + "5";
 long valorFinal = Long.parseLong(nuevoValorStr);
 
 // 5. Formatear sin decimales para que el 5 + 0 sea 50 y no 5000
-NumberFormat formatoMoneda = NumberFormat.getCurrencyInstance(new Locale("es", "CO"));
+
 formatoMoneda.setMaximumFractionDigits(0); // ESTA LÍNEA ES CLAVE: quita los centavos
 
 lblCantidad.setText(formatoMoneda.format(valorFinal));
@@ -380,7 +442,7 @@ String nuevoValorStr = textoLimpio + "6";
 long valorFinal = Long.parseLong(nuevoValorStr);
 
 // 5. Formatear sin decimales para que el 5 + 0 sea 50 y no 5000
-NumberFormat formatoMoneda = NumberFormat.getCurrencyInstance(new Locale("es", "CO"));
+
 formatoMoneda.setMaximumFractionDigits(0); // ESTA LÍNEA ES CLAVE: quita los centavos
 
 lblCantidad.setText(formatoMoneda.format(valorFinal));
@@ -402,7 +464,7 @@ String nuevoValorStr = textoLimpio + "7";
 long valorFinal = Long.parseLong(nuevoValorStr);
 
 // 5. Formatear sin decimales para que el 5 + 0 sea 50 y no 5000
-NumberFormat formatoMoneda = NumberFormat.getCurrencyInstance(new Locale("es", "CO"));
+
 formatoMoneda.setMaximumFractionDigits(0); // ESTA LÍNEA ES CLAVE: quita los centavos
 
 lblCantidad.setText(formatoMoneda.format(valorFinal));
@@ -424,7 +486,7 @@ String nuevoValorStr = textoLimpio + "8";
 long valorFinal = Long.parseLong(nuevoValorStr);
 
 // 5. Formatear sin decimales para que el 5 + 0 sea 50 y no 5000
-NumberFormat formatoMoneda = NumberFormat.getCurrencyInstance(new Locale("es", "CO"));
+
 formatoMoneda.setMaximumFractionDigits(0); // ESTA LÍNEA ES CLAVE: quita los centavos
 
 lblCantidad.setText(formatoMoneda.format(valorFinal));
@@ -446,7 +508,7 @@ String nuevoValorStr = textoLimpio + "9";
 long valorFinal = Long.parseLong(nuevoValorStr);
 
 // 5. Formatear sin decimales para que el 5 + 0 sea 50 y no 5000
-NumberFormat formatoMoneda = NumberFormat.getCurrencyInstance(new Locale("es", "CO"));
+
 formatoMoneda.setMaximumFractionDigits(0); // ESTA LÍNEA ES CLAVE: quita los centavos
 
 lblCantidad.setText(formatoMoneda.format(valorFinal));
@@ -455,6 +517,14 @@ lblCantidad.setText(formatoMoneda.format(valorFinal));
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
       this.dispose();  // TODO add your handling code here:
     }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void btnFinalizarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarVentaActionPerformed
+        
+        this.parent.mtdConfirmarPagosEfectivo();
+        this.dispose();
+        
+        
+    }//GEN-LAST:event_btnFinalizarVentaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -476,8 +546,11 @@ lblCantidad.setText(formatoMoneda.format(valorFinal));
     private javax.swing.JButton btn8;
     private javax.swing.JButton btn9;
     private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnFinalizarVenta;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JLabel lblCantidad;
+    private javax.swing.JLabel lblValorVueltas;
+    private javax.swing.JLabel lblValorVueltas1;
     // End of variables declaration//GEN-END:variables
 }

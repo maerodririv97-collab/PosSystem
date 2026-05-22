@@ -107,7 +107,7 @@
 				<text><![CDATA[Egresos]]></text>
 			</staticText>
 		</band>
-		<band height="103">
+		<band height="197">
 			<subreport>
 				<reportElement x="5" y="20" width="190" height="15" uuid="4efcd54a-9534-4bf9-a9dd-0e09c745c6ff"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource((java.util.Collection)$P{turno}.getOperaciones("Ingreso"))]]></dataSourceExpression>
@@ -147,7 +147,7 @@
 				<textFieldExpression><![CDATA[$P{turno}.getTotalOperaciones("Ingreso")]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="16" y="69" width="88" height="14" uuid="12dff405-2ae2-4f4a-bad1-a51c65689ef2">
+				<reportElement x="15" y="98" width="88" height="14" uuid="12dff405-2ae2-4f4a-bad1-a51c65689ef2">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Right">
@@ -156,74 +156,14 @@
 				<text><![CDATA[Propinas Efectivo:]]></text>
 			</staticText>
 			<textField pattern="¤#,##0">
-				<reportElement x="125" y="71" width="71" height="10" uuid="7c77c288-6e4f-4136-84c4-ea6749557952"/>
+				<reportElement x="123" y="99" width="71" height="10" uuid="7c77c288-6e4f-4136-84c4-ea6749557952"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Arial" size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{turno}.getTotalProTPago("Efectivo")]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤#,##0">
-				<reportElement x="125" y="86" width="71" height="10" uuid="a17ed09b-df11-4a1b-b5a6-b4f081cb81af"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Arial" size="8" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{turno}.getTotalProTPago("Transferencia")]]></textFieldExpression>
-			</textField>
 			<staticText>
-				<reportElement x="7" y="85" width="97" height="14" uuid="425a734e-2d63-45ad-9b87-416858d874c6"/>
-				<textElement textAlignment="Right">
-					<font size="9"/>
-				</textElement>
-				<text><![CDATA[Propinas Transferencia:]]></text>
-			</staticText>
-		</band>
-	</detail>
-	<pageFooter>
-		<band height="121">
-			<textField pattern="¤#,##0">
-				<reportElement x="125" y="22" width="71" height="10" uuid="c4324e3b-fdf9-4c86-aebc-2b35a6660806"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Arial" size="8" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{turno}.getTotalTPago("Efectivo")]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤#,##0">
-				<reportElement x="125" y="5" width="71" height="13" uuid="5fa6abdc-7c87-43ee-b972-52052ab2b34b"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{turno}.getTotalVentas()]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤#,##0">
-				<reportElement x="125" y="37" width="71" height="10" uuid="eef0d57f-ae7a-45bc-81ca-d7788ca1f069"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Arial" size="8" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{turno}.getTotalTPago("Transferencia")]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤#,##0">
-				<reportElement x="125" y="69" width="71" height="13" uuid="6200ddfc-7708-47fb-b9f4-4f967eaf5239"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{turno}.getTotalCaja()]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤#,##0">
-				<reportElement x="125" y="56" width="71" height="13" uuid="5aba5a92-4e1b-40b5-88ad-3df4e5643517"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Arial" size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{turno}.getValorInicial()]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="13" y="5" width="91" height="13" uuid="c4dc251f-8b87-42ad-95bf-aa0f103e5ed5"/>
-				<textElement textAlignment="Right">
-					<font size="9"/>
-				</textElement>
-				<text><![CDATA[Total Ventas Turno:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="16" y="20" width="88" height="14" uuid="6a212733-7932-42eb-bfff-d986309e7f92">
+				<reportElement x="15" y="84" width="88" height="14" uuid="6a212733-7932-42eb-bfff-d986309e7f92">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Right">
@@ -231,40 +171,158 @@
 				</textElement>
 				<text><![CDATA[Pagos Efectivo:]]></text>
 			</staticText>
+			<textField pattern="¤#,##0">
+				<reportElement x="123" y="86" width="71" height="10" uuid="c4324e3b-fdf9-4c86-aebc-2b35a6660806"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{turno}.getTotalTPago("Efectivo")]]></textFieldExpression>
+			</textField>
 			<staticText>
-				<reportElement x="7" y="36" width="97" height="14" uuid="a9d85e96-2ac9-45e4-91ef-2f1840ab8ee9"/>
+				<reportElement x="16" y="129" width="88" height="14" uuid="2dbdf4f2-2f7e-4c0f-a785-8ef82e5c34f0">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<textField pattern="¤#,##0">
+				<reportElement x="125" y="130" width="71" height="10" uuid="6910fadb-b4e1-42ef-a07f-bde98fab8155"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{turno}.getSumatoria($P{turno}.getTotalTPago("Efectivo"),$P{turno}.getTotalProTPago("Efectivo")) + $P{turno}.getValorInicial()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="8" y="126" width="186" height="1" uuid="e28bcd5c-712b-4317-97e7-5ae7b48993fb"/>
+			</line>
+			<staticText>
+				<reportElement x="15" y="181" width="88" height="14" uuid="2190add7-f4c0-4506-96da-7c6c5c8aa936">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="7" y="179" width="186" height="1" uuid="c13fecc3-4d43-4ebf-af0e-0863e4a5a386"/>
+			</line>
+			<textField pattern="¤#,##0">
+				<reportElement x="124" y="182" width="71" height="10" uuid="626f3382-e8e3-4e21-90f2-da69e36d928e"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{turno}.getSumatoria($P{turno}.getTotalTPago("Transferencia"),$P{turno}.getTotalProTPago("Transferencia"))]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="8" y="75" width="186" height="1" uuid="5fb0dc18-3ca5-48c0-8df6-0021c1ee8e01"/>
+			</line>
+			<line>
+				<reportElement x="7" y="38" width="186" height="1" uuid="5e116ed0-6456-4425-b5db-3eee9c260789"/>
+			</line>
+			<staticText>
+				<reportElement x="12" y="112" width="91" height="14" uuid="0a2364ab-a641-4e41-b23c-66c3858ae033"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Base Caja:]]></text>
+			</staticText>
+			<textField pattern="¤#,##0">
+				<reportElement x="125" y="112" width="71" height="13" uuid="0101d82a-5c01-4157-8b27-776525cf820c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{turno}.getValorInicial()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="120">
+			<textField pattern="¤#,##0">
+				<reportElement x="125" y="20" width="71" height="13" uuid="5fa6abdc-7c87-43ee-b972-52052ab2b34b"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{turno}.getTotalVentas()]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤#,##0">
+				<reportElement x="125" y="-44" width="71" height="12" uuid="eef0d57f-ae7a-45bc-81ca-d7788ca1f069"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{turno}.getTotalTPago("Transferencia")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤#,##0">
+				<reportElement x="125" y="46" width="71" height="13" uuid="6200ddfc-7708-47fb-b9f4-4f967eaf5239"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{turno}.getTotalCaja()]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤#,##0">
+				<reportElement x="125" y="33" width="71" height="13" uuid="5aba5a92-4e1b-40b5-88ad-3df4e5643517"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{turno}.getValorInicial()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="14" y="20" width="91" height="13" uuid="c4dc251f-8b87-42ad-95bf-aa0f103e5ed5"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Total Ventas Turno:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="-46" width="97" height="14" uuid="a9d85e96-2ac9-45e4-91ef-2f1840ab8ee9"/>
 				<textElement textAlignment="Right">
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[Pagos Transferencia:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="13" y="56" width="91" height="14" uuid="02c41a50-f2fa-4647-962b-e30655e29fa0"/>
+				<reportElement x="14" y="33" width="91" height="14" uuid="02c41a50-f2fa-4647-962b-e30655e29fa0"/>
 				<textElement textAlignment="Right">
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[Valor Base Turno:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="14" y="70" width="91" height="14" uuid="c883a2a6-cc8c-4fbc-9317-9b492dea5bd1"/>
+				<reportElement x="14" y="47" width="91" height="14" uuid="c883a2a6-cc8c-4fbc-9317-9b492dea5bd1"/>
 				<textElement textAlignment="Right">
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[Saldo en Caja:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="13" y="98" width="91" height="14" uuid="85c68cf0-a31a-4cf6-aa66-d1e5e5a41964"/>
+				<reportElement x="15" y="70" width="91" height="14" uuid="85c68cf0-a31a-4cf6-aa66-d1e5e5a41964"/>
 				<textElement textAlignment="Right">
 					<font size="9"/>
 				</textElement>
-				<text><![CDATA[Valor Propinas:]]></text>
+				<text><![CDATA[Total Propinas:]]></text>
 			</staticText>
 			<textField pattern="¤#,##0">
-				<reportElement x="124" y="98" width="71" height="13" uuid="5aa46216-976f-47db-9abd-4dc54cd5975d"/>
+				<reportElement x="126" y="70" width="71" height="13" uuid="5aa46216-976f-47db-9abd-4dc54cd5975d"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Arial" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{turno}.getTotalPropinas()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="6" y="-32" width="97" height="14" uuid="425a734e-2d63-45ad-9b87-416858d874c6"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Propinas Transferencia:]]></text>
+			</staticText>
+			<textField pattern="¤#,##0">
+				<reportElement x="124" y="-31" width="71" height="12" uuid="a17ed09b-df11-4a1b-b5a6-b4f081cb81af"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{turno}.getTotalProTPago("Transferencia")]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>

@@ -4,10 +4,11 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/Home_Administracion.java</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/frmDetalleVenta.java</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/frmModoPago.java</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/frmListadoProductos.java</file>
+            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/frmListarTurnos.java</file>
+            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/models/Turnos.java</file>
+            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/models/Ventas.java</file>
             <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/hibernate.cfg.xml</file>
+            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/models/Productos.java</file>
         </group>
     </open-files>
 </project-private>

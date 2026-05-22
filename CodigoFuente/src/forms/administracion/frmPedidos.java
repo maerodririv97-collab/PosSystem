@@ -39,18 +39,21 @@ public class frmPedidos extends javax.swing.JFrame implements Runnable {
     public List<Ventas> listVentas;
     public static Usuarios usuario;
     
+    private models.DisenoFormularios desing;
+    
     private Thread hilo;
     
     public frmPedidos(Home_Administracion p) {
         
-        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
-        
+       
         initComponents();
+        
+        desing.mtdDisenoPantalla(this);
         this.parent  = p;
-        this.setLocationRelativeTo(this);
+       
         ImageIcon img = new ImageIcon(getClass().getResource("/images/icon_app.png"));
         this.setIconImage(img.getImage().getScaledInstance(180,180, Image.SCALE_SMOOTH));
-        this.setTitle("POSystem - Powered by KIM-Solutions");
+        
         
         hilo = new Thread(this);
         hilo.start();
@@ -66,21 +69,48 @@ public class frmPedidos extends javax.swing.JFrame implements Runnable {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        PanelPedidos = new javax.swing.JPanel();
+        jpnSuperior = new javax.swing.JPanel();
+        lblLogo = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         btnSalir = new javax.swing.JButton();
         btnRecargar = new javax.swing.JButton();
+        jpnCentral = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        PanelPedidos = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(1920, 1080));
         setMinimumSize(new java.awt.Dimension(1920, 1080));
         setPreferredSize(new java.awt.Dimension(1920, 1080));
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente_small.png"))); // NOI18N
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 10, 250, 179));
+        jpnSuperior.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente_small.png"))); // NOI18N
+        jpnSuperior.add(lblLogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 10, 160, 179));
+
+        jLabel2.setFont(new java.awt.Font("Leelawadee", 0, 36)); // NOI18N
+        jLabel2.setText("Pedidos Sin Facturar");
+        jpnSuperior.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 80, 350, 70));
+
+        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/exit.png"))); // NOI18N
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+        jpnSuperior.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 70, 90, 70));
+
+        btnRecargar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/reload.png"))); // NOI18N
+        btnRecargar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRecargarActionPerformed(evt);
+            }
+        });
+        jpnSuperior.add(btnRecargar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 70, 90, 70));
+
+        getContentPane().add(jpnSuperior, java.awt.BorderLayout.NORTH);
+
+        jpnCentral.setLayout(new java.awt.GridLayout());
 
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -89,27 +119,9 @@ public class frmPedidos extends javax.swing.JFrame implements Runnable {
         PanelPedidos.setLayout(new java.awt.GridLayout(0, 1));
         jScrollPane1.setViewportView(PanelPedidos);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 290, 1070, 490));
+        jpnCentral.add(jScrollPane1);
 
-        jLabel2.setFont(new java.awt.Font("Leelawadee", 0, 36)); // NOI18N
-        jLabel2.setText("Pedidos Sin Facturar");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 160, 350, 70));
-
-        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/exit.png"))); // NOI18N
-        btnSalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalirActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 170, 90, 70));
-
-        btnRecargar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/reload.png"))); // NOI18N
-        btnRecargar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRecargarActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnRecargar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1190, 170, 90, 70));
+        getContentPane().add(jpnCentral, java.awt.BorderLayout.CENTER);
 
         getAccessibleContext().setAccessibleParent(this);
 
@@ -196,8 +208,10 @@ public class frmPedidos extends javax.swing.JFrame implements Runnable {
     private javax.swing.JPanel PanelPedidos;
     private javax.swing.JButton btnRecargar;
     private javax.swing.JButton btnSalir;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel jpnCentral;
+    private javax.swing.JPanel jpnSuperior;
+    private javax.swing.JLabel lblLogo;
     // End of variables declaration//GEN-END:variables
 }

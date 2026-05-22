@@ -135,21 +135,40 @@ public class frmModoPago extends javax.swing.JFrame {
         
             
             
-           /*int respVueltos = JOptionPane.showConfirmDialog(null,"¿Necesitas dar Vueltas?");
+           int respVueltos = JOptionPane.showConfirmDialog(null,"¿Necesitas dar Vueltas?");
         
         
             if (JOptionPane.OK_OPTION == respVueltos){
                
+                
+                this.setEnabled(false);
                 frmVueltas.venta = this.venta;
                 
-               frmVueltas formVueltas = new frmVueltas();
+               frmVueltas formVueltas = new frmVueltas(this);
                formVueltas.setVisible(true);
+               
+               formVueltas.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent e) {
+                
+                    if(frmModoPago.this.venta.getEstado() != "Pagada"){
+                    
+                        frmModoPago.this.toFront(); 
+                        frmModoPago.this.setEnabled(true); 
+                        frmModoPago.this.setVisible(true);
+                    }
+                
+                }});
                 
                 
             }else{
-                         new Home_Administracion(venta.getUsuarios()).setVisible(true);
-            }*/
-        mtdConfirmarPagosEfectivo();
+                
+                mtdConfirmarPagosEfectivo();
+                this.parent.dispose();
+                this.dispose();
+                         
+            }
+        
         
         
 
@@ -183,10 +202,6 @@ public class frmModoPago extends javax.swing.JFrame {
                         }catch (JRException ex){
                         JOptionPane.showMessageDialog(rootPane, "Error iReport: " + ex.getMessage());
                         System.err.println( "Error iReport: " + ex.getMessage() );
-                        }finally{
-                            this.parent.dispose();
-                         this.dispose();
-                        
                         }
                     }else{
                          new Home_Administracion(venta.getUsuarios()).setVisible(true);

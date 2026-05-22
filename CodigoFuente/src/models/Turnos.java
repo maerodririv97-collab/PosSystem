@@ -394,6 +394,14 @@ public class Turnos  implements java.io.Serializable {
 
          return total;
      }
+      
+      public double getSumatoria(int ventas, int propinas){
+         double total = 0;
+
+         total = ventas + propinas;
+
+         return total;
+     }
 
       
 

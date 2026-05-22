@@ -6,13 +6,27 @@
 package forms.administracion;
 
 import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.text.NumberFormat;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import models.*;
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperPrintManager;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -30,17 +44,25 @@ public class frmDetalleVenta extends javax.swing.JFrame {
     private boolean propina = false;
     private double valorServicio = 0;
     
+    private models.DisenoFormularios desing;
+    
     public frmDetalleVenta(frmPedidos p,Ventas v) {
         initComponents();
         this.parent = p;
         this.venta = v;
         
-        this.setLocationRelativeTo(this);
+        desing.mtdDisenoPantalla(this);
+        
+        
         ImageIcon img = new ImageIcon(getClass().getResource("/images/icon_app.png"));
         this.setIconImage(img.getImage().getScaledInstance(180,180, Image.SCALE_SMOOTH));
-        this.setTitle("POSystem - Powered by KIM-Solutions");
         
-        btnIncluirServicio.setFont(new Font("Segoe UI", Font.PLAIN, 28));
+        // 1. Le pones la fuente grande que necesitas en tu UI
+        btnIncluirServicio.setFont(new Font("Segoe UI", Font.PLAIN, 26)); 
+
+        // 2. Usas tu nueva función pasándole el componente y el tamaño en píxeles (ej: 26)
+        models.DisenoFormularios.mtdAgrandarCheckBox(btnIncluirServicio, 26);
+        
         
         mtdInformacionGeneral();
         mtdCargarPedidos();
@@ -55,8 +77,11 @@ public class frmDetalleVenta extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jpnInferior = new javax.swing.JPanel();
+        jpnIzquierda = new javax.swing.JPanel();
+        btnSalir = new javax.swing.JButton();
+        btnConfirmarVenta = new javax.swing.JButton();
+        btnIncluirServicio = new javax.swing.JCheckBox();
         PanelInformacion = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -67,143 +92,30 @@ public class frmDetalleVenta extends javax.swing.JFrame {
         lblUbicacion = new javax.swing.JLabel();
         lblValorTotal = new javax.swing.JLabel();
         lblPedidos = new javax.swing.JLabel();
+        btnImprimir = new javax.swing.JButton();
+        jpnDerecha = new javax.swing.JPanel();
         ScrollPedidos = new javax.swing.JScrollPane();
         PanelPedidos = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
+        jpnDerInf = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         lblTotalVenta = new javax.swing.JLabel();
-        btnSalir = new javax.swing.JButton();
-        btnImprimir = new javax.swing.JButton();
-        btnIncluirServicio = new javax.swing.JCheckBox();
         jLabel14 = new javax.swing.JLabel();
         lblPropina = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         lblSubtotal = new javax.swing.JLabel();
+        jpnSuperior = new javax.swing.JPanel();
+        lblLogo = new javax.swing.JLabel();
+        lblDetalle = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(1366, 800));
         setMinimumSize(new java.awt.Dimension(1024, 800));
         setPreferredSize(new java.awt.Dimension(1024, 800));
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente_small.png"))); // NOI18N
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(78, 0, 250, 179));
+        jpnInferior.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jpnInferior.setLayout(new java.awt.GridLayout(1, 0));
 
-        jLabel2.setFont(new java.awt.Font("Leelawadee", 0, 36)); // NOI18N
-        jLabel2.setText("Detalles de Venta");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(504, 34, 290, 70));
-
-        jLabel4.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Información General");
-
-        jLabel5.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel5.setText("Ubicación:");
-
-        jLabel6.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel6.setText("Barista:");
-
-        jLabel7.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel7.setText("Valor Total:");
-
-        jLabel8.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel8.setText("# de Pedidos:");
-
-        lblMesero.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
-        lblMesero.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblMesero.setText("Mesero:");
-
-        lblUbicacion.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
-        lblUbicacion.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblUbicacion.setText("Mesero:");
-
-        lblValorTotal.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
-        lblValorTotal.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblValorTotal.setText("Mesero:");
-
-        lblPedidos.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
-        lblPedidos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblPedidos.setText("Mesero:");
-
-        javax.swing.GroupLayout PanelInformacionLayout = new javax.swing.GroupLayout(PanelInformacion);
-        PanelInformacion.setLayout(PanelInformacionLayout);
-        PanelInformacionLayout.setHorizontalGroup(
-            PanelInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelInformacionLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(PanelInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(PanelInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(PanelInformacionLayout.createSequentialGroup()
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(lblMesero, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(PanelInformacionLayout.createSequentialGroup()
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(lblUbicacion, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(PanelInformacionLayout.createSequentialGroup()
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(lblValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(PanelInformacionLayout.createSequentialGroup()
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblPedidos, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(22, 22, 22)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        PanelInformacionLayout.setVerticalGroup(
-            PanelInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelInformacionLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22)
-                .addGroup(PanelInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblMesero, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(PanelInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblUbicacion, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(PanelInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(PanelInformacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblPedidos, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(25, Short.MAX_VALUE))
-        );
-
-        getContentPane().add(PanelInformacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(62, 184, -1, -1));
-
-        ScrollPedidos.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        ScrollPedidos.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-
-        PanelPedidos.setLayout(new java.awt.GridLayout(0, 1));
-        ScrollPedidos.setViewportView(PanelPedidos);
-
-        getContentPane().add(ScrollPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(454, 184, 441, 316));
-
-        jLabel3.setFont(new java.awt.Font("Leelawadee", 0, 24)); // NOI18N
-        jLabel3.setText("Pedidos");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(648, 124, -1, 42));
-
-        jLabel13.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
-        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel13.setText("Total Venta:");
-        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(559, 685, 150, 40));
-
-        lblTotalVenta.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
-        lblTotalVenta.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblTotalVenta.setText("$50.000");
-        getContentPane().add(lblTotalVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(727, 687, 168, 40));
+        jpnIzquierda.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/exit.png"))); // NOI18N
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -211,7 +123,78 @@ public class frmDetalleVenta extends javax.swing.JFrame {
                 btnSalirActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(224, 592, 103, 87));
+        jpnIzquierda.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 460, 103, 87));
+
+        btnConfirmarVenta.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnConfirmarVenta.setText("Confirmar Pago");
+        btnConfirmarVenta.setFocusPainted(false);
+        btnConfirmarVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConfirmarVentaActionPerformed(evt);
+            }
+        });
+        jpnIzquierda.add(btnConfirmarVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 460, 270, 90));
+
+        btnIncluirServicio.setFont(new java.awt.Font("Leelawadee", 0, 36)); // NOI18N
+        btnIncluirServicio.setText("Desea Incluir Servicio");
+        btnIncluirServicio.setToolTipText("");
+        btnIncluirServicio.setContentAreaFilled(false);
+        btnIncluirServicio.setPreferredSize(new java.awt.Dimension(600, 100));
+        btnIncluirServicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIncluirServicioActionPerformed(evt);
+            }
+        });
+        jpnIzquierda.add(btnIncluirServicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 350, 490, 62));
+
+        PanelInformacion.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel4.setFont(new java.awt.Font("Leelawadee UI", 0, 36)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("Información General");
+        PanelInformacion.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(38, 6, 330, 41));
+
+        jLabel5.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel5.setText("Ubicación:");
+        PanelInformacion.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(38, 129, 122, 40));
+
+        jLabel6.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel6.setText("Barista:");
+        PanelInformacion.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(38, 69, 122, 40));
+
+        jLabel7.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel7.setText("Valor Total:");
+        PanelInformacion.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(38, 189, 122, 40));
+
+        jLabel8.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel8.setText("# de Pedidos:");
+        PanelInformacion.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 249, 154, 40));
+
+        lblMesero.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
+        lblMesero.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblMesero.setText("Mesero:");
+        PanelInformacion.add(lblMesero, new org.netbeans.lib.awtextra.AbsoluteConstraints(178, 71, 168, 40));
+
+        lblUbicacion.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
+        lblUbicacion.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblUbicacion.setText("Mesero:");
+        PanelInformacion.add(lblUbicacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(178, 131, 168, 40));
+
+        lblValorTotal.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
+        lblValorTotal.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblValorTotal.setText("Mesero:");
+        PanelInformacion.add(lblValorTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(178, 191, 168, 40));
+
+        lblPedidos.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
+        lblPedidos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblPedidos.setText("Mesero:");
+        PanelInformacion.add(lblPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(178, 251, 168, 40));
+
+        jpnIzquierda.add(PanelInformacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 10, 640, 340));
 
         btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons/print.png"))); // NOI18N
         btnImprimir.addActionListener(new java.awt.event.ActionListener() {
@@ -219,37 +202,84 @@ public class frmDetalleVenta extends javax.swing.JFrame {
                 btnImprimirActionPerformed(evt);
             }
         });
-        getContentPane().add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 592, -1, -1));
+        jpnIzquierda.add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 460, -1, -1));
 
-        btnIncluirServicio.setFont(new java.awt.Font("Leelawadee", 0, 36)); // NOI18N
-        btnIncluirServicio.setText("Desea Incluir Servicio");
-        btnIncluirServicio.setPreferredSize(new java.awt.Dimension(600, 100));
-        btnIncluirServicio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnIncluirServicioActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnIncluirServicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(68, 512, 370, 62));
+        jpnInferior.add(jpnIzquierda);
+
+        jpnDerecha.setLayout(new java.awt.GridLayout(2, 0));
+
+        ScrollPedidos.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        ScrollPedidos.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+        PanelPedidos.setLayout(new java.awt.GridLayout(0, 1));
+        ScrollPedidos.setViewportView(PanelPedidos);
+
+        jpnDerecha.add(ScrollPedidos);
+
+        jpnDerInf.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel13.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel13.setText("Total Venta:");
+        jLabel13.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jLabel13.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jpnDerInf.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 150, 40));
+
+        lblTotalVenta.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
+        lblTotalVenta.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblTotalVenta.setText("$50.000");
+        lblTotalVenta.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        lblTotalVenta.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jpnDerInf.add(lblTotalVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 150, 168, 40));
 
         jLabel14.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
-        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel14.setText("Valor Servicio:");
-        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(559, 637, 150, 40));
+        jLabel14.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jLabel14.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jpnDerInf.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 150, 40));
 
         lblPropina.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
-        lblPropina.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblPropina.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblPropina.setText("$0.0");
-        getContentPane().add(lblPropina, new org.netbeans.lib.awtextra.AbsoluteConstraints(727, 639, 168, 40));
+        lblPropina.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        lblPropina.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jpnDerInf.add(lblPropina, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 110, 168, 40));
 
         jLabel15.setFont(new java.awt.Font("Leelawadee UI", 0, 24)); // NOI18N
-        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel15.setText("Sub Total:");
-        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(559, 583, 150, 40));
+        jLabel15.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jLabel15.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jpnDerInf.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 150, 40));
 
         lblSubtotal.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
-        lblSubtotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblSubtotal.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblSubtotal.setText("$50.000");
-        getContentPane().add(lblSubtotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(727, 585, 168, 40));
+        lblSubtotal.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        lblSubtotal.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jpnDerInf.add(lblSubtotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 60, 168, 40));
+
+        jpnDerecha.add(jpnDerInf);
+
+        jpnInferior.add(jpnDerecha);
+
+        getContentPane().add(jpnInferior, java.awt.BorderLayout.CENTER);
+
+        jpnSuperior.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jpnSuperior.setLayout(new java.awt.GridLayout(1, 2));
+
+        lblLogo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logotipo_cliente_small.png"))); // NOI18N
+        lblLogo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jpnSuperior.add(lblLogo);
+
+        lblDetalle.setFont(new java.awt.Font("Leelawadee", 0, 36)); // NOI18N
+        lblDetalle.setText("Detalles de Venta");
+        lblDetalle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jpnSuperior.add(lblDetalle);
+
+        getContentPane().add(jpnSuperior, java.awt.BorderLayout.PAGE_START);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -259,9 +289,9 @@ public class frmDetalleVenta extends javax.swing.JFrame {
         new Home_Administracion(usuario).setVisible(true);// TODO add your handling code here:
     }//GEN-LAST:event_btnSalirActionPerformed
 
-    private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
+    private void btnConfirmarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarVentaActionPerformed
         
-        btnImprimir.setVisible(false);
+        btnConfirmarVenta.setVisible(false);
         this.dispose();
         if(this.venta.getEstado().equalsIgnoreCase("Pagada")){
             JOptionPane.showMessageDialog(null, "Esta Factura Ya se Cobro");
@@ -272,7 +302,7 @@ public class frmDetalleVenta extends javax.swing.JFrame {
         
         
         
-    }//GEN-LAST:event_btnImprimirActionPerformed
+    }//GEN-LAST:event_btnConfirmarVentaActionPerformed
 
     private void btnIncluirServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirServicioActionPerformed
             
@@ -306,6 +336,28 @@ public class frmDetalleVenta extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnIncluirServicioActionPerformed
 
+    private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
+                        // TODO add your handling code here:
+                        
+                        
+                   Map<String,Object> params = new HashMap<String,Object>();
+                        params.put("Venta", this.venta);
+                        
+                        try{
+                        
+                        JasperPrint jasperPrint = JasperFillManager.fillReport("src\\reports\\venta.jasper",params,new JREmptyDataSource());
+                        
+                        //JasperViewer.viewReport(jasperPrint, false);
+                        JasperPrintManager.printReport(jasperPrint, false);   
+                            
+                        }catch (JRException ex){
+                        JOptionPane.showMessageDialog(rootPane, "Error iReport: " + ex.getMessage());
+                        System.err.println( "Error iReport: " + ex.getMessage() );
+                        }
+                        
+                        
+    }//GEN-LAST:event_btnImprimirActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -338,26 +390,57 @@ public class frmDetalleVenta extends javax.swing.JFrame {
         }
         
     }
+    
+    public static void agrandarCheckBox(JCheckBox checkBox, int ancho, int alto) {
+        // 1. Obtener el icono que viene por defecto en el Look and Feel
+        Icon iconoPorDefecto = UIManager.getIcon("CheckBox.icon");
+        
+        if (iconoPorDefecto != null) {
+            // 2. Crear una imagen del tamaño que queremos
+            BufferedImage img = new BufferedImage(ancho, alto, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = img.createGraphics();
+            
+            // Habilitar anti-aliasing para que no se vea pixelado al estirarse
+            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR); 
+            
+            // 3. Dibujar el icono original escalado dentro de la nueva imagen
+            iconoPorDefecto.paintIcon(checkBox, g2d, 0, 0);
+            g2d.dispose();
+            
+            // 4. Asignar el nuevo icono escalado al CheckBox
+            Icon iconoGrande = new ImageIcon(img.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH));
+            checkBox.setIcon(iconoGrande);
+            
+            // Opcional: También puedes definir el icono para cuando esté seleccionado
+            // si notas que no cambia visualmente al hacer clic
+            checkBox.setSelectedIcon(iconoGrande); 
+        }
+    }
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelInformacion;
     private javax.swing.JPanel PanelPedidos;
     private javax.swing.JScrollPane ScrollPedidos;
+    private javax.swing.JButton btnConfirmarVenta;
     private javax.swing.JButton btnImprimir;
     private javax.swing.JCheckBox btnIncluirServicio;
     private javax.swing.JButton btnSalir;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jpnDerInf;
+    private javax.swing.JPanel jpnDerecha;
+    private javax.swing.JPanel jpnInferior;
+    private javax.swing.JPanel jpnIzquierda;
+    private javax.swing.JPanel jpnSuperior;
+    private javax.swing.JLabel lblDetalle;
+    private javax.swing.JLabel lblLogo;
     private javax.swing.JLabel lblMesero;
     private javax.swing.JLabel lblPedidos;
     private javax.swing.JLabel lblPropina;
