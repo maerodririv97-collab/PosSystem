@@ -352,8 +352,6 @@ public class mainMesero extends javax.swing.JFrame {
                                       v.sendPrint(session);
                                     }
 
-                                //session.evict(getVenta()); 
-                                session.flush();
                                 session.close();
                                 
                                 
@@ -443,8 +441,6 @@ public class mainMesero extends javax.swing.JFrame {
                         session.delete(getVenta());
                         trns.commit();
                         PanelListadoPedidos.removeAll();
-                       session.clear();
-                       session.flush();
                        session.close();
                         
                         
@@ -706,8 +702,7 @@ public class mainMesero extends javax.swing.JFrame {
             }catch (RuntimeException ex) {
                 System.out.println(ex.getMessage());
             }finally {
-                session.evict(pedido); 
-                session.flush();
+                session.evict(pedido);
                 session.close();
             }
             
@@ -939,8 +934,7 @@ public class mainMesero extends javax.swing.JFrame {
        
                     
            }
-        session.evict(pedido);                
-        session.flush();
+        session.evict(pedido);
         session.close();
     }
     

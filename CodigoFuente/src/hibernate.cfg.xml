@@ -43,23 +43,28 @@ Contributor(s):
   <session-factory>
     <property name="hibernate.dialect">org.hibernate.dialect.MySQL57Dialect</property>
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-    <property name="hibernate.connection.url">jdbc:mysql://localhost/pos_system</property>
-    <property name="hibernate.connection.username">root</property>
-    
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/pos_system</property>
+    <property name="hibernate.connection.username">maison</property>
+    <property name="hibernate.connection.password">M@isonC@fe2026*</property>
+
     <!--<property name="hibernate.connection.url">jdbc:mysql://db-mysql-nyc3-maison-do-user-37498528-0.g.db.ondigitalocean.com/pos_system</property>
     <property name="hibernate.connection.port">25060</property>
     <property name="hibernate.connection.username">maisonadm</property>
     <property name="hibernate.connection.password">AVNS_vgnyGyiixrYtnJJ29Vo</property>-->
     
-    <!-- c3p0 config http://www.hibernate.org/214.html -->
-        <property name="connection.provider_class">org.hibernate.service.jdbc.connections.internal.C3P0ConnectionProvider</property>        
-        <property name="hibernate.c3p0.acquire_increment">1</property>
-        <property name="hibernate.c3p0.idle_test_period">60</property>
-        <property name="hibernate.c3p0.min_size">1</property>
-        <property name="hibernate.c3p0.max_size">4</property>
-        <property name="hibernate.c3p0.max_statements">50</property>
-        <property name="hibernate.c3p0.acquireRetryAttempts">1</property>
-        <property name="hibernate.c3p0.acquireRetryDelay">250</property>
+    <!-- c3p0 connection pool -->
+        <property name="connection.provider_class">org.hibernate.service.jdbc.connections.internal.C3P0ConnectionProvider</property>
+        <property name="hibernate.c3p0.min_size">2</property>
+        <property name="hibernate.c3p0.max_size">10</property>
+        <property name="hibernate.c3p0.acquire_increment">2</property>
+        <property name="hibernate.c3p0.idle_test_period">30</property>
+        <property name="hibernate.c3p0.max_statements">100</property>
+        <property name="hibernate.c3p0.timeout">300</property>
+        <property name="hibernate.c3p0.acquireRetryAttempts">3</property>
+        <property name="hibernate.c3p0.acquireRetryDelay">1000</property>
+        <property name="hibernate.c3p0.preferredTestQuery">SELECT 1</property>
+        <property name="hibernate.c3p0.testConnectionOnCheckout">false</property>
+        <property name="hibernate.c3p0.testConnectionOnCheckin">true</property>
         
         <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property> 
         <property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>

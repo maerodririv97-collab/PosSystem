@@ -89,7 +89,6 @@ public class Mesas  implements java.io.Serializable {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            session.flush();
             session.close();
         }
         return mesas;
@@ -107,7 +106,6 @@ public class Mesas  implements java.io.Serializable {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            session.flush();
             session.close();
         }
         return mesas;
@@ -125,7 +123,6 @@ public class Mesas  implements java.io.Serializable {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            session.flush();
             session.close();
         }
         return mesa;
@@ -147,7 +144,6 @@ public class Mesas  implements java.io.Serializable {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            session.flush();
             session.close();
         }
       

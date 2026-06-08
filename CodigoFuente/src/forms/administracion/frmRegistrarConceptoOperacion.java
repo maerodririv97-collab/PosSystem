@@ -190,7 +190,6 @@ public class frmRegistrarConceptoOperacion extends javax.swing.JFrame {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            session.flush();
             session.close();
         }
        

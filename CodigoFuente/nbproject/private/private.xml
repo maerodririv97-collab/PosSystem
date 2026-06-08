@@ -9,6 +9,11 @@
             <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/models/Ventas.java</file>
             <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/hibernate.cfg.xml</file>
             <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/models/Productos.java</file>
+            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/frmModoPago.java</file>
+            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/mainMesero.java</file>
+            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/frmVueltas.java</file>
+            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/frmPedidos.java</file>
+            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/frmDetalleVenta.java</file>
         </group>
     </open-files>
 </project-private>

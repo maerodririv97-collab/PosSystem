@@ -499,7 +499,6 @@ public class frmRegistrarProductos extends javax.swing.JFrame {
                 e.printStackTrace();
            
             } finally {
-                session.flush();
                 session.close();
             }
             
@@ -543,7 +542,6 @@ public class frmRegistrarProductos extends javax.swing.JFrame {
                 e.printStackTrace();
             
             } finally {
-                session.flush();
                 session.close();
             }
              

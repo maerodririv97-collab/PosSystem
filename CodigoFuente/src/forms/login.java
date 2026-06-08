@@ -39,7 +39,7 @@ public class login extends javax.swing.JFrame {
      */
     public login() {
         
-        sesion = HibernateUtil.getSession();
+        sesion = HibernateUtil.getSessionFactory().openSession();
         initComponents();
         this.setLocationRelativeTo(this);
         this.setResizable(false);

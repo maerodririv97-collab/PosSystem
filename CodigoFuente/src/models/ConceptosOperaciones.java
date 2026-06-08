@@ -71,34 +71,31 @@ public class ConceptosOperaciones  implements java.io.Serializable {
     
       public List<models.ConceptosOperaciones> listarConceptos() {
         List<ConceptosOperaciones> conceptos = new ArrayList<ConceptosOperaciones>();
-        Transaction trns = null;
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
-            trns = session.beginTransaction();
+            session.getTransaction().begin();
             conceptos = session.createQuery(" FROM ConceptosOperaciones C").list();
+            session.getTransaction().commit();
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            session.flush();
             session.close();
         }
         return conceptos;
     }
-      
+
        public List<models.ConceptosOperaciones> mtdFiltro(String cadena ) {
         List<ConceptosOperaciones> conceptos = new ArrayList<ConceptosOperaciones>();
-        Transaction trns = null;
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
-            trns = session.beginTransaction();
+            session.getTransaction().begin();
             Query q = session.createQuery("FROM ConceptosOperaciones C WHERE C.nombre LIKE :parametro");
             q.setString("parametro",'%'+cadena+'%');
-            
             conceptos = q.list();
+            session.getTransaction().commit();
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            session.flush();
             session.close();
         }
         return conceptos;

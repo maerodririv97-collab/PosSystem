@@ -121,7 +121,6 @@ public class Usuarios  implements java.io.Serializable {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            session.flush();
             session.close();
         }
         return users;

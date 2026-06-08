@@ -512,7 +512,6 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
             }catch (RuntimeException ex) {
                 ex.printStackTrace();
             }finally {
-                session.flush();
                 session.close();
             }
        
@@ -566,7 +565,6 @@ public class Home_Administracion extends javax.swing.JFrame implements Runnable 
                 ex.printStackTrace();
             } finally {
                 trns = null;
-                session.flush();
                 session.close();
                 turnoAbierto = turnoActual;
             }

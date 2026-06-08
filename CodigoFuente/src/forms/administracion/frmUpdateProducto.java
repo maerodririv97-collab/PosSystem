@@ -327,7 +327,6 @@ public class frmUpdateProducto extends javax.swing.JFrame {
                 e.printStackTrace();
             
             } finally {
-                session.flush();
                 session.close();
             } 
         // TODO add your handling code here:

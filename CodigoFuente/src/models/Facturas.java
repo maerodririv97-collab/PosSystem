@@ -118,12 +118,11 @@ public class Facturas  implements java.io.Serializable {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            session.flush();
             session.close();
         }
         return fact;
     }
-      
+
        public List<models.Facturas> mtdFiltro(String cadena ) {
         List<Facturas> fac = new ArrayList<Facturas>();
         Transaction trns = null;
@@ -135,17 +134,16 @@ public class Facturas  implements java.io.Serializable {
             q.setString("parametro2",'%'+cadena+'%');
             
             fac = q.list();
-            
+
             session.getTransaction().commit();
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            session.flush();
             session.close();
         }
         return fac;
     }
-       
+
        public Facturas mtdUniqueFactura(int factura) {
         
         Facturas fact = new Facturas();
@@ -160,15 +158,13 @@ public class Facturas  implements java.io.Serializable {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            session.clear();
-            session.flush();
             session.close();
         }
-        
+
         return fact;
-       
+
     }
-       
+
        public Facturas mtdVerifiqueCode(String codigo) {
         
         Facturas fact = new Facturas();
@@ -183,15 +179,13 @@ public class Facturas  implements java.io.Serializable {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            session.clear();
-            session.flush();
             session.close();
         }
-        
+
         return fact;
-       
+
     }
-       
+
        public boolean mtdEliminarFactura(Facturas fac){
           Session session = HibernateUtil.getSessionFactory().openSession();
         try {
@@ -201,8 +195,6 @@ public class Facturas  implements java.io.Serializable {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            session.clear();
-            session.flush();
             session.close();
         } 
         

@@ -466,7 +466,6 @@ public class frmPrecioEspecial extends javax.swing.JFrame {
         } catch (ParseException ex) {
             Logger.getLogger(frmPrecioEspecial.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
-            session.flush();
             session.close();
         }
     }//GEN-LAST:event_btnGuardarActionPerformed

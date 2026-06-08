@@ -176,8 +176,6 @@ public class frmMesas extends javax.swing.JFrame {
                                 
                                 System.out.println(ex.getMessage());
                             }finally {
-                                session.clear();
-                                session.flush();
                                 session.close();
                             }
                           }else{
@@ -249,8 +247,6 @@ public class frmMesas extends javax.swing.JFrame {
                            }catch (RuntimeException ex) {
                                 ex.printStackTrace();
                             }finally {
-                                session.clear();
-                                session.flush();
                                 session.close();
                             }
                           }else{
@@ -317,8 +313,6 @@ public class frmMesas extends javax.swing.JFrame {
                            }catch (RuntimeException ex) {
                                 ex.printStackTrace();
                             }finally {
-                                session.clear();
-                                session.flush();
                                 session.close();
                             }
                            }else{
@@ -480,8 +474,6 @@ public class frmMesas extends javax.swing.JFrame {
                            }catch (RuntimeException ex) {
                                 ex.printStackTrace();
                             }finally {
-                                session.clear();
-                                session.flush();
                                 session.close();
                             }
                           

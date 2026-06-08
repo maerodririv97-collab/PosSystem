@@ -106,7 +106,6 @@ public class Operaciones  implements java.io.Serializable {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            session.flush();
             session.close();
         }
         return Operaciones;
@@ -126,7 +125,6 @@ public class Operaciones  implements java.io.Serializable {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            session.flush();
             session.close();
         }
         return opera;

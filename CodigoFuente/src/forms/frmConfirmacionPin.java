@@ -69,7 +69,7 @@ public class frmConfirmacionPin extends javax.swing.JFrame {
     
     public frmConfirmacionPin(java.awt.Frame parent,Turnos turno,Ventas vent){
         
-        sesion = HibernateUtil.getSession();
+        sesion = HibernateUtil.getSessionFactory().openSession();
         initComponents();
         this.parentP = parent;
         this.turno = turno;
@@ -396,7 +396,6 @@ public class frmConfirmacionPin extends javax.swing.JFrame {
                                     }
 
                                 //session.evict(getVenta()); 
-                                session.flush();
                                 session.close();
                                 
                                 this.dispose();
@@ -456,7 +455,6 @@ public class frmConfirmacionPin extends javax.swing.JFrame {
                                     }
 
                                  
-                                session.flush();
                                 session.close();
                                 
                                 this.dispose();

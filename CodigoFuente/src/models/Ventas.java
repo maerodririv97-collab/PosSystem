@@ -225,7 +225,6 @@ public class Ventas  implements java.io.Serializable {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            session.flush();
             session.close();
         }
         return ventas;
@@ -245,8 +244,6 @@ public class Ventas  implements java.io.Serializable {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            session.clear();
-            session.flush();
             session.close();
         }
         

@@ -81,7 +81,6 @@ public class Categorias  implements java.io.Serializable {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            session.flush();
             session.close();
         }
         return categorias;

@@ -211,7 +211,6 @@ public class frmModoPago extends javax.swing.JFrame {
              }catch (RuntimeException ex) {
                 ex.printStackTrace();
             }finally {
-                session.flush();
                 session.close();
                 this.dispose();
             }
@@ -278,7 +277,6 @@ public class frmModoPago extends javax.swing.JFrame {
                  }catch (RuntimeException ex) {
                     ex.printStackTrace();
                 }finally {
-                    session.flush();
                     session.close();
                     this.dispose();
                 }

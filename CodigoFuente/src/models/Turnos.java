@@ -138,10 +138,8 @@ public class Turnos  implements java.io.Serializable {
             ventasFacturadas = (ArrayList<Ventas>) session.createQuery("FROM Ventas V WHERE turno="+getIdTurno()+" AND V.estado = 'Pagada'").list();
         
         session.getTransaction().commit();
-        session.clear();
-        session.flush();
-        session.close();    
-        
+        session.close();
+
         for(Object objVen : ventasFacturadas){
             Ventas venta = (Ventas) objVen;
             if(venta.getFormaPago().equalsIgnoreCase(tipoPago))
@@ -198,7 +196,6 @@ public class Turnos  implements java.io.Serializable {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            session.flush();
             session.close();
         }
 
@@ -223,7 +220,6 @@ public class Turnos  implements java.io.Serializable {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            session.flush();
             session.close();
         }
 
@@ -252,7 +248,6 @@ public class Turnos  implements java.io.Serializable {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            session.flush();
             session.close();
         }
 
@@ -277,7 +272,6 @@ public class Turnos  implements java.io.Serializable {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            session.flush();
             session.close();
         }
 
@@ -302,7 +296,6 @@ public class Turnos  implements java.io.Serializable {
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
-            session.flush();
             session.close();
         }
 

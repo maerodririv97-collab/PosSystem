@@ -499,7 +499,6 @@ public class frmRegistrarCompuesto extends javax.swing.JFrame {
                 e.printStackTrace();
             
             } finally {
-                session.flush();
                 session.close();
                 this.dispose();
                 new Home_Administracion(usuario).setVisible(true);

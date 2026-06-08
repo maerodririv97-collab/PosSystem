@@ -322,7 +322,6 @@ public class frmValorTurno extends javax.swing.JFrame {
             }catch (RuntimeException ex) {
                 ex.printStackTrace();
             }finally {
-                session.flush();
                 session.close();
             }
 
