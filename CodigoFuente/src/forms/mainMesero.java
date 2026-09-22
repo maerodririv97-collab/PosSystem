@@ -540,7 +540,7 @@ public class mainMesero extends javax.swing.JFrame {
                             JButton btnPro = new JButton("<html><body style='text-align: center;'><b>" + dataProducto.getNombre() + "</b></body></html>");
 
                             // Tu línea de la fuente se mantiene impecable
-                            btnPro.setFont(new java.awt.Font("Arial", 0, 18)); 
+                            btnPro.setFont(new java.awt.Font("Arial", 0, 25)); 
                             btnPro.setFocusPainted(false);
 
                             // 💡 TIP EXTRA: Asegúrate de que el texto se mantenga centrado en el botón

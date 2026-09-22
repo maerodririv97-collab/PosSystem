@@ -3,17 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/Home_Administracion.java</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/frmListarTurnos.java</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/models/Turnos.java</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/models/Ventas.java</file>
             <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/hibernate.cfg.xml</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/models/Productos.java</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/frmModoPago.java</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/mainMesero.java</file>
-            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/frmVueltas.java</file>
+            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/frmDetallePedido.java</file>
             <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/frmPedidos.java</file>
             <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/administracion/frmDetalleVenta.java</file>
+            <file>file:/C:/Repositorios/SistemaPOS/CodigoFuente/src/forms/mainMesero.java</file>
         </group>
     </open-files>
 </project-private>
