@@ -14,6 +14,7 @@ import {
   Clock,
   DoorOpen,
   LogOut,
+  X,
 } from "lucide-react";
 import Login, { UsuarioSesion } from "./components/Login";
 import AbrirTurno, { Turno } from "./components/AbrirTurno";
@@ -69,6 +70,13 @@ function App() {
   const [subTabCatalogo, setSubTabCatalogo] = useState<SubTabCatalogo>("categorias");
   const [subTabGestion, setSubTabGestion] = useState<SubTabGestion>("mesas");
   const [error, setError] = useState("");
+
+  // El aviso de error se oculta solo; si no, queda pegado aunque lo siguiente salga bien.
+  useEffect(() => {
+    if (!error) return;
+    const t = setTimeout(() => setError(""), 10000);
+    return () => clearTimeout(t);
+  }, [error]);
   const [cuadreAbierto, setCuadreAbierto] = useState(false);
 
   useEffect(() => {
@@ -141,7 +149,10 @@ function App() {
         {tabsDisponibles.map((t) => {
           const Icono = t.icono;
           return (
-            <button key={t.id} className={tab === t.id ? "tab-activo" : ""} onClick={() => setTab(t.id)}>
+            <button key={t.id} className={tab === t.id ? "tab-activo" : ""} onClick={() => {
+                setTab(t.id);
+                setError("");
+              }}>
               <Icono size={18} />
               {t.label}
             </button>
@@ -149,7 +160,14 @@ function App() {
         })}
       </nav>
 
-      {error && <p className="error">{error}</p>}
+      {error && (
+        <div className="aviso-error" role="alert">
+          <span>{error}</span>
+          <button onClick={() => setError("")} aria-label="Cerrar aviso">
+            <X size={18} />
+          </button>
+        </div>
+      )}
 
       <div className={`panel-contenido ${tab === "ventas" ? "panel-contenido-ventas" : ""}`}>
         {tab === "ventas" && <Ventas usuario={usuario} idTurno={turno.id_turno} onError={setError} />}
@@ -203,7 +221,12 @@ function App() {
         )}
 
         {tab === "operaciones" && (
-          <Operaciones idTurno={turno.id_turno} actorId={usuario.id_usuario} onError={setError} />
+          <Operaciones
+            idTurno={turno.id_turno}
+            actorId={usuario.id_usuario}
+            puedeGestionarConceptos={esAdmin(usuario.perfil)}
+            onError={setError}
+          />
         )}
         {tab === "reportes" && <Reportes onError={setError} />}
         {tab === "base-de-datos" && esDesarrollador && (

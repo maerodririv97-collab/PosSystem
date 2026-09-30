@@ -1488,3 +1488,29 @@ button:disabled {
   font-size: 1.2em;
   margin: 0;
 }
+
+/* Aviso de error global (se cierra con la X o solo a los 10 s) */
+
+.aviso-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 1.5rem 1rem;
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius);
+  font-weight: 600;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.aviso-error button {
+  flex-shrink: 0;
+  padding: 0;
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--color-danger);
+}

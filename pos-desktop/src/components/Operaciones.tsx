@@ -18,10 +18,12 @@ interface Operacion {
 interface Props {
   idTurno: number;
   actorId: number;
+  /** Solo el administrador crea/elimina conceptos de operación. */
+  puedeGestionarConceptos: boolean;
   onError: (msg: string) => void;
 }
 
-export default function Operaciones({ idTurno, actorId, onError }: Props) {
+export default function Operaciones({ idTurno, actorId, puedeGestionarConceptos, onError }: Props) {
   const [operaciones, setOperaciones] = useState<Operacion[]>([]);
   const [conceptos, setConceptos] = useState<ConceptoOperacion[]>([]);
   const [tipo, setTipo] = useState<"Ingreso" | "Egreso">("Ingreso");
@@ -93,9 +95,11 @@ export default function Operaciones({ idTurno, actorId, onError }: Props) {
             </option>
           ))}
         </select>
-        <button type="button" onClick={() => setMostrarConceptos(true)}>
-          + Conceptos
-        </button>
+        {puedeGestionarConceptos && (
+          <button type="button" onClick={() => setMostrarConceptos(true)}>
+            + Conceptos
+          </button>
+        )}
         <input
           placeholder="Observaciones"
           value={observaciones}
@@ -110,7 +114,11 @@ export default function Operaciones({ idTurno, actorId, onError }: Props) {
       </form>
 
       {conceptos.length === 0 && (
-        <p className="ayuda">No hay conceptos de operación creados. Creá uno en "Conceptos de Operación".</p>
+        <p className="ayuda">
+          {puedeGestionarConceptos
+            ? 'No hay conceptos de operación creados. Creá uno en "+ Conceptos".'
+            : "No hay conceptos de operación creados. Pedile al administrador que los cree."}
+        </p>
       )}
 
       <div className="grid-tarjetas">
@@ -138,7 +146,7 @@ export default function Operaciones({ idTurno, actorId, onError }: Props) {
         />
       )}
 
-      {mostrarConceptos && (
+      {mostrarConceptos && puedeGestionarConceptos && (
         <div className="modal-fondo" onClick={() => setMostrarConceptos(false)}>
           <div className="modal-caja" onClick={(e) => e.stopPropagation()}>
             <h3>Conceptos de Operación</h3>
