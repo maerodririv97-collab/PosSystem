@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import DetalleDia from "./DetalleDia";
+import GeneradorReportes from "./reportes/GeneradorReportes";
 
 interface VentaDia {
   fecha: string;
@@ -86,6 +87,8 @@ export default function Reportes({ onError }: Props) {
 
   return (
     <section>
+      <GeneradorReportes onError={onError} />
+
       <div className="cabecera-venta">
         <button onClick={mesAnterior}>← Mes anterior</button>
         <span>

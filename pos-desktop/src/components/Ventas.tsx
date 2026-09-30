@@ -1,11 +1,142 @@
 import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
-import { Coffee, Armchair, ShoppingBag, ChevronRight } from "lucide-react";
+import {
+  Coffee,
+  Armchair,
+  ShoppingBag,
+  ChevronRight,
+  ChevronLeft,
+  X,
+  Plus,
+  Minus,
+  Trash2,
+  Banknote,
+  Landmark,
+  Croissant,
+  CupSoda,
+  IceCream2,
+  Sandwich,
+  Cookie,
+  Soup,
+  Utensils,
+  Pizza,
+  Candy,
+  Salad,
+  Milk,
+  GlassWater,
+  Leaf,
+  Martini,
+  Flame,
+  Egg,
+  Citrus,
+  Package,
+  Droplet,
+  Sparkles,
+  Popsicle,
+  Wine,
+  Beer,
+  CakeSlice,
+  Wheat,
+  type LucideIcon,
+} from "lucide-react";
 import type { UsuarioSesion } from "./Login";
 import SeleccionCantidad from "./SeleccionCantidad";
 import TecladoNumerico from "./TecladoNumerico";
 import Recibo, { DatosRecibo } from "./Recibo";
 import tasaCafe from "../assets/tasa_cafe.png";
+
+// Coincidencias específicas primero (nombres reales del negocio), luego genéricas.
+// El orden importa: la primera clave que calce define el ícono.
+const ICONOS_CATEGORIA: { claves: string[]; icono: LucideIcon }[] = [
+  { claves: ["momento latte", "latte", "macchiato", "moka"], icono: Milk },
+  { claves: ["frappe", "frappé", "granizado"], icono: IceCream2 },
+  { claves: ["barra fria", "barra fría", "smoothie"], icono: GlassWater },
+  { claves: ["esp de origen", "de origen", "origen"], icono: Leaf },
+  { claves: ["infusion", "infusiones", "cafe", "café", "espresso", "capuchino", "tinto"], icono: Coffee },
+  { claves: ["coctel", "cocktail", "vino", "licor", "trago", "coctelería", "cocteleria"], icono: Martini },
+  { claves: ["horno", "asado", "tostado"], icono: Flame },
+  { claves: ["brunch", "desayuno"], icono: Egg },
+  { claves: ["frutal", "frutales", "extracto", "citrico", "cítrico"], icono: Citrus },
+  { claves: ["limonada", "soda", "gaseosa", "refresco"], icono: CupSoda },
+  { claves: ["bakery", "reposteria", "repostería", "panaderia", "panadería", "croissant"], icono: Croissant },
+  { claves: ["adicion", "adiciones", "extra", "extras", "topping"], icono: Plus },
+  { claves: ["llevar", "domicilio", "empacado"], icono: ShoppingBag },
+  { claves: ["varios", "otros", "general"], icono: Package },
+  { claves: ["bebida", "bebidas", "agua"], icono: Droplet },
+  { claves: ["postre", "helado", "torta", "pastel"], icono: IceCream2 },
+  { claves: ["dulce", "chocolate", "confite"], icono: Candy },
+  { claves: ["galleta"], icono: Cookie },
+  { claves: ["sandwich", "sándwich", "hamburguesa", "burger"], icono: Sandwich },
+  { claves: ["pizza"], icono: Pizza },
+  { claves: ["ensalada", "vegetariano", "vegano"], icono: Salad },
+  { claves: ["sopa", "caldo"], icono: Soup },
+];
+
+// Reserva de íconos para categorías que no calcen con ninguna clave anterior.
+// Se elige por hash del nombre para que no todas las categorías nuevas
+// terminen mostrando el mismo ícono genérico.
+const ICONOS_RESERVA: LucideIcon[] = [Utensils, Sparkles, Package, Coffee];
+
+function normalizar(texto: string): string {
+  return texto
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "");
+}
+
+function iconoParaCategoria(nombre: string): LucideIcon {
+  const normalizado = normalizar(nombre);
+  for (const grupo of ICONOS_CATEGORIA) {
+    if (grupo.claves.some((clave) => normalizado.includes(normalizar(clave)))) {
+      return grupo.icono;
+    }
+  }
+  let hash = 0;
+  for (let i = 0; i < normalizado.length; i++) hash = (hash * 31 + normalizado.charCodeAt(i)) >>> 0;
+  return ICONOS_RESERVA[hash % ICONOS_RESERVA.length];
+}
+
+// Íconos por producto: más específicos que el de categoría, para que cosas como
+// una paleta dentro de "BAKERY" no hereden el ícono de croissant de la categoría.
+// Si ningún producto de la lista calza, se usa el ícono de su categoría (no uno
+// genérico único), así solo comparten ícono los productos que de verdad se parecen.
+const ICONOS_PRODUCTO: { claves: string[]; icono: LucideIcon }[] = [
+  { claves: ["paleta"], icono: Popsicle },
+  { claves: ["vino", "sangria", "sangría"], icono: Wine },
+  { claves: ["mojito", "margarita", "amaretto", "ron blanco", "whisky", "tequila"], icono: Martini },
+  { claves: ["cerveza", "cervaza", "michelada"], icono: Beer },
+  { claves: ["leche", "flat white", "irlandes"], icono: Milk },
+  { claves: ["huevo"], icono: Egg },
+  {
+    claves: [
+      "cafe", "café", "expresso", "espresso", "americano", "capuchino", "carajillo", "affogato",
+      "aromatica", "infusion", "mocca", "mocaccino", "bombon", "bomba", "campesino", "cold brew",
+      "aeropress", "chemex", "origami", "prensa francesa", "sifon", "v60", "chai", "latte", "matcha",
+      "cortado",
+    ],
+    icono: Coffee,
+  },
+  { claves: ["croissant"], icono: Croissant },
+  { claves: ["galleta", "alfajor"], icono: Cookie },
+  { claves: ["trufa", "brownie", "chocolate", "caramelo", "chantilly", "vainilla", "salsa de", "oreo", "milo"], icono: Candy },
+  { claves: ["torta"], icono: CakeSlice },
+  { claves: ["jugo", "zumo"], icono: Citrus },
+  { claves: ["limonada", "soda", "coca cola", "coca-cola", "redbull", "fuze", "hatsu", "ginger"], icono: CupSoda },
+  { claves: ["agua"], icono: Droplet },
+  { claves: ["derretido", "sanduche"], icono: Sandwich },
+  { claves: ["pan "], icono: Wheat },
+  { claves: ["lasa"], icono: Utensils },
+];
+
+function iconoParaProducto(nombreProducto: string, nombreCategoria: string): LucideIcon {
+  const normalizado = normalizar(nombreProducto);
+  for (const grupo of ICONOS_PRODUCTO) {
+    if (grupo.claves.some((clave) => normalizado.includes(normalizar(clave)))) {
+      return grupo.icono;
+    }
+  }
+  return iconoParaCategoria(nombreCategoria);
+}
 
 interface Mesa {
   id_mesa: number;
@@ -17,6 +148,7 @@ interface Mesa {
 interface Categoria {
   id_categoria: number;
   nombre: string;
+  tipo: string; // 'Contable' lleva inventario; 'Sin Stock' no
 }
 
 interface Producto {
@@ -38,6 +170,11 @@ interface VentaAbierta {
   total: number;
 }
 
+interface VentaProducto {
+  producto: number;
+  total_vendido: number;
+}
+
 interface Pedido {
   id_pedido: number;
   producto: number;
@@ -53,7 +190,9 @@ interface Props {
   onError: (msg: string) => void;
 }
 
-const FORMAS_PAGO = ["Efectivo", "Tarjeta", "Transferencia"];
+const PORCENTAJE_PROPINA = 10;
+
+type PasoCobro = "metodo" | "efectivo";
 
 export default function Ventas({ usuario, idTurno, onError }: Props) {
   const [mesas, setMesas] = useState<Mesa[]>([]);
@@ -63,9 +202,12 @@ export default function Ventas({ usuario, idTurno, onError }: Props) {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [productos, setProductos] = useState<Producto[]>([]);
   const [categoriaActiva, setCategoriaActiva] = useState<number | null>(null);
-  const [formaPago, setFormaPago] = useState(FORMAS_PAGO[0]);
+  const [catalogoAbierto, setCatalogoAbierto] = useState(false);
+  const [ventasPorProducto, setVentasPorProducto] = useState<Record<number, number>>({});
+  const [pasoCobro, setPasoCobro] = useState<PasoCobro | null>(null);
+  const [cobrando, setCobrando] = useState(false);
   const [incluyePropina, setIncluyePropina] = useState(false);
-  const [porcentajePropina, setPorcentajePropina] = useState(8);
+  const [stockPorConfirmar, setStockPorConfirmar] = useState<{ pedido: Pedido; stock: number } | null>(null);
   const [efectivoRecibido, setEfectivoRecibido] = useState("");
   const [mostrarTecladoEfectivo, setMostrarTecladoEfectivo] = useState(false);
   const [productoParaCantidad, setProductoParaCantidad] = useState<Producto | null>(null);
@@ -111,6 +253,17 @@ export default function Ventas({ usuario, idTurno, onError }: Props) {
     }
   }
 
+  async function cargarRankingVentas() {
+    try {
+      const ranking = await invoke<VentaProducto[]>("ranking_ventas_productos");
+      const mapa: Record<number, number> = {};
+      for (const r of ranking) mapa[r.producto] = r.total_vendido;
+      setVentasPorProducto(mapa);
+    } catch (e) {
+      onError(String(e));
+    }
+  }
+
   async function entrarAVenta(venta: VentaAbierta) {
     setVentaActiva(venta);
     try {
@@ -123,6 +276,8 @@ export default function Ventas({ usuario, idTurno, onError }: Props) {
       setProductos(ps);
       setPedidos(peds);
       setCategoriaActiva(null);
+      setCatalogoAbierto(false);
+      await cargarRankingVentas();
     } catch (e) {
       onError(String(e));
     }
@@ -163,6 +318,26 @@ export default function Ventas({ usuario, idTurno, onError }: Props) {
     }
   }
 
+  /** Botones +/− del resumen: suma o resta una unidad a la línea del pedido. */
+  async function cambiarCantidad(pedido: Pedido, delta: 1 | -1, forzar = false) {
+    if (delta < 0 && pedido.cantidad <= 1) {
+      await quitarPedido(pedido.id_pedido);
+      return;
+    }
+    try {
+      await invoke("cambiar_cantidad_pedido", { idPedido: pedido.id_pedido, delta, forzar });
+      setStockPorConfirmar(null);
+      await refrescarPedidos();
+    } catch (e) {
+      const msg = String(e);
+      if (msg.startsWith("STOCK_INSUFICIENTE|")) {
+        setStockPorConfirmar({ pedido, stock: Number(msg.split("|")[1]) });
+      } else {
+        onError(msg);
+      }
+    }
+  }
+
   async function cancelarVenta() {
     if (!ventaActiva) return;
     try {
@@ -175,9 +350,16 @@ export default function Ventas({ usuario, idTurno, onError }: Props) {
     }
   }
 
-  async function cerrarVenta(e: React.FormEvent) {
-    e.preventDefault();
-    if (!ventaActiva || !puedeCobrar) return;
+  function iniciarCobro() {
+    if (pedidos.length === 0) return;
+    setEfectivoRecibido("");
+    setPasoCobro("metodo");
+  }
+
+  async function cerrarVenta(formaPago: string) {
+    if (!ventaActiva || cobrando) return;
+    if (formaPago === "Efectivo" && !efectivoAlcanza) return;
+    setCobrando(true);
     try {
       await invoke("cerrar_venta", {
         cierre: { id_venta: ventaActiva.id_venta, forma_pago: formaPago, valor_propina: propina },
@@ -194,11 +376,13 @@ export default function Ventas({ usuario, idTurno, onError }: Props) {
       setVentaActiva(null);
       setPedidos([]);
       setIncluyePropina(false);
-      setPorcentajePropina(8);
       setEfectivoRecibido("");
+      setPasoCobro(null);
       await cargarMesas();
     } catch (e) {
       onError(String(e));
+    } finally {
+      setCobrando(false);
     }
   }
 
@@ -212,14 +396,36 @@ export default function Ventas({ usuario, idTurno, onError }: Props) {
   }
 
   const total = pedidos.reduce((acc, p) => acc + p.valor, 0);
-  const propina = incluyePropina ? Math.round((total * porcentajePropina) / 100) : 0;
+  const propina = incluyePropina ? Math.round((total * PORCENTAJE_PROPINA) / 100) : 0;
   const totalConPropina = total + propina;
-  const esEfectivo = formaPago === "Efectivo";
   const vueltas = (Number(efectivoRecibido) || 0) - totalConPropina;
-  const puedeCobrar = pedidos.length > 0 && (!esEfectivo || vueltas >= 0);
+  // "¿Con cuánto paga?" es opcional: si pagan con el valor exacto no hay nada que calcular.
+  // Solo bloqueamos el cobro si SÍ registraron un efectivo recibido y no alcanza.
+  const efectivoAlcanza = efectivoRecibido === "" || vueltas >= 0;
+
+  function unidadesVendidas(idProducto: number): number {
+    return ventasPorProducto[idProducto] ?? 0;
+  }
+
+  function ordenarPorVentas<T>(lista: T[], vendidos: (item: T) => number, nombre: (item: T) => string): T[] {
+    return [...lista].sort((a, b) => {
+      const diferencia = vendidos(b) - vendidos(a);
+      if (diferencia !== 0) return diferencia;
+      return nombre(a).localeCompare(nombre(b), "es");
+    });
+  }
 
   if (ventaActiva) {
-    const productosFiltrados = productos.filter((p) => p.categoria === categoriaActiva);
+    const categoriasOrdenadas = ordenarPorVentas(
+      categorias,
+      (c) => productos.filter((p) => p.categoria === c.id_categoria).reduce((acc, p) => acc + unidadesVendidas(p.id_producto), 0),
+      (c) => c.nombre,
+    );
+    const productosFiltrados = ordenarPorVentas(
+      productos.filter((p) => p.categoria === categoriaActiva),
+      (p) => unidadesVendidas(p.id_producto),
+      (p) => p.nombre,
+    );
     return (
       <section className="venta-caja">
         <div className="cabecera-venta">
@@ -234,120 +440,138 @@ export default function Ventas({ usuario, idTurno, onError }: Props) {
           )}
         </div>
 
-        <div className="layout-venta">
-          <div className="columna-productos">
-            {categoriaActiva === null ? (
-              <div className="grid-mesas">
-                {categorias.map((c) => (
-                  <button
-                    key={c.id_categoria}
-                    className="mesa-boton mesa-activa mesa-boton-categoria"
-                    onClick={() => setCategoriaActiva(c.id_categoria)}
-                  >
-                    <span>{c.nombre}</span>
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <>
-                <div className="cabecera-venta cabecera-productos">
-                  <button onClick={() => setCategoriaActiva(null)}>← Categorías</button>
-                  <span>{categorias.find((c) => c.id_categoria === categoriaActiva)?.nombre}</span>
-                </div>
-                <div className="grid-tarjetas">
-                  {productosFiltrados.map((p) => (
-                    <button
-                      key={p.id_producto}
-                      className="boton-producto"
-                      onClick={() => setProductoParaCantidad(p)}
-                    >
-                      <span>{p.nombre}</span>
-                      <small>${p.valor.toLocaleString()}</small>
-                      <small className={p.stock <= 0 ? "stock-bajo" : ""}>stock {p.stock}</small>
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
-
-          <div className="columna-pedido">
-            <h3>Pedido</h3>
+        <div className="layout-venta layout-venta-solo-pedido">
+          <div className="columna-pedido columna-pedido-full">
+            <div className="cabecera-pedido">
+              <h3>Pedido</h3>
+              <button className="btn-pill btn-agregar-productos" onClick={() => setCatalogoAbierto(true)}>
+                <Plus size={18} />
+                Agregar productos
+              </button>
+            </div>
             <div className="lista-pedido">
               {pedidos.map((p) => (
-                <div key={p.id_pedido} className="fila-detalle">
-                  <span>
-                    {p.cantidad} × {p.nombre_producto}
-                  </span>
-                  <span>${p.valor.toLocaleString()}</span>
-                  <button className="btn-eliminar" onClick={() => quitarPedido(p.id_pedido)}>
-                    Quitar
+                <div key={p.id_pedido} className="fila-detalle fila-pedido">
+                  <span className="fila-pedido-nombre">{p.nombre_producto}</span>
+                  <div className="control-cantidad">
+                    <button
+                      aria-label={p.cantidad <= 1 ? "Quitar producto" : "Quitar una unidad"}
+                      onClick={() => cambiarCantidad(p, -1)}
+                    >
+                      <Minus size={18} />
+                    </button>
+                    <span className="control-cantidad-valor">{p.cantidad}</span>
+                    <button aria-label="Agregar una unidad" onClick={() => cambiarCantidad(p, 1)}>
+                      <Plus size={18} />
+                    </button>
+                  </div>
+                  <span className="fila-pedido-valor">${p.valor.toLocaleString()}</span>
+                  <button className="btn-eliminar" aria-label="Quitar producto" onClick={() => quitarPedido(p.id_pedido)}>
+                    <Trash2 size={18} />
                   </button>
                 </div>
               ))}
             </div>
             <p className="total-venta">Total: ${total.toLocaleString()}</p>
 
-            <form className="form-cobro" onSubmit={cerrarVenta}>
-              <select value={formaPago} onChange={(e) => setFormaPago(e.currentTarget.value)}>
-                {FORMAS_PAGO.map((f) => (
-                  <option key={f} value={f}>
-                    {f}
-                  </option>
-                ))}
-              </select>
-
+            <div className="form-cobro">
               <label className="check-propina">
                 <input
                   type="checkbox"
                   checked={incluyePropina}
                   onChange={(e) => setIncluyePropina(e.currentTarget.checked)}
                 />
-                Incluir propina
+                Incluir propina ({PORCENTAJE_PROPINA}%)
               </label>
 
-              {incluyePropina && (
-                <div className="row porcentajes-propina">
-                  {[5, 8, 10].map((pct) => (
-                    <button
-                      key={pct}
-                      type="button"
-                      className={porcentajePropina === pct ? "tab-activo" : ""}
-                      onClick={() => setPorcentajePropina(pct)}
-                    >
-                      {pct}%
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {incluyePropina && <p className="ayuda">Propina ({porcentajePropina}%): ${propina.toLocaleString()}</p>}
+              {incluyePropina && <p className="ayuda">Propina: ${propina.toLocaleString()}</p>}
 
               <p className="total-venta">Total a pagar: ${totalConPropina.toLocaleString()}</p>
 
-              {esEfectivo && (
-                <>
-                  <button type="button" onClick={() => setMostrarTecladoEfectivo(true)}>
-                    {efectivoRecibido === ""
-                      ? "¿Con cuánto paga?"
-                      : `Paga con $${Number(efectivoRecibido).toLocaleString()}`}
-                  </button>
-                  {efectivoRecibido !== "" && (
-                    <p className={vueltas < 0 ? "error" : "ayuda"}>
-                      {vueltas < 0
-                        ? `Falta $${Math.abs(vueltas).toLocaleString()}`
-                        : `Vueltas: $${vueltas.toLocaleString()}`}
-                    </p>
-                  )}
-                </>
-              )}
-
-              <button type="submit" disabled={!puedeCobrar}>
-                Cobrar y cerrar
+              <button className="btn-principal" onClick={iniciarCobro} disabled={pedidos.length === 0}>
+                Cobrar
               </button>
-            </form>
+            </div>
           </div>
         </div>
+
+        {catalogoAbierto && (
+          <div className="modal-fondo modal-fondo-catalogo">
+            <div className="modal-catalogo">
+              <div className="cabecera-catalogo">
+                {categoriaActiva !== null ? (
+                  <button className="btn-volver-catalogo" onClick={() => setCategoriaActiva(null)}>
+                    <ChevronLeft size={20} />
+                    Categorías
+                  </button>
+                ) : (
+                  <span className="titulo-catalogo">Elige una categoría</span>
+                )}
+                <button
+                  className="btn-cerrar-catalogo"
+                  onClick={() => {
+                    setCatalogoAbierto(false);
+                    setCategoriaActiva(null);
+                  }}
+                >
+                  <X size={22} />
+                </button>
+              </div>
+
+              {categoriaActiva === null ? (
+                <div className="grid-categorias-modal">
+                  {categoriasOrdenadas.map((c) => {
+                    const Icono = iconoParaCategoria(c.nombre);
+                    return (
+                      <button
+                        key={c.id_categoria}
+                        className="tarjeta-categoria-modal"
+                        onClick={() => setCategoriaActiva(c.id_categoria)}
+                      >
+                        <Icono size={36} strokeWidth={1.6} />
+                        <span>{c.nombre}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : (
+                <>
+                  <p className="titulo-catalogo titulo-catalogo-productos">
+                    {categorias.find((c) => c.id_categoria === categoriaActiva)?.nombre}
+                  </p>
+                  {(() => {
+                    const categoriaSeleccionada = categorias.find((c) => c.id_categoria === categoriaActiva);
+                    const nombreCategoriaActiva = categoriaSeleccionada?.nombre ?? "";
+                    const categoriaContable = categoriaSeleccionada?.tipo !== "Sin Stock";
+                    return (
+                      <div className="grid-tarjetas grid-productos-modal">
+                        {productosFiltrados.map((p) => {
+                          const IconoProducto = iconoParaProducto(p.nombre, nombreCategoriaActiva);
+                          return (
+                            <button
+                              key={p.id_producto}
+                              className="boton-producto"
+                              onClick={() => setProductoParaCantidad(p)}
+                            >
+                              <IconoProducto size={28} strokeWidth={1.6} />
+                              <span>{p.nombre}</span>
+                              {categoriaContable && (
+                                <small className={p.stock <= 0 ? "stock-bajo" : ""}>stock {p.stock}</small>
+                              )}
+                            </button>
+                          );
+                        })}
+                        {productosFiltrados.length === 0 && (
+                          <p className="ayuda">Esta categoría no tiene productos todavía.</p>
+                        )}
+                      </div>
+                    );
+                  })()}
+                </>
+              )}
+            </div>
+          </div>
+        )}
 
         {productoParaCantidad && (
           <SeleccionCantidad
@@ -356,6 +580,82 @@ export default function Ventas({ usuario, idTurno, onError }: Props) {
             onConfirmar={confirmarCantidad}
             onCancelar={() => setProductoParaCantidad(null)}
           />
+        )}
+
+        {pasoCobro === "metodo" && (
+          <div className="modal-fondo" onClick={() => !cobrando && setPasoCobro(null)}>
+            <div className="modal-caja modal-cobro" onClick={(e) => e.stopPropagation()}>
+              <h3>¿Cómo paga el cliente?</h3>
+              <p className="total-venta">Total a pagar: ${totalConPropina.toLocaleString()}</p>
+              <div className="opciones-pago">
+                <button className="opcion-pago" onClick={() => setPasoCobro("efectivo")} disabled={cobrando}>
+                  <Banknote size={34} strokeWidth={1.6} />
+                  Efectivo
+                </button>
+                <button className="opcion-pago" onClick={() => cerrarVenta("Transferencia")} disabled={cobrando}>
+                  <Landmark size={34} strokeWidth={1.6} />
+                  Transferencia
+                </button>
+              </div>
+              <div className="row-acciones">
+                <button onClick={() => setPasoCobro(null)} disabled={cobrando}>
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {pasoCobro === "efectivo" && (
+          <div className="modal-fondo" onClick={() => !cobrando && setPasoCobro(null)}>
+            <div className="modal-caja modal-cobro" onClick={(e) => e.stopPropagation()}>
+              <h3>Pago en efectivo</h3>
+              <p className="total-venta">Total a pagar: ${totalConPropina.toLocaleString()}</p>
+              <button type="button" onClick={() => setMostrarTecladoEfectivo(true)}>
+                {efectivoRecibido === ""
+                  ? "¿Con cuánto paga?"
+                  : `Paga con $${Number(efectivoRecibido).toLocaleString()}`}
+              </button>
+              {efectivoRecibido !== "" && (
+                <p className={vueltas < 0 ? "error" : "vueltas"}>
+                  {vueltas < 0 ? `Falta $${Math.abs(vueltas).toLocaleString()}` : `Vueltas: $${vueltas.toLocaleString()}`}
+                </p>
+              )}
+              <div className="row-acciones">
+                <button
+                  className="btn-principal"
+                  onClick={() => cerrarVenta("Efectivo")}
+                  disabled={!efectivoAlcanza || cobrando}
+                >
+                  {cobrando ? "Cobrando…" : "Cobrar y cerrar"}
+                </button>
+                <button onClick={() => setPasoCobro("metodo")} disabled={cobrando}>
+                  Cambiar método
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {stockPorConfirmar && (
+          <div className="modal-fondo" onClick={() => setStockPorConfirmar(null)}>
+            <div className="modal-caja modal-cobro" onClick={(e) => e.stopPropagation()}>
+              <h3>Stock insuficiente</h3>
+              <p>
+                <strong>{stockPorConfirmar.pedido.nombre_producto}</strong>{" "}
+                {stockPorConfirmar.stock <= 0
+                  ? `no tiene stock disponible (${stockPorConfirmar.stock}).`
+                  : `solo tiene ${stockPorConfirmar.stock} en stock.`}
+              </p>
+              <p className="ayuda">¿Agregar una unidad de todas formas? El stock quedará en negativo.</p>
+              <div className="row-acciones">
+                <button className="btn-principal" onClick={() => cambiarCantidad(stockPorConfirmar.pedido, 1, true)}>
+                  Agregar igual
+                </button>
+                <button onClick={() => setStockPorConfirmar(null)}>Cancelar</button>
+              </div>
+            </div>
+          </div>
         )}
 
         {mostrarTecladoEfectivo && (

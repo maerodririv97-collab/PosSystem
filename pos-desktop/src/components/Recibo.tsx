@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { invoke } from "@tauri-apps/api/core";
 import logoPrinter from "../assets/logotipo_cliente_printer.png";
+import { ANCHO_RECIBO, ajustarLinea, centrar, normalizarParaImpresora, raya } from "../lib/textoImpresion";
 
 interface Pedido {
   id_pedido: number;
@@ -26,6 +27,41 @@ interface Props {
   onError: (msg: string) => void;
 }
 
+function construirTextoRecibo(venta: DatosRecibo, pedidos: Pedido[]): string {
+  const subtotal = venta.total - venta.valor_propina;
+
+  const lineasPedidos = pedidos.map((p) => {
+    const cantidad = String(p.cantidad).padEnd(4);
+    const valor = `$${p.valor.toLocaleString()}`;
+    const anchoDescripcion = Math.max(1, ANCHO_RECIBO - cantidad.length - valor.length - 1);
+    const descripcion =
+      p.nombre_producto.length > anchoDescripcion
+        ? `${p.nombre_producto.slice(0, anchoDescripcion - 1)}…`
+        : p.nombre_producto.padEnd(anchoDescripcion);
+    return `${cantidad}${descripcion} ${valor}`;
+  });
+
+  return [
+    centrar("Maison du Café"),
+    centrar("Nizza Apartamentos, Local 103"),
+    centrar("La Estrella, Ant"),
+    "",
+    ajustarLinea(`Ticket #${venta.id_venta}`, venta.fecha),
+    `${venta.numero_mesa} - ${venta.nombre_mesero}`,
+    raya(),
+    ...lineasPedidos,
+    raya(),
+    ajustarLinea("Sub-Total:", `$${subtotal.toLocaleString()}`),
+    ajustarLinea("Servicio:", `$${venta.valor_propina.toLocaleString()}`),
+    ajustarLinea("TOTAL:", `$${venta.total.toLocaleString()}`),
+    ajustarLinea("Forma de pago:", venta.forma_pago),
+    "",
+    centrar("¡Gracias por su visita!"),
+    centrar("Maison du Café"),
+    "\n\n\n",
+  ].join("\n");
+}
+
 export default function Recibo({ venta, onCerrar, onError }: Props) {
   const [pedidos, setPedidos] = useState<Pedido[]>([]);
   const imprimiendo = useRef(false);
@@ -36,13 +72,20 @@ export default function Recibo({ venta, onCerrar, onError }: Props) {
       .catch((e) => onError(String(e)));
   }, [venta.id_venta]);
 
-  function imprimir() {
+  async function imprimir() {
     if (imprimiendo.current) return;
     imprimiendo.current = true;
-    window.print();
+    try {
+      // Impresión directa a la impresora predeterminada de Windows, sin diálogos.
+      const texto = normalizarParaImpresora(construirTextoRecibo(venta, pedidos));
+      await invoke("imprimir_recibo_termico", { texto, conLogo: true });
+    } catch (e) {
+      onError(String(e));
+    }
     setTimeout(() => {
       imprimiendo.current = false;
-    }, 1000);
+      onCerrar();
+    }, 300);
   }
 
   const subtotal = venta.total - venta.valor_propina;

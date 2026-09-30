@@ -653,6 +653,160 @@ button:disabled {
   min-width: 280px;
 }
 
+.layout-venta-solo-pedido {
+  justify-content: center;
+}
+
+.columna-pedido-full {
+  flex: none;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.cabecera-pedido {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.cabecera-pedido h3 {
+  padding: 0;
+  margin: 0;
+}
+
+.btn-agregar-productos {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.btn-agregar-productos:hover {
+  background-color: var(--color-gold);
+  border-color: var(--color-gold);
+}
+
+/* Catálogo (categorías / productos) en modal a pantalla completa */
+
+.modal-fondo-catalogo {
+  padding: 0;
+  align-items: stretch;
+  justify-content: stretch;
+}
+
+.modal-catalogo {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-surface);
+  border-radius: 0;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.cabecera-catalogo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.titulo-catalogo {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.4em;
+  color: var(--color-primary);
+}
+
+.titulo-catalogo-productos {
+  margin: -0.5rem 0 1rem;
+}
+
+.btn-volver-catalogo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background-color: transparent;
+  border-color: var(--color-border);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.btn-cerrar-catalogo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 999px;
+  background-color: transparent;
+  border-color: var(--color-border);
+  color: var(--color-primary);
+}
+
+.btn-cerrar-catalogo:hover {
+  background-color: var(--color-danger-bg);
+  border-color: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+
+.grid-categorias-modal {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.25rem;
+  flex: 1;
+  align-content: start;
+}
+
+.tarjeta-categoria-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 150px;
+  border-radius: var(--radius);
+  background-color: var(--color-primary-softer);
+  border: 1px solid var(--color-border);
+  color: var(--color-primary);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1em;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.tarjeta-categoria-modal:hover {
+  border-color: var(--color-gold);
+  transform: translateY(-2px);
+}
+
+.grid-productos-modal {
+  padding: 0;
+  flex: 1;
+  align-content: start;
+}
+
+@media (max-width: 640px) {
+  .grid-categorias-modal {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  }
+
+  .tarjeta-categoria-modal {
+    min-height: 120px;
+  }
+}
+
 .columna-productos .tabs {
   justify-content: flex-start;
   padding: 0;
@@ -671,12 +825,18 @@ button:disabled {
 .boton-producto {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
-  min-height: 88px;
-  text-align: left;
-  align-items: flex-start;
+  gap: 0.4rem;
+  min-height: 110px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
   background-color: var(--color-surface);
   border-color: var(--color-border);
+  color: var(--color-primary);
+}
+
+.boton-producto span {
+  font-weight: 600;
 }
 
 .boton-producto:hover {
@@ -1085,4 +1245,246 @@ button:disabled {
   .no-imprimir {
     display: none !important;
   }
+}
+
+/* Reportes PDF (general / detallado) */
+
+.reportes-generador {
+  margin: 0 1.5rem 1.5rem;
+  padding: 1.25rem 1.5rem;
+  background-color: var(--color-surface-soft);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.reportes-generador-cabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.reportes-generador h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  color: var(--color-primary);
+}
+
+.reportes-generador .btn-pill-suave {
+  flex-shrink: 0;
+}
+
+.reportes-rango {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.reportes-rango label,
+.formulario-correo label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85em;
+  font-weight: 600;
+  color: var(--color-text-soft);
+}
+
+.reportes-atajos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.btn-atajo {
+  border-radius: 999px;
+  font-size: 0.85em;
+  padding: 0.4em 0.9em;
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+.reportes-botones {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.75rem;
+}
+
+.btn-reporte {
+  justify-content: flex-start;
+  gap: 0.9rem;
+  padding: 0.9rem 1.2rem;
+  text-align: left;
+  border-radius: var(--radius);
+}
+
+.btn-reporte span {
+  display: flex;
+  flex-direction: column;
+}
+
+.btn-reporte strong {
+  font-size: 1.05em;
+}
+
+.btn-reporte small {
+  color: #cbd6cd;
+  font-weight: 400;
+  font-size: 0.8em;
+}
+
+.exito-reporte {
+  color: var(--color-success);
+  font-weight: 600;
+  margin: 0.75rem 0 0;
+  overflow-wrap: anywhere;
+}
+
+.modal-caja.modal-reporte {
+  width: min(1000px, 95vw);
+  height: 92vh;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-reporte-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.modal-reporte-cabecera h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  color: var(--color-primary);
+}
+
+.modal-caja.modal-reporte .row-acciones {
+  margin-top: 0;
+}
+
+.visor-pdf {
+  flex: 1;
+  width: 100%;
+  margin-top: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background-color: #ffffff;
+}
+
+.modal-encima {
+  z-index: 110;
+}
+
+.formulario-correo {
+  width: min(560px, 95vw);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-align: left;
+}
+
+.formulario-correo h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  color: var(--color-primary);
+}
+
+.formulario-correo textarea {
+  border-radius: 10px;
+  border: 1.5px solid var(--color-border);
+  padding: 0.6em 1.1em;
+  font-family: var(--font-body);
+  font-size: 1em;
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  resize: vertical;
+}
+
+.formulario-correo-fila {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.formulario-correo-fila label:first-child {
+  flex: 1;
+}
+
+.campo-puerto {
+  width: 170px;
+}
+
+/* Resumen del pedido: controles +/− por línea */
+
+.fila-pedido-nombre {
+  flex: 1;
+  min-width: 0;
+}
+
+.fila-pedido-valor {
+  min-width: 90px;
+  text-align: right;
+  font-weight: 600;
+}
+
+.control-cantidad {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.control-cantidad button {
+  padding: 0;
+  border-radius: 999px;
+}
+
+.control-cantidad-valor {
+  min-width: 2ch;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.1em;
+}
+
+/* Cobro: elección del método de pago */
+
+.modal-caja.modal-cobro {
+  width: min(460px, 95vw);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.modal-cobro h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  color: var(--color-primary);
+}
+
+.opciones-pago {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.opcion-pago {
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.25rem 0.75rem;
+  font-size: 1.1em;
+  font-weight: 600;
+  border-radius: var(--radius);
+}
+
+.vueltas {
+  color: var(--color-success);
+  font-weight: 700;
+  font-size: 1.2em;
+  margin: 0;
 }

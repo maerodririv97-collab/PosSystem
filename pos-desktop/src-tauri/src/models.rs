@@ -43,6 +43,12 @@ pub struct NuevoProducto {
 }
 
 #[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
+pub struct VentaProducto {
+    pub producto: i64,
+    pub total_vendido: i64,
+}
+
+#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
 pub struct Usuario {
     pub id_usuario: i64,
     pub nombres: String,
@@ -128,6 +134,8 @@ pub struct Turno {
     pub estado: String,
     pub valor_final: Option<i64>,
     pub diferencia: Option<i64>,
+    pub cerrado_por: Option<i64>,
+    pub nombre_cerrado_por: Option<String>,
 }
 
 #[derive(Debug, Serialize, sqlx::FromRow)]
@@ -145,6 +153,7 @@ pub struct ResumenTurno {
     pub total_egresos: i64,
     pub efectivo_esperado: i64,
     pub desglose: Vec<DesglosePago>,
+    pub desglose_propinas: Vec<DesglosePago>,
 }
 
 #[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]

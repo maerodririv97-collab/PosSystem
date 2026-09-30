@@ -1,6 +1,8 @@
 import { useRef } from "react";
 import { createPortal } from "react-dom";
+import { invoke } from "@tauri-apps/api/core";
 import logoPrinter from "../assets/logotipo_cliente_printer.png";
+import { ajustarLinea, centrar, normalizarParaImpresora, raya } from "../lib/textoImpresion";
 
 interface Producto {
   id_producto: number;
@@ -21,17 +23,39 @@ interface Props {
   onCerrar: () => void;
 }
 
+function construirTextoInventario(fecha: string, categorias: Categoria[], productos: Producto[]): string {
+  const lineas: string[] = [centrar("Maison du Café"), centrar("Inventario"), fecha, raya()];
+
+  for (const c of categorias.filter((c) => c.tipo === "Contable")) {
+    const productosCategoria = productos.filter((p) => p.categoria === c.id_categoria);
+    if (productosCategoria.length === 0) continue;
+    lineas.push(c.nombre);
+    for (const p of productosCategoria) {
+      lineas.push(ajustarLinea(p.nombre, String(p.stock)));
+    }
+    lineas.push(raya());
+  }
+
+  lineas.push(centrar("Maison du Café"), "\n\n\n");
+  return lineas.join("\n");
+}
+
 export default function ImprimirInventario({ productos, categorias, onCerrar }: Props) {
   const fecha = new Date().toLocaleString("es-CO");
   const imprimiendo = useRef(false);
 
-  function imprimir() {
+  async function imprimir() {
     if (imprimiendo.current) return;
     imprimiendo.current = true;
-    window.print();
+    try {
+      const texto = normalizarParaImpresora(construirTextoInventario(fecha, categorias, productos));
+      await invoke("imprimir_recibo_termico", { texto, conLogo: true });
+    } catch (e) {
+      console.error(e);
+    }
     setTimeout(() => {
       imprimiendo.current = false;
-    }, 1000);
+    }, 300);
   }
 
   const contenedor = document.getElementById("imprimir-root");

@@ -5,7 +5,7 @@ use tauri::State;
 use crate::models::{
     Categoria, CerrarVenta, ConceptoOperacion, DesglosePago, DetalleDia, Mesa, MovimientoInventario, NuevaCategoria,
     NuevaMesa, NuevaOperacion, NuevoConceptoOperacion, NuevoProducto, NuevoUsuario, Operacion, Pedido, Producto,
-    ResumenTurno, Turno, Usuario, Venta, VentaAbierta, VentaDetalle, VentaDia,
+    ResumenTurno, Turno, Usuario, Venta, VentaAbierta, VentaDetalle, VentaDia, VentaProducto,
 };
 
 #[tauri::command]
@@ -67,6 +67,28 @@ pub async fn listar_productos(pool: State<'_, SqlitePool>) -> Result<Vec<Product
         "SELECT id_producto, categoria, codigo_barras, nombre, costo, valor, stock, servicio, tipo_venta, imagen, estado
          FROM productos ORDER BY lower(nombre)",
     )
+    .fetch_all(pool.inner())
+    .await
+    .map_err(|e| e.to_string())
+}
+
+/// Unidades vendidas por producto en los últimos 15 días (solo ventas pagadas),
+/// para ordenar el catálogo de la pantalla de venta por popularidad reciente
+/// en vez de alfabéticamente.
+#[tauri::command]
+pub async fn ranking_ventas_productos(pool: State<'_, SqlitePool>) -> Result<Vec<VentaProducto>, String> {
+    let desde = (chrono::Local::now() - chrono::Duration::days(15))
+        .format("%Y-%m-%d %H:%M:%S")
+        .to_string();
+
+    sqlx::query_as::<_, VentaProducto>(
+        "SELECT pe.producto AS producto, SUM(pe.cantidad) AS total_vendido
+         FROM pedidos pe
+         JOIN ventas v ON v.id_venta = pe.venta
+         WHERE v.estado = 'Pagada' AND v.fecha >= ?1
+         GROUP BY pe.producto",
+    )
+    .bind(&desde)
     .fetch_all(pool.inner())
     .await
     .map_err(|e| e.to_string())
@@ -466,6 +488,11 @@ pub async fn listar_pedidos(pool: State<'_, SqlitePool>, id_venta: i64) -> Resul
     .map_err(|e| e.to_string())
 }
 
+/// Consulta SQL: ¿el producto lleva inventario? Los de categorías tipo 'Sin Stock'
+/// (cafés, bebidas preparadas, brunch...) no: no se valida ni se mueve su stock.
+const SQL_CONTROLA_STOCK: &str = "SELECT COALESCE(c.tipo, '') <> 'Sin Stock' FROM productos p
+         LEFT JOIN categorias c ON c.id_categoria = p.categoria WHERE p.id_producto = ?1";
+
 #[tauri::command]
 pub async fn agregar_pedido(
     pool: State<'_, SqlitePool>,
@@ -498,12 +525,19 @@ pub async fn agregar_pedido(
     .await
     .map_err(|e| e.to_string())?;
 
-    sqlx::query("UPDATE productos SET stock = stock - ?1 WHERE id_producto = ?2")
-        .bind(cantidad as f64)
+    let controla_stock: bool = sqlx::query_scalar(SQL_CONTROLA_STOCK)
         .bind(id_producto)
-        .execute(pool.inner())
+        .fetch_one(pool.inner())
         .await
         .map_err(|e| e.to_string())?;
+    if controla_stock {
+        sqlx::query("UPDATE productos SET stock = stock - ?1 WHERE id_producto = ?2")
+            .bind(cantidad as f64)
+            .bind(id_producto)
+            .execute(pool.inner())
+            .await
+            .map_err(|e| e.to_string())?;
+    }
 
     sqlx::query_as::<_, Pedido>(
         "SELECT pe.id_pedido, pe.producto, pr.nombre AS nombre_producto, pe.venta, pe.valor, pe.cantidad,
@@ -525,12 +559,19 @@ pub async fn eliminar_pedido(pool: State<'_, SqlitePool>, id_pedido: i64) -> Res
             .await
             .map_err(|e| e.to_string())?;
 
-    sqlx::query("UPDATE productos SET stock = stock + ?1 WHERE id_producto = ?2")
-        .bind(cantidad as f64)
+    let controla_stock: bool = sqlx::query_scalar(SQL_CONTROLA_STOCK)
         .bind(id_producto)
-        .execute(pool.inner())
+        .fetch_one(pool.inner())
         .await
         .map_err(|e| e.to_string())?;
+    if controla_stock {
+        sqlx::query("UPDATE productos SET stock = stock + ?1 WHERE id_producto = ?2")
+            .bind(cantidad as f64)
+            .bind(id_producto)
+            .execute(pool.inner())
+            .await
+            .map_err(|e| e.to_string())?;
+    }
 
     sqlx::query("DELETE FROM pedidos WHERE id_pedido = ?1")
         .bind(id_pedido)
@@ -539,6 +580,78 @@ pub async fn eliminar_pedido(pool: State<'_, SqlitePool>, id_pedido: i64) -> Res
         .map_err(|e| e.to_string())?;
 
     Ok(())
+}
+
+/// Suma o resta unidades a una línea de pedido (botones +/− del resumen), conservando
+/// el precio unitario con el que se registró la línea y ajustando el stock.
+/// Al sumar un producto de categoría 'Contable', si el stock no alcanza devuelve
+/// `STOCK_INSUFICIENTE|<stock>` para que la pantalla pida confirmación; con
+/// `forzar = true` se agrega igual. Los de categorías 'Sin Stock' no se validan.
+#[tauri::command]
+pub async fn cambiar_cantidad_pedido(
+    pool: State<'_, SqlitePool>,
+    id_pedido: i64,
+    delta: i64,
+    forzar: bool,
+) -> Result<(), String> {
+    let mut tx = pool.inner().begin().await.map_err(|e| e.to_string())?;
+
+    let (id_producto, cantidad, valor, compra, estado_venta): (i64, i64, i64, i64, String) = sqlx::query_as(
+        "SELECT pe.producto, pe.cantidad, pe.valor, pe.compra, v.estado
+         FROM pedidos pe JOIN ventas v ON v.id_venta = pe.venta
+         WHERE pe.id_pedido = ?1",
+    )
+    .bind(id_pedido)
+    .fetch_one(&mut *tx)
+    .await
+    .map_err(|e| e.to_string())?;
+
+    if estado_venta != "Abierta" {
+        return Err("La venta ya fue cobrada; no se puede modificar.".to_string());
+    }
+    let nueva = cantidad + delta;
+    if nueva < 1 {
+        return Err("La cantidad mínima es 1; usa Quitar para eliminar el producto.".to_string());
+    }
+
+    let controla_stock: bool = sqlx::query_scalar(SQL_CONTROLA_STOCK)
+        .bind(id_producto)
+        .fetch_one(&mut *tx)
+        .await
+        .map_err(|e| e.to_string())?;
+
+    if controla_stock && delta > 0 && !forzar {
+        let stock: f64 = sqlx::query_scalar("SELECT stock FROM productos WHERE id_producto = ?1")
+            .bind(id_producto)
+            .fetch_one(&mut *tx)
+            .await
+            .map_err(|e| e.to_string())?;
+        if stock < delta as f64 {
+            return Err(format!("STOCK_INSUFICIENTE|{stock}"));
+        }
+    }
+
+    let valor_unitario = if cantidad > 0 { valor / cantidad } else { 0 };
+    let costo_unitario = if cantidad > 0 { compra / cantidad } else { 0 };
+    sqlx::query("UPDATE pedidos SET cantidad = ?1, valor = ?2, compra = ?3 WHERE id_pedido = ?4")
+        .bind(nueva)
+        .bind(valor_unitario * nueva)
+        .bind(costo_unitario * nueva)
+        .bind(id_pedido)
+        .execute(&mut *tx)
+        .await
+        .map_err(|e| e.to_string())?;
+
+    if controla_stock {
+        sqlx::query("UPDATE productos SET stock = stock - ?1 WHERE id_producto = ?2")
+            .bind(delta as f64)
+            .bind(id_producto)
+            .execute(&mut *tx)
+            .await
+            .map_err(|e| e.to_string())?;
+    }
+
+    tx.commit().await.map_err(|e| e.to_string())
 }
 
 #[tauri::command]
@@ -595,7 +708,9 @@ pub async fn login_pin(pool: State<'_, SqlitePool>, pin: i64) -> Result<Usuario,
 #[tauri::command]
 pub async fn obtener_turno_abierto(pool: State<'_, SqlitePool>) -> Result<Option<Turno>, String> {
     sqlx::query_as::<_, Turno>(
-        "SELECT id_turno, apertura, cierre, valor_inicial, estado, valor_final, diferencia FROM turnos WHERE estado = 'Abierto' LIMIT 1",
+        "SELECT id_turno, apertura, cierre, valor_inicial, estado, valor_final, diferencia,
+                cerrado_por, NULL AS nombre_cerrado_por
+         FROM turnos WHERE estado = 'Abierto' LIMIT 1",
     )
     .fetch_optional(pool.inner())
     .await
@@ -617,7 +732,8 @@ pub async fn abrir_turno(pool: State<'_, SqlitePool>, valor_inicial: i64) -> Res
 
     sqlx::query_as::<_, Turno>(
         "INSERT INTO turnos (apertura, cierre, valor_inicial, estado) VALUES (?1, NULL, ?2, 'Abierto')
-         RETURNING id_turno, apertura, cierre, valor_inicial, estado, valor_final, diferencia",
+         RETURNING id_turno, apertura, cierre, valor_inicial, estado, valor_final, diferencia,
+                   cerrado_por, NULL AS nombre_cerrado_por",
     )
     .bind(&apertura)
     .bind(valor_inicial)
@@ -663,6 +779,20 @@ async fn calcular_resumen_turno(pool: &SqlitePool, id_turno: i64) -> Result<Resu
     .await
     .map_err(|e| e.to_string())?;
 
+    let desglose_propinas_raw: Vec<(String, f64)> = sqlx::query_as(
+        "SELECT forma_pago, COALESCE(SUM(valor_propina), 0.0) AS total
+         FROM ventas WHERE turno = ?1 AND estado = 'Pagada'
+         GROUP BY forma_pago",
+    )
+    .bind(id_turno)
+    .fetch_all(pool)
+    .await
+    .map_err(|e| e.to_string())?;
+    let desglose_propinas: Vec<DesglosePago> = desglose_propinas_raw
+        .into_iter()
+        .map(|(forma_pago, total)| DesglosePago { forma_pago, total: total.round() as i64 })
+        .collect();
+
     let total_efectivo_ventas = desglose
         .iter()
         .find(|d| d.forma_pago == "Efectivo")
@@ -695,6 +825,7 @@ async fn calcular_resumen_turno(pool: &SqlitePool, id_turno: i64) -> Result<Resu
         total_egresos,
         efectivo_esperado,
         desglose,
+        desglose_propinas,
     })
 }
 
@@ -789,8 +920,31 @@ pub async fn resumen_turno(pool: State<'_, SqlitePool>, id_turno: i64) -> Result
     calcular_resumen_turno(pool.inner(), id_turno).await
 }
 
+/// Turnos cerrados en una fecha dada (para poder reimprimir su reporte de cierre
+/// desde el calendario de reportes).
 #[tauri::command]
-pub async fn cerrar_turno(pool: State<'_, SqlitePool>, id_turno: i64, valor_final: i64) -> Result<(), String> {
+pub async fn listar_turnos_dia(pool: State<'_, SqlitePool>, fecha: String) -> Result<Vec<Turno>, String> {
+    sqlx::query_as::<_, Turno>(
+        "SELECT t.id_turno, t.apertura, t.cierre, t.valor_inicial, t.estado, t.valor_final, t.diferencia,
+                t.cerrado_por, (u.nombres || ' ' || u.apellidos) AS nombre_cerrado_por
+         FROM turnos t
+         LEFT JOIN usuarios u ON u.id_usuario = t.cerrado_por
+         WHERE t.estado = 'Cerrado' AND substr(t.cierre, 1, 10) = ?1
+         ORDER BY t.cierre",
+    )
+    .bind(&fecha)
+    .fetch_all(pool.inner())
+    .await
+    .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub async fn cerrar_turno(
+    pool: State<'_, SqlitePool>,
+    id_turno: i64,
+    valor_final: i64,
+    actor_id: i64,
+) -> Result<(), String> {
     let ventas_abiertas = sqlx::query_scalar::<_, i64>(
         "SELECT COUNT(*) FROM ventas WHERE turno = ?1 AND estado = 'Abierta'",
     )
@@ -809,11 +963,13 @@ pub async fn cerrar_turno(pool: State<'_, SqlitePool>, id_turno: i64, valor_fina
     let cierre = chrono::Local::now().format("%Y-%m-%d %H:%M:%S").to_string();
 
     sqlx::query(
-        "UPDATE turnos SET cierre = ?1, estado = 'Cerrado', valor_final = ?2, diferencia = ?3 WHERE id_turno = ?4",
+        "UPDATE turnos SET cierre = ?1, estado = 'Cerrado', valor_final = ?2, diferencia = ?3, cerrado_por = ?4
+         WHERE id_turno = ?5",
     )
     .bind(&cierre)
     .bind(valor_final)
     .bind(diferencia)
+    .bind(actor_id)
     .bind(id_turno)
     .execute(pool.inner())
     .await
@@ -1087,4 +1243,175 @@ pub async fn listar_ventas_cerradas_turno(
     .fetch_all(pool.inner())
     .await
     .map_err(|e| e.to_string())
+}
+
+/// Convierte el logo embebido a comandos ESC/POS de imagen rasterizada (GS v 0).
+///
+/// El logo real es un emblema circular con el disco de fondo oscuro y el texto/
+/// borde en dorado. Imprimir eso tal cual (oscuro = tinta) sale como una mancha
+/// negra sólida y gasta mucho térmico. En vez de eso invertimos la selección:
+/// se imprime como tinta negra el texto/borde dorado (que es lo que se necesita
+/// leer), y se deja en blanco tanto el disco de fondo oscuro como todo lo que
+/// esté fuera del círculo (transparente en el PNG) — el resultado es el emblema
+/// dibujado en línea fina sobre el papel, no un cuadro/disco relleno.
+/// Se aplica difuminado Floyd-Steinberg para conservar los bordes suaves del
+/// texto en vez de un simple umbral. Se usa la versión de 220x220 (no la
+/// miniatura de 60x60) para evitar el desenfoque de estirar una imagen muy
+/// pequeña. 220 puntos de ancho es conservador: cabe tanto en impresoras de
+/// 58mm (384 puntos) como de 80mm (576 puntos) a 203dpi. Incluye los comandos
+/// para centrarlo en el papel.
+#[cfg(windows)]
+fn logo_raster_escpos() -> Vec<u8> {
+    use image::imageops::colorops::{dither, BiLevel};
+    use image::{GenericImageView, Luma};
+
+    const LOGO_PNG: &[u8] = include_bytes!("../assets/logo_termico.png");
+    const ANCHO_DESTINO: u32 = 220;
+
+    let Ok(img) = image::load_from_memory(LOGO_PNG) else {
+        return Vec::new();
+    };
+    let alto_destino = ((img.height() as u64 * ANCHO_DESTINO as u64) / img.width() as u64).max(1) as u32;
+    let redimensionada = img.resize_exact(ANCHO_DESTINO, alto_destino, image::imageops::FilterType::Lanczos3);
+
+    let mut gris = image::ImageBuffer::<Luma<u8>, Vec<u8>>::new(ANCHO_DESTINO, alto_destino);
+    for (x, y, px) in redimensionada.pixels() {
+        let [r, g, b, a] = px.0;
+        let alpha = a as f32 / 255.0;
+        if alpha < 0.5 {
+            // Fuera del círculo (transparente): nunca imprimir.
+            gris.put_pixel(x, y, Luma([255]));
+            continue;
+        }
+        let luminancia = 0.299 * r as f32 + 0.587 * g as f32 + 0.114 * b as f32;
+        // Invertido: lo claro (dorado) queda con valor bajo -> el dither lo marca
+        // como tinta; lo oscuro (disco de fondo) queda alto -> se deja en blanco.
+        let invertido = (255.0 - luminancia).clamp(0.0, 255.0);
+        gris.put_pixel(x, y, Luma([invertido.round() as u8]));
+    }
+    dither(&mut gris, &BiLevel);
+
+    let ancho_bytes = (ANCHO_DESTINO as usize).div_ceil(8);
+    let mut bitmap = vec![0u8; ancho_bytes * alto_destino as usize];
+
+    for y in 0..alto_destino {
+        for x in 0..ANCHO_DESTINO {
+            // Tras el dither, cada pixel queda en 0 (negro) o 255 (blanco).
+            if gris.get_pixel(x, y).0[0] == 0 {
+                let indice = y as usize * ancho_bytes + (x as usize / 8);
+                let bit = 7 - (x % 8);
+                bitmap[indice] |= 1 << bit;
+            }
+        }
+    }
+
+    let xl = (ancho_bytes & 0xFF) as u8;
+    let xh = ((ancho_bytes >> 8) & 0xFF) as u8;
+    let yl = (alto_destino as usize & 0xFF) as u8;
+    let yh = ((alto_destino as usize >> 8) & 0xFF) as u8;
+
+    let mut comando = vec![0x1B, 0x61, 0x01]; // ESC a 1 : centrar
+    comando.extend_from_slice(&[0x1D, 0x76, 0x30, 0x00, xl, xh, yl, yh]);
+    comando.extend_from_slice(&bitmap);
+    comando.extend_from_slice(&[0x1B, 0x61, 0x00]); // ESC a 0 : volver a alinear a la izquierda
+    comando
+}
+
+/// Envía bytes directamente a la impresora predeterminada de Windows usando la API
+/// RAW del spooler (WinSpool), sin abrir ningún diálogo. Es la técnica estándar
+/// para imprimir recibos en impresoras térmicas de punto de venta.
+#[cfg(windows)]
+fn enviar_bytes_a_impresora_predeterminada(datos: &[u8]) -> Result<(), String> {
+    use windows::core::PCWSTR;
+    use windows::Win32::Graphics::Printing::{
+        ClosePrinter, EndDocPrinter, EndPagePrinter, GetDefaultPrinterW, OpenPrinterW,
+        StartDocPrinterW, StartPagePrinter, WritePrinter, DOC_INFO_1W,
+    };
+
+    unsafe {
+        let mut len: u32 = 0;
+        let _ = GetDefaultPrinterW(None, &mut len);
+        if len == 0 {
+            return Err("No hay una impresora predeterminada configurada en Windows.".to_string());
+        }
+
+        let mut nombre_buf: Vec<u16> = vec![0; len as usize];
+        if !GetDefaultPrinterW(Some(windows::core::PWSTR(nombre_buf.as_mut_ptr())), &mut len).as_bool() {
+            return Err("No se pudo leer la impresora predeterminada de Windows.".to_string());
+        }
+        // GetDefaultPrinterW incluye el terminador nulo; lo quitamos para reutilizar el buffer.
+        if let Some(fin) = nombre_buf.iter().position(|&c| c == 0) {
+            nombre_buf.truncate(fin);
+        }
+        nombre_buf.push(0);
+
+        let mut handle = Default::default();
+        OpenPrinterW(PCWSTR(nombre_buf.as_ptr()), &mut handle, None).map_err(|e| e.to_string())?;
+
+        let mut doc_name: Vec<u16> = "Recibo Maison du Café".encode_utf16().chain(std::iter::once(0)).collect();
+        let mut datatype: Vec<u16> = "RAW".encode_utf16().chain(std::iter::once(0)).collect();
+        let doc_info = DOC_INFO_1W {
+            pDocName: windows::core::PWSTR(doc_name.as_mut_ptr()),
+            pOutputFile: windows::core::PWSTR::null(),
+            pDatatype: windows::core::PWSTR(datatype.as_mut_ptr()),
+        };
+
+        let job_id = StartDocPrinterW(handle, 1, &doc_info);
+        if job_id == 0 {
+            let _ = ClosePrinter(handle);
+            return Err("No se pudo iniciar el trabajo de impresión.".to_string());
+        }
+
+        if !StartPagePrinter(handle).as_bool() {
+            let _ = EndDocPrinter(handle);
+            let _ = ClosePrinter(handle);
+            return Err("No se pudo iniciar la página de impresión.".to_string());
+        }
+
+        let mut escritos: u32 = 0;
+        let escribio_bien =
+            WritePrinter(handle, datos.as_ptr() as *const _, datos.len() as u32, &mut escritos).as_bool();
+
+        let _ = EndPagePrinter(handle);
+        let _ = EndDocPrinter(handle);
+        let _ = ClosePrinter(handle);
+
+        if !escribio_bien {
+            return Err("Falló el envío del recibo a la impresora.".to_string());
+        }
+    }
+
+    Ok(())
+}
+
+/// Imprime el recibo directamente en la impresora térmica predeterminada, sin
+/// mostrar ningún diálogo de impresión al cajero. Arma el trabajo con comandos
+/// ESC/POS: inicialización, logo (opcional), el texto y el corte de papel al final,
+/// ya que al enviar datos RAW se salta el driver de Windows (y con él, el logo y el
+/// corte automático que el driver aplicaba antes).
+#[tauri::command]
+pub async fn imprimir_recibo_termico(texto: String, con_logo: bool) -> Result<(), String> {
+    #[cfg(windows)]
+    {
+        tauri::async_runtime::spawn_blocking(move || {
+            let mut datos: Vec<u8> = Vec::new();
+            datos.extend_from_slice(&[0x1B, 0x40]); // ESC @ : inicializar impresora
+            if con_logo {
+                datos.extend_from_slice(&logo_raster_escpos());
+                datos.push(b'\n');
+            }
+            datos.extend_from_slice(texto.as_bytes());
+            datos.extend_from_slice(&[0x1B, 0x64, 0x04]); // ESC d 4 : alimentar 4 líneas
+            datos.extend_from_slice(&[0x1D, 0x56, 0x01]); // GS V 1 : corte parcial de papel
+
+            enviar_bytes_a_impresora_predeterminada(&datos)
+        })
+        .await
+        .map_err(|e| e.to_string())?
+    }
+    #[cfg(not(windows))]
+    {
+        let _ = (texto, con_logo);
+        Err("La impresión directa solo está disponible en Windows.".to_string())
+    }
 }

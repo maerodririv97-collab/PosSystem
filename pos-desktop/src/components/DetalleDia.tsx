@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
+import { construirTextoCierreTurno, ResumenTurno } from "./CuadreTurno";
+import { normalizarParaImpresora } from "../lib/textoImpresion";
 
 interface DesglosePago {
   forma_pago: string;
@@ -24,6 +26,18 @@ interface DetalleDiaData {
   ventas: VentaDetalle[];
 }
 
+interface TurnoDia {
+  id_turno: number;
+  apertura: string;
+  cierre: string | null;
+  valor_inicial: number;
+  estado: string;
+  valor_final: number | null;
+  diferencia: number | null;
+  cerrado_por: number | null;
+  nombre_cerrado_por: string | null;
+}
+
 interface Props {
   fecha: string;
   onCerrar: () => void;
@@ -32,12 +46,40 @@ interface Props {
 
 export default function DetalleDia({ fecha, onCerrar, onError }: Props) {
   const [detalle, setDetalle] = useState<DetalleDiaData | null>(null);
+  const [turnos, setTurnos] = useState<TurnoDia[]>([]);
+  const [reimprimiendo, setReimprimiendo] = useState<number | null>(null);
 
   useEffect(() => {
     invoke<DetalleDiaData>("detalle_dia", { fecha })
       .then(setDetalle)
       .catch((e) => onError(String(e)));
+    invoke<TurnoDia[]>("listar_turnos_dia", { fecha })
+      .then(setTurnos)
+      .catch((e) => onError(String(e)));
   }, [fecha]);
+
+  async function reimprimirReporte(t: TurnoDia) {
+    if (reimprimiendo !== null) return;
+    setReimprimiendo(t.id_turno);
+    try {
+      const resumen = await invoke<ResumenTurno>("resumen_turno", { idTurno: t.id_turno });
+      const texto = normalizarParaImpresora(
+        construirTextoCierreTurno(
+          t.id_turno,
+          t.apertura,
+          t.cierre ?? "",
+          t.nombre_cerrado_por ?? "",
+          resumen,
+          t.valor_final ?? 0,
+        ),
+      );
+      await invoke("imprimir_recibo_termico", { texto, conLogo: true });
+    } catch (e) {
+      onError(String(e));
+    } finally {
+      setReimprimiendo(null);
+    }
+  }
 
   return (
     <div className="modal-fondo" onClick={onCerrar}>
@@ -59,6 +101,25 @@ export default function DetalleDia({ fecha, onCerrar, onError }: Props) {
             <p>Propinas: ${Math.round(detalle.total_propinas).toLocaleString()}</p>
             <p>Cantidad de ventas: {detalle.ventas.length}</p>
           </>
+        )}
+
+        {turnos.length > 0 && (
+          <div className="detalle-campana">
+            <p>
+              <strong>Turnos cerrados</strong>
+            </p>
+            {turnos.map((t) => (
+              <div key={t.id_turno} className="fila-detalle">
+                <span>
+                  Turno #{t.id_turno} · {t.apertura} → {t.cierre}
+                  {t.nombre_cerrado_por ? ` · ${t.nombre_cerrado_por}` : ""}
+                </span>
+                <button onClick={() => reimprimirReporte(t)} disabled={reimprimiendo === t.id_turno}>
+                  Reimprimir reporte
+                </button>
+              </div>
+            ))}
+          </div>
         )}
 
         <div className="row-acciones">

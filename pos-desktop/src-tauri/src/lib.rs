@@ -1,6 +1,7 @@
 mod commands;
 mod db;
 mod models;
+mod reportes;
 
 use tauri::Manager;
 
@@ -28,6 +29,7 @@ pub fn run() {
             commands::actualizar_categoria,
             commands::eliminar_categoria,
             commands::listar_productos,
+            commands::ranking_ventas_productos,
             commands::crear_producto,
             commands::actualizar_producto,
             commands::eliminar_producto,
@@ -48,6 +50,7 @@ pub fn run() {
             commands::listar_pedidos,
             commands::agregar_pedido,
             commands::eliminar_pedido,
+            commands::cambiar_cantidad_pedido,
             commands::cerrar_venta,
             commands::cancelar_venta,
             commands::login_pin,
@@ -55,6 +58,7 @@ pub fn run() {
             commands::abrir_turno,
             commands::resumen_turno,
             commands::cerrar_turno,
+            commands::listar_turnos_dia,
             commands::listar_conceptos_operaciones,
             commands::crear_concepto_operacion,
             commands::eliminar_concepto_operacion,
@@ -63,8 +67,16 @@ pub fn run() {
             commands::resumen_ventas_mes,
             commands::detalle_dia,
             commands::listar_ventas_cerradas_turno,
+            commands::imprimir_recibo_termico,
             commands::importar_catalogo_real,
             commands::importar_desde_archivo,
+            reportes::datos_reporte,
+            reportes::guardar_reporte_pdf,
+            reportes::exportar_reporte_pdf,
+            reportes::obtener_config_correo,
+            reportes::guardar_config_correo,
+            reportes::probar_config_correo,
+            reportes::enviar_reporte_correo,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

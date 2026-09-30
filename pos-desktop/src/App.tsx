@@ -56,6 +56,7 @@ const TABS_ADMIN: { id: Tab; label: string; icono: typeof Coffee }[] = [
 
 const TABS_OPERATIVO: { id: Tab; label: string; icono: typeof Coffee }[] = [
   { id: "ventas", label: "Ventas", icono: Coffee },
+  { id: "operaciones", label: "Operaciones", icono: Settings },
 ];
 
 type SubTabCatalogo = "categorias" | "productos";
@@ -100,20 +101,6 @@ function App() {
     return <AbrirTurno onTurnoAbierto={setTurno} onError={setError} />;
   }
 
-  if (cuadreAbierto) {
-    return (
-      <CuadreTurno
-        idTurno={turno.id_turno}
-        onCerrado={() => {
-          setCuadreAbierto(false);
-          setTurno(null);
-        }}
-        onCancelar={() => setCuadreAbierto(false)}
-        onError={setError}
-      />
-    );
-  }
-
   const esDesarrollador = usuario.perfil === "Desarrollador";
   const tabsDisponibles = [
     ...(esAdmin(usuario.perfil) ? TABS_ADMIN : TABS_OPERATIVO),
@@ -139,12 +126,10 @@ function App() {
             <Clock size={16} />
             Turno desde {turno.apertura}
           </span>
-          {esAdmin(usuario.perfil) && (
-            <button className="btn-pill" onClick={() => setCuadreAbierto(true)}>
-              <DoorOpen size={16} />
-              Cerrar turno
-            </button>
-          )}
+          <button className="btn-pill" onClick={() => setCuadreAbierto(true)}>
+            <DoorOpen size={16} />
+            Cerrar turno
+          </button>
           <button className="btn-pill" onClick={cerrarSesion}>
             <LogOut size={16} />
             Salir
@@ -226,6 +211,21 @@ function App() {
         )}
         {tab === "mi-perfil" && <MiPerfil usuario={usuario} onActualizado={setUsuario} onError={setError} />}
       </div>
+
+      {cuadreAbierto && (
+        <CuadreTurno
+          idTurno={turno.id_turno}
+          apertura={turno.apertura}
+          actorId={usuario.id_usuario}
+          nombreUsuario={`${usuario.nombres} ${usuario.apellidos}`}
+          onCerrado={() => {
+            setCuadreAbierto(false);
+            setTurno(null);
+          }}
+          onCancelar={() => setCuadreAbierto(false)}
+          onError={setError}
+        />
+      )}
     </main>
   );
 }

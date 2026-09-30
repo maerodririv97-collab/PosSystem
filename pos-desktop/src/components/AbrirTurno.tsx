@@ -21,8 +21,9 @@ export default function AbrirTurno({ onTurnoAbierto, onError }: Props) {
 
   async function abrir(e: React.FormEvent) {
     e.preventDefault();
+    if (valorInicial === null) return;
     try {
-      const turno = await invoke<Turno>("abrir_turno", { valorInicial: valorInicial ?? 0 });
+      const turno = await invoke<Turno>("abrir_turno", { valorInicial });
       onTurnoAbierto(turno);
     } catch (e) {
       onError(String(e));
@@ -37,8 +38,13 @@ export default function AbrirTurno({ onTurnoAbierto, onError }: Props) {
         <button type="button" onClick={() => setMostrarTeclado(true)}>
           {valorInicial === null ? "Valor inicial de caja" : `$${valorInicial.toLocaleString()}`}
         </button>
-        <button type="submit">Abrir turno</button>
+        <button type="submit" disabled={valorInicial === null}>
+          Abrir turno
+        </button>
       </form>
+      {valorInicial === null && (
+        <p className="ayuda">Debes contar y registrar el efectivo con el que arranca la caja antes de abrir el turno.</p>
+      )}
 
       {mostrarTeclado && (
         <TecladoNumerico

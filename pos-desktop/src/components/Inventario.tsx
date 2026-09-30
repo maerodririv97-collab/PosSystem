@@ -53,10 +53,12 @@ export default function Inventario({ actorId, onError }: Props) {
         invoke<MovimientoInventario[]>("listar_movimientos_inventario"),
       ]);
       setProductos(ps);
-      setCategorias(cs);
+      // Las categorías 'Sin Stock' (cafés, bebidas preparadas...) no llevan inventario.
+      const contables = cs.filter((c) => c.tipo !== "Sin Stock");
+      setCategorias(contables);
       setMovimientos(movs);
-      if (cs.length && categoriaActiva === null) {
-        setCategoriaActiva(cs[0].id_categoria);
+      if (contables.length && categoriaActiva === null) {
+        setCategoriaActiva(contables[0].id_categoria);
       }
     } catch (e) {
       onError(String(e));
