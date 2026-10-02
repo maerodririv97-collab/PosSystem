@@ -86,6 +86,23 @@ function App() {
       .catch((e) => setError(String(e)));
   }, [usuario]);
 
+  // Se valida antes de abrir el cuadre: si hay ventas abiertas no tiene sentido contar la caja.
+  async function intentarCerrarTurno() {
+    try {
+      const abiertas = await invoke<{ numero_mesa: number }[]>("listar_ventas_abiertas");
+      if (abiertas.length > 0) {
+        const mesas = abiertas.map((v) => v.numero_mesa).join(", ");
+        setError(
+          `No puede cerrar el turno: hay ${abiertas.length} venta(s) abierta(s) pendiente(s) de cobrar (mesa ${mesas}).`,
+        );
+        return;
+      }
+      setCuadreAbierto(true);
+    } catch (e) {
+      setError(String(e));
+    }
+  }
+
   function cerrarSesion() {
     setUsuario(null);
     setTurno(undefined);
@@ -134,7 +151,7 @@ function App() {
             <Clock size={16} />
             Turno desde {turno.apertura}
           </span>
-          <button className="btn-pill" onClick={() => setCuadreAbierto(true)}>
+          <button className="btn-pill" onClick={intentarCerrarTurno}>
             <DoorOpen size={16} />
             Cerrar turno
           </button>

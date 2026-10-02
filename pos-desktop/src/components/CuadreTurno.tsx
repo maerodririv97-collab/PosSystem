@@ -82,6 +82,8 @@ export default function CuadreTurno({ idTurno, apertura, actorId, nombreUsuario,
   const [mostrarTeclado, setMostrarTeclado] = useState(false);
   const [errorCarga, setErrorCarga] = useState("");
   const [cerrando, setCerrando] = useState(false);
+  // El aviso general queda detrás del fondo del modal, así que el error de cierre se muestra aquí.
+  const [errorCierre, setErrorCierre] = useState("");
 
   useEffect(() => {
     invoke<ResumenTurno>("resumen_turno", { idTurno })
@@ -95,6 +97,7 @@ export default function CuadreTurno({ idTurno, apertura, actorId, nombreUsuario,
   async function confirmarCierre() {
     if (!resumen || cerrando) return;
     setCerrando(true);
+    setErrorCierre("");
     try {
       await invoke("cerrar_turno", { idTurno, valorFinal: valorFinal ?? 0, actorId });
       const cierre = new Date().toLocaleString("es-CO");
@@ -108,7 +111,7 @@ export default function CuadreTurno({ idTurno, apertura, actorId, nombreUsuario,
       }
       onCerrado();
     } catch (e) {
-      onError(String(e));
+      setErrorCierre(String(e));
       setCerrando(false);
     }
   }
@@ -161,6 +164,8 @@ export default function CuadreTurno({ idTurno, apertura, actorId, nombreUsuario,
             )}
           </>
         )}
+
+        {errorCierre && <p className="error">{errorCierre}</p>}
 
         <div className="row-acciones">
           <button onClick={confirmarCierre} disabled={!resumen || valorFinal === null || cerrando}>
