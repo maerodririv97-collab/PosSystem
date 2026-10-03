@@ -377,6 +377,13 @@ button:disabled {
   width: 100%;
 }
 
+.campo-edicion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  width: 100%;
+}
+
 .tarjeta-inactiva {
   opacity: 0.6;
 }

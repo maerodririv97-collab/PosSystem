@@ -173,11 +173,22 @@ export default function Productos({ onError }: Props) {
                     </option>
                   ))}
                 </select>
-                <input
-                  type="number"
-                  value={edit.valor}
-                  onChange={(e) => setEdit({ ...edit, valor: Number(e.currentTarget.value) })}
-                />
+                <label className="campo-edicion">
+                  <small>Costo</small>
+                  <input
+                    type="number"
+                    value={edit.costo}
+                    onChange={(e) => setEdit({ ...edit, costo: Number(e.currentTarget.value) })}
+                  />
+                </label>
+                <label className="campo-edicion">
+                  <small>Valor venta</small>
+                  <input
+                    type="number"
+                    value={edit.valor}
+                    onChange={(e) => setEdit({ ...edit, valor: Number(e.currentTarget.value) })}
+                  />
+                </label>
                 <div className="row-acciones">
                   <button onClick={guardarEdicion}>Guardar</button>
                   <button
@@ -195,7 +206,7 @@ export default function Productos({ onError }: Props) {
               <div key={p.id_producto} className="tarjeta">
                 <span>{p.nombre}</span>
                 <small>
-                  ${p.valor.toLocaleString()} · stock {p.stock} ({p.estado})
+                  ${p.valor.toLocaleString()} · costo ${p.costo.toLocaleString()} · stock {p.stock} ({p.estado})
                 </small>
                 <div className="row-acciones">
                   <button onClick={() => iniciarEdicion(p)}>Editar</button>
