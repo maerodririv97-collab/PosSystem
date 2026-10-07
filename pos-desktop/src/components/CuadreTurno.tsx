@@ -19,9 +19,17 @@ export interface ResumenTurno {
   desglose_propinas: DesglosePago[];
 }
 
+/** Cómo abrió el turno, contra lo que dejó el anterior (null si no se sabe). */
+export interface AperturaInfo {
+  baseEsperada: number | null;
+  diferenciaApertura: number | null;
+  motivoApertura: string;
+}
+
 interface Props {
   idTurno: number;
   apertura: string;
+  aperturaInfo: AperturaInfo;
   actorId: number;
   nombreUsuario: string;
   onCerrado: () => void;
@@ -40,7 +48,11 @@ export function construirTextoCierreTurno(
   nombreUsuario: string,
   resumen: ResumenTurno,
   valorFinal: number,
+  /** null en turnos cerrados antes de registrar retiros. */
+  retiro: number | null,
+  aperturaInfo: AperturaInfo,
 ): string {
+  const difApertura = aperturaInfo.diferenciaApertura ?? 0;
   const diferencia = valorFinal - resumen.efectivo_esperado;
   const estadoDiferencia = diferencia === 0 ? "(cuadra)" : diferencia > 0 ? "(sobra)" : "(falta)";
 
@@ -52,6 +64,15 @@ export function construirTextoCierreTurno(
     `Apertura: ${apertura}`,
     `Cierre:   ${cierre}`,
     ...(nombreUsuario ? [`Cerrado por: ${nombreUsuario}`] : []),
+    ...(difApertura !== 0
+      ? [
+          raya(),
+          centrar("*** ALERTA DE APERTURA ***"),
+          ajustarLinea("Dejo el turno anterior:", `$${(aperturaInfo.baseEsperada ?? 0).toLocaleString()}`),
+          ajustarLinea("Diferencia apertura:", `$${difApertura.toLocaleString()} ${difApertura > 0 ? "(sobra)" : "(falta)"}`),
+          ...(aperturaInfo.motivoApertura ? [`Motivo: ${aperturaInfo.motivoApertura}`] : []),
+        ]
+      : []),
     raya(),
     ajustarLinea("Valor inicial:", `$${resumen.valor_inicial.toLocaleString()}`),
     ...resumen.desglose.map((d) => ajustarLinea(`${d.forma_pago}:`, `$${d.total.toLocaleString()}`)),
@@ -70,16 +91,25 @@ export function construirTextoCierreTurno(
     ajustarLinea("Efectivo esperado:", `$${resumen.efectivo_esperado.toLocaleString()}`),
     ajustarLinea("Efectivo contado:", `$${valorFinal.toLocaleString()}`),
     ajustarLinea("Diferencia:", `$${diferencia.toLocaleString()} ${estadoDiferencia}`),
+    ...(retiro === null
+      ? []
+      : [
+          raya(),
+          ajustarLinea("Retiro:", `$${retiro.toLocaleString()}`),
+          ajustarLinea("Queda en caja:", `$${(valorFinal - retiro).toLocaleString()}`),
+        ]),
     "",
     centrar("Maison du Café"),
     "\n\n\n",
   ].join("\n");
 }
 
-export default function CuadreTurno({ idTurno, apertura, actorId, nombreUsuario, onCerrado, onCancelar, onError }: Props) {
+export default function CuadreTurno({ idTurno, apertura, aperturaInfo, actorId, nombreUsuario, onCerrado, onCancelar, onError }: Props) {
   const [resumen, setResumen] = useState<ResumenTurno | null>(null);
   const [valorFinal, setValorFinal] = useState<number | null>(null);
   const [mostrarTeclado, setMostrarTeclado] = useState(false);
+  const [retiro, setRetiro] = useState<number | null>(null);
+  const [mostrarTecladoRetiro, setMostrarTecladoRetiro] = useState(false);
   const [errorCarga, setErrorCarga] = useState("");
   const [cerrando, setCerrando] = useState(false);
   // El aviso general queda detrás del fondo del modal, así que el error de cierre se muestra aquí.
@@ -95,15 +125,15 @@ export default function CuadreTurno({ idTurno, apertura, actorId, nombreUsuario,
   }, [idTurno]);
 
   async function confirmarCierre() {
-    if (!resumen || cerrando) return;
+    if (!resumen || cerrando || valorFinal === null || retiro === null || retiro > valorFinal) return;
     setCerrando(true);
     setErrorCierre("");
     try {
-      await invoke("cerrar_turno", { idTurno, valorFinal: valorFinal ?? 0, actorId });
+      await invoke("cerrar_turno", { idTurno, valorFinal, valorRetirado: retiro, actorId });
       const cierre = new Date().toLocaleString("es-CO");
       try {
         const texto = normalizarParaImpresora(
-          construirTextoCierreTurno(idTurno, apertura, cierre, nombreUsuario, resumen, valorFinal ?? 0),
+          construirTextoCierreTurno(idTurno, apertura, cierre, nombreUsuario, resumen, valorFinal, retiro, aperturaInfo),
         );
         await invoke("imprimir_recibo_termico", { texto, conLogo: true });
       } catch (e) {
@@ -117,11 +147,21 @@ export default function CuadreTurno({ idTurno, apertura, actorId, nombreUsuario,
   }
 
   const diferencia = (valorFinal ?? 0) - (resumen?.efectivo_esperado ?? 0);
+  const retiroExcede = valorFinal !== null && retiro !== null && retiro > valorFinal;
 
   return (
     <div className="modal-fondo" onClick={cerrando ? undefined : onCancelar}>
       <div className="modal-caja" onClick={(e) => e.stopPropagation()}>
         <h3>Cuadre de caja</h3>
+
+        {(aperturaInfo.diferenciaApertura ?? 0) !== 0 && (
+          <p className="error">
+            Este turno abrió con ${(aperturaInfo.diferenciaApertura ?? 0).toLocaleString()}{" "}
+            {(aperturaInfo.diferenciaApertura ?? 0) > 0 ? "de más" : "de menos"} respecto a lo que dejó el turno
+            anterior (${(aperturaInfo.baseEsperada ?? 0).toLocaleString()}).
+            {aperturaInfo.motivoApertura && ` Motivo: ${aperturaInfo.motivoApertura}`}
+          </p>
+        )}
 
         {!resumen && (
           <>
@@ -162,19 +202,53 @@ export default function CuadreTurno({ idTurno, apertura, actorId, nombreUsuario,
                 {diferencia === 0 ? "(cuadra)" : diferencia > 0 ? "(sobra)" : "(falta)"}
               </p>
             )}
+
+            {valorFinal !== null && (
+              <>
+                <form className="row form-productos" onSubmit={(e) => e.preventDefault()}>
+                  <button type="button" onClick={() => setMostrarTecladoRetiro(true)} disabled={cerrando}>
+                    {retiro === null ? "¿Cuánto efectivo retiras?" : `Retiro: $${retiro.toLocaleString()}`}
+                  </button>
+                </form>
+                {retiro !== null &&
+                  (retiroExcede ? (
+                    <p className="error">El retiro no puede ser mayor que el efectivo contado.</p>
+                  ) : (
+                    <p>
+                      <strong>Queda en caja: ${(valorFinal - retiro).toLocaleString()}</strong>{" "}
+                      <span className="ayuda">(base del siguiente turno)</span>
+                    </p>
+                  ))}
+              </>
+            )}
           </>
         )}
 
         {errorCierre && <p className="error">{errorCierre}</p>}
 
         <div className="row-acciones">
-          <button onClick={confirmarCierre} disabled={!resumen || valorFinal === null || cerrando}>
+          <button
+            onClick={confirmarCierre}
+            disabled={!resumen || valorFinal === null || retiro === null || retiroExcede || cerrando}
+          >
             {cerrando ? "Cerrando e imprimiendo…" : "Confirmar cierre de turno"}
           </button>
           <button className="btn-eliminar" onClick={onCancelar} disabled={cerrando}>
             Cancelar
           </button>
         </div>
+
+        {mostrarTecladoRetiro && (
+          <TecladoNumerico
+            titulo="Efectivo que retiras de la caja"
+            valorInicial={retiro ?? undefined}
+            onConfirmar={(v) => {
+              setRetiro(v);
+              setMostrarTecladoRetiro(false);
+            }}
+            onCancelar={() => setMostrarTecladoRetiro(false)}
+          />
+        )}
 
         {mostrarTeclado && (
           <TecladoNumerico

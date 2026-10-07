@@ -207,7 +207,7 @@ export default function Ventas({ usuario, idTurno, onError }: Props) {
   const [pasoCobro, setPasoCobro] = useState<PasoCobro | null>(null);
   const [cobrando, setCobrando] = useState(false);
   const [incluyePropina, setIncluyePropina] = useState(false);
-  const [stockPorConfirmar, setStockPorConfirmar] = useState<{ pedido: Pedido; stock: number } | null>(null);
+  const [stockInsuficiente, setStockInsuficiente] = useState<{ nombre: string; stock: number } | null>(null);
   const [efectivoRecibido, setEfectivoRecibido] = useState("");
   const [mostrarTecladoEfectivo, setMostrarTecladoEfectivo] = useState(false);
   const [productoParaCantidad, setProductoParaCantidad] = useState<Producto | null>(null);
@@ -305,7 +305,15 @@ export default function Ventas({ usuario, idTurno, onError }: Props) {
       setProductoParaCantidad(null);
       await refrescarPedidos();
     } catch (e) {
-      onError(String(e));
+      const msg = String(e);
+      if (msg.startsWith("STOCK_INSUFICIENTE|")) {
+        // El aviso general queda detrás del modal: se cierra y se avisa con el de stock.
+        setStockInsuficiente({ nombre: productoParaCantidad.nombre, stock: Number(msg.split("|")[1]) });
+        setProductoParaCantidad(null);
+        await refrescarPedidos();
+      } else {
+        onError(msg);
+      }
     }
   }
 
@@ -319,19 +327,18 @@ export default function Ventas({ usuario, idTurno, onError }: Props) {
   }
 
   /** Botones +/− del resumen: suma o resta una unidad a la línea del pedido. */
-  async function cambiarCantidad(pedido: Pedido, delta: 1 | -1, forzar = false) {
+  async function cambiarCantidad(pedido: Pedido, delta: 1 | -1) {
     if (delta < 0 && pedido.cantidad <= 1) {
       await quitarPedido(pedido.id_pedido);
       return;
     }
     try {
-      await invoke("cambiar_cantidad_pedido", { idPedido: pedido.id_pedido, delta, forzar });
-      setStockPorConfirmar(null);
+      await invoke("cambiar_cantidad_pedido", { idPedido: pedido.id_pedido, delta });
       await refrescarPedidos();
     } catch (e) {
       const msg = String(e);
       if (msg.startsWith("STOCK_INSUFICIENTE|")) {
-        setStockPorConfirmar({ pedido, stock: Number(msg.split("|")[1]) });
+        setStockInsuficiente({ nombre: pedido.nombre_producto, stock: Number(msg.split("|")[1]) });
       } else {
         onError(msg);
       }
@@ -547,16 +554,20 @@ export default function Ventas({ usuario, idTurno, onError }: Props) {
                       <div className="grid-tarjetas grid-productos-modal">
                         {productosFiltrados.map((p) => {
                           const IconoProducto = iconoParaProducto(p.nombre, nombreCategoriaActiva);
+                          const agotado = categoriaContable && p.stock <= 0;
                           return (
                             <button
                               key={p.id_producto}
                               className="boton-producto"
                               onClick={() => setProductoParaCantidad(p)}
+                              disabled={agotado}
                             >
                               <IconoProducto size={28} strokeWidth={1.6} />
                               <span>{p.nombre}</span>
                               {categoriaContable && (
-                                <small className={p.stock <= 0 ? "stock-bajo" : ""}>stock {p.stock}</small>
+                                <small className={p.stock <= 0 ? "stock-bajo" : ""}>
+                                  {agotado ? "Agotado" : `stock ${p.stock}`}
+                                </small>
                               )}
                             </button>
                           );
@@ -577,6 +588,11 @@ export default function Ventas({ usuario, idTurno, onError }: Props) {
           <SeleccionCantidad
             nombreProducto={productoParaCantidad.nombre}
             valorUnitario={productoParaCantidad.valor}
+            maximo={
+              categorias.find((c) => c.id_categoria === productoParaCantidad.categoria)?.tipo !== "Sin Stock"
+                ? productoParaCantidad.stock
+                : undefined
+            }
             onConfirmar={confirmarCantidad}
             onCancelar={() => setProductoParaCantidad(null)}
           />
@@ -637,22 +653,21 @@ export default function Ventas({ usuario, idTurno, onError }: Props) {
           </div>
         )}
 
-        {stockPorConfirmar && (
-          <div className="modal-fondo" onClick={() => setStockPorConfirmar(null)}>
+        {stockInsuficiente && (
+          <div className="modal-fondo" onClick={() => setStockInsuficiente(null)}>
             <div className="modal-caja modal-cobro" onClick={(e) => e.stopPropagation()}>
               <h3>Stock insuficiente</h3>
               <p>
-                <strong>{stockPorConfirmar.pedido.nombre_producto}</strong>{" "}
-                {stockPorConfirmar.stock <= 0
-                  ? `no tiene stock disponible (${stockPorConfirmar.stock}).`
-                  : `solo tiene ${stockPorConfirmar.stock} en stock.`}
+                <strong>{stockInsuficiente.nombre}</strong>{" "}
+                {stockInsuficiente.stock <= 0
+                  ? "no tiene stock disponible."
+                  : `solo tiene ${stockInsuficiente.stock} en stock.`}
               </p>
-              <p className="ayuda">¿Agregar una unidad de todas formas? El stock quedará en negativo.</p>
+              <p className="ayuda">Registra la entrada en Inventario para poder venderlo.</p>
               <div className="row-acciones">
-                <button className="btn-principal" onClick={() => cambiarCantidad(stockPorConfirmar.pedido, 1, true)}>
-                  Agregar igual
+                <button className="btn-principal" onClick={() => setStockInsuficiente(null)}>
+                  Entendido
                 </button>
-                <button onClick={() => setStockPorConfirmar(null)}>Cancelar</button>
               </div>
             </div>
           </div>

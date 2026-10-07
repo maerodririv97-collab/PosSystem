@@ -40,6 +40,10 @@ export interface OperacionReporte {
   valor: number;
   administrador: string;
   turno: number;
+  /** 'Turno' (entra al cuadre) o 'General' (gastos del negocio). */
+  caja: string;
+  /** De dónde salió el dinero: 'Efectivo' o 'Transferencia'. */
+  forma_pago: string;
 }
 
 export interface TurnoReporte {
@@ -51,6 +55,14 @@ export interface TurnoReporte {
   valor_final: number | null;
   diferencia: number | null;
   cerrado_por: string | null;
+  /** Efectivo que se llevó quien cerró (null en turnos anteriores a los retiros). */
+  valor_retirado: number | null;
+  /** Lo que dejó el turno anterior (null si no se sabe). */
+  base_esperada: number | null;
+  /** Contado al abrir − lo que dejó el turno anterior. */
+  diferencia_apertura: number | null;
+  abierto_por: string | null;
+  motivo_apertura: string;
   n_ventas: number;
   total: number;
   propinas: number;
@@ -162,12 +174,27 @@ export interface Resumen {
   ticket: number;
   dias_con_venta: number;
   promedio_diario: number;
+  /** Egresos de la caja general (gastos del negocio). */
+  gastos: number;
+  /** Ventas (sin propinas) − gastos. */
+  ganancia: number;
+}
+
+/** Operaciones de la caja de turno (las que entran al cuadre). */
+export function operacionesTurno(d: DatosReporte): OperacionReporte[] {
+  return d.operaciones.filter((o) => o.caja !== "General");
+}
+
+/** Gastos del negocio: egresos registrados en la caja general. */
+export function gastosGenerales(d: DatosReporte): OperacionReporte[] {
+  return d.operaciones.filter((o) => o.caja === "General" && o.tipo === "Egreso");
 }
 
 export function resumen(d: DatosReporte): Resumen {
   const total = d.dias.reduce((s, x) => s + x.total, 0);
   const n_ventas = d.dias.reduce((s, x) => s + x.n_ventas, 0);
   const propinas = d.dias.reduce((s, x) => s + x.propinas, 0);
+  const gastos = gastosGenerales(d).reduce((s, o) => s + o.valor, 0);
   return {
     total,
     n_ventas,
@@ -175,6 +202,8 @@ export function resumen(d: DatosReporte): Resumen {
     ticket: n_ventas ? total / n_ventas : 0,
     dias_con_venta: d.dias.length,
     promedio_diario: d.dias.length ? total / d.dias.length : 0,
+    gastos,
+    ganancia: total - gastos,
   };
 }
 
@@ -440,10 +469,10 @@ export interface FilaOperacionesMes {
   egresos: number;
 }
 
-export function operacionesPorMes(d: DatosReporte): FilaOperacionesMes[] {
+export function operacionesPorMes(d: DatosReporte, operaciones: OperacionReporte[]): FilaOperacionesMes[] {
   const meses = ventasPorMes(d);
   const filas = meses.map((m) => ({ clave: m.clave, etiqueta: m.etiqueta, etiquetaCorta: m.etiquetaCorta, ingresos: 0, egresos: 0 }));
-  for (const o of d.operaciones) {
+  for (const o of operaciones) {
     const f = filas.find((x) => x.clave === o.fecha.slice(0, 7));
     if (!f) continue;
     if (o.tipo === "Ingreso") f.ingresos += o.valor;
@@ -459,9 +488,9 @@ export interface FilaConcepto {
   total: number;
 }
 
-export function operacionesPorConcepto(d: DatosReporte): FilaConcepto[] {
+export function operacionesPorConcepto(operaciones: OperacionReporte[]): FilaConcepto[] {
   const m = new Map<string, FilaConcepto>();
-  for (const o of d.operaciones) {
+  for (const o of operaciones) {
     const clave = `${o.tipo}|${o.concepto}`;
     const g = m.get(clave) ?? { tipo: o.tipo, concepto: o.concepto, cantidad: 0, total: 0 };
     g.cantidad += 1;

@@ -13,6 +13,7 @@ interface Operacion {
   valor: number;
   fecha: string;
   concepto: string;
+  caja: string;
 }
 
 interface Props {
@@ -68,6 +69,7 @@ export default function Operaciones({ idTurno, actorId, puedeGestionarConceptos,
           tipo,
           valor,
           concepto: observaciones,
+          caja: "Turno",
         },
       });
       setValor(null);

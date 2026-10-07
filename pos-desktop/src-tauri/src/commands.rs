@@ -5,7 +5,7 @@ use tauri::State;
 use crate::models::{
     Categoria, CerrarVenta, ConceptoOperacion, DesglosePago, DetalleDia, Mesa, MovimientoInventario, NuevaCategoria,
     NuevaMesa, NuevaOperacion, NuevoConceptoOperacion, NuevoProducto, NuevoUsuario, Operacion, Pedido, Producto,
-    ResumenTurno, Turno, Usuario, Venta, VentaAbierta, VentaDetalle, VentaDia, VentaProducto,
+    ResumenCajaGeneral, ResumenTurno, RetiroTurno, Turno, AlertaCaja, Usuario, Venta, VentaAbierta, VentaDetalle, VentaDia, VentaProducto,
 };
 
 #[tauri::command]
@@ -509,6 +509,16 @@ pub async fn agregar_pedido(
     .await
     .map_err(|e| e.to_string())?;
 
+    let controla_stock: bool = sqlx::query_scalar(SQL_CONTROLA_STOCK)
+        .bind(id_producto)
+        .fetch_one(pool.inner())
+        .await
+        .map_err(|e| e.to_string())?;
+    // Los productos de categorías 'Contable' no se pueden vender sin stock.
+    if controla_stock && producto.stock < cantidad as f64 {
+        return Err(format!("STOCK_INSUFICIENTE|{}", producto.stock));
+    }
+
     let valor = producto.valor * cantidad;
     let compra = producto.costo * cantidad;
 
@@ -525,11 +535,6 @@ pub async fn agregar_pedido(
     .await
     .map_err(|e| e.to_string())?;
 
-    let controla_stock: bool = sqlx::query_scalar(SQL_CONTROLA_STOCK)
-        .bind(id_producto)
-        .fetch_one(pool.inner())
-        .await
-        .map_err(|e| e.to_string())?;
     if controla_stock {
         sqlx::query("UPDATE productos SET stock = stock - ?1 WHERE id_producto = ?2")
             .bind(cantidad as f64)
@@ -585,14 +590,12 @@ pub async fn eliminar_pedido(pool: State<'_, SqlitePool>, id_pedido: i64) -> Res
 /// Suma o resta unidades a una línea de pedido (botones +/− del resumen), conservando
 /// el precio unitario con el que se registró la línea y ajustando el stock.
 /// Al sumar un producto de categoría 'Contable', si el stock no alcanza devuelve
-/// `STOCK_INSUFICIENTE|<stock>` para que la pantalla pida confirmación; con
-/// `forzar = true` se agrega igual. Los de categorías 'Sin Stock' no se validan.
+/// `STOCK_INSUFICIENTE|<stock>` y no se agrega. Los de categorías 'Sin Stock' no se validan.
 #[tauri::command]
 pub async fn cambiar_cantidad_pedido(
     pool: State<'_, SqlitePool>,
     id_pedido: i64,
     delta: i64,
-    forzar: bool,
 ) -> Result<(), String> {
     let mut tx = pool.inner().begin().await.map_err(|e| e.to_string())?;
 
@@ -620,7 +623,7 @@ pub async fn cambiar_cantidad_pedido(
         .await
         .map_err(|e| e.to_string())?;
 
-    if controla_stock && delta > 0 && !forzar {
+    if controla_stock && delta > 0 {
         let stock: f64 = sqlx::query_scalar("SELECT stock FROM productos WHERE id_producto = ?1")
             .bind(id_producto)
             .fetch_one(&mut *tx)
@@ -709,7 +712,8 @@ pub async fn login_pin(pool: State<'_, SqlitePool>, pin: i64) -> Result<Usuario,
 pub async fn obtener_turno_abierto(pool: State<'_, SqlitePool>) -> Result<Option<Turno>, String> {
     sqlx::query_as::<_, Turno>(
         "SELECT id_turno, apertura, cierre, valor_inicial, estado, valor_final, diferencia,
-                cerrado_por, NULL AS nombre_cerrado_por
+                cerrado_por, NULL AS nombre_cerrado_por, valor_retirado, base_esperada, diferencia_apertura,
+                abierto_por, NULL AS nombre_abierto_por, motivo_apertura
          FROM turnos WHERE estado = 'Abierto' LIMIT 1",
     )
     .fetch_optional(pool.inner())
@@ -717,8 +721,35 @@ pub async fn obtener_turno_abierto(pool: State<'_, SqlitePool>) -> Result<Option
     .map_err(|e| e.to_string())
 }
 
+/// Efectivo que dejó en caja el último turno cerrado (contado − retiro): es la
+/// base con la que debería abrir el siguiente. `None` si el último turno se
+/// cerró sin registrar retiro (turnos anteriores a este cambio) o no hay turnos.
+async fn calcular_base_esperada(pool: &SqlitePool) -> Result<Option<i64>, String> {
+    let ultimo: Option<(Option<i64>, Option<i64>)> = sqlx::query_as(
+        "SELECT valor_final, valor_retirado FROM turnos WHERE estado = 'Cerrado' ORDER BY id_turno DESC LIMIT 1",
+    )
+    .fetch_optional(pool)
+    .await
+    .map_err(|e| e.to_string())?;
+
+    Ok(match ultimo {
+        Some((Some(final_), Some(retirado))) => Some(final_ - retirado),
+        _ => None,
+    })
+}
+
 #[tauri::command]
-pub async fn abrir_turno(pool: State<'_, SqlitePool>, valor_inicial: i64) -> Result<Turno, String> {
+pub async fn base_esperada_turno(pool: State<'_, SqlitePool>) -> Result<Option<i64>, String> {
+    calcular_base_esperada(pool.inner()).await
+}
+
+#[tauri::command]
+pub async fn abrir_turno(
+    pool: State<'_, SqlitePool>,
+    valor_inicial: i64,
+    actor_id: i64,
+    motivo: Option<String>,
+) -> Result<Turno, String> {
     let existente = sqlx::query_scalar::<_, i64>("SELECT COUNT(*) FROM turnos WHERE estado = 'Abierto'")
         .fetch_one(pool.inner())
         .await
@@ -729,14 +760,27 @@ pub async fn abrir_turno(pool: State<'_, SqlitePool>, valor_inicial: i64) -> Res
     }
 
     let apertura = chrono::Local::now().format("%Y-%m-%d %H:%M:%S").to_string();
+    let base_esperada = calcular_base_esperada(pool.inner()).await?;
+    let diferencia_apertura = base_esperada.map(|b| valor_inicial - b);
+    let motivo = motivo.unwrap_or_default().trim().to_string();
+    if diferencia_apertura.unwrap_or(0) != 0 && motivo.is_empty() {
+        return Err("Indica el motivo por el que la caja no tiene lo que dejó el turno anterior.".to_string());
+    }
 
     sqlx::query_as::<_, Turno>(
-        "INSERT INTO turnos (apertura, cierre, valor_inicial, estado) VALUES (?1, NULL, ?2, 'Abierto')
+        "INSERT INTO turnos (apertura, cierre, valor_inicial, estado, base_esperada, diferencia_apertura,
+                             abierto_por, motivo_apertura)
+         VALUES (?1, NULL, ?2, 'Abierto', ?3, ?4, ?5, ?6)
          RETURNING id_turno, apertura, cierre, valor_inicial, estado, valor_final, diferencia,
-                   cerrado_por, NULL AS nombre_cerrado_por",
+                   cerrado_por, NULL AS nombre_cerrado_por, valor_retirado, base_esperada, diferencia_apertura,
+                abierto_por, NULL AS nombre_abierto_por, motivo_apertura",
     )
     .bind(&apertura)
     .bind(valor_inicial)
+    .bind(base_esperada)
+    .bind(diferencia_apertura)
+    .bind(actor_id)
+    .bind(&motivo)
     .fetch_one(pool.inner())
     .await
     .map_err(|e| e.to_string())
@@ -800,14 +844,14 @@ async fn calcular_resumen_turno(pool: &SqlitePool, id_turno: i64) -> Result<Resu
         .unwrap_or(0);
 
     let total_ingresos: i64 =
-        sqlx::query_scalar("SELECT COALESCE(SUM(valor), 0) FROM operaciones WHERE turno = ?1 AND tipo = 'Ingreso'")
+        sqlx::query_scalar("SELECT COALESCE(SUM(valor), 0) FROM operaciones WHERE turno = ?1 AND caja = 'Turno' AND tipo = 'Ingreso'")
             .bind(id_turno)
             .fetch_one(pool)
             .await
             .map_err(|e| e.to_string())?;
 
     let total_egresos: i64 =
-        sqlx::query_scalar("SELECT COALESCE(SUM(valor), 0) FROM operaciones WHERE turno = ?1 AND tipo = 'Egreso'")
+        sqlx::query_scalar("SELECT COALESCE(SUM(valor), 0) FROM operaciones WHERE turno = ?1 AND caja = 'Turno' AND tipo = 'Egreso'")
             .bind(id_turno)
             .fetch_one(pool)
             .await
@@ -870,10 +914,10 @@ pub async fn eliminar_concepto_operacion(pool: State<'_, SqlitePool>, id_concept
 pub async fn listar_operaciones(pool: State<'_, SqlitePool>, id_turno: i64) -> Result<Vec<Operacion>, String> {
     sqlx::query_as::<_, Operacion>(
         "SELECT o.id_operacion, o.tipo_concepto, c.nombre AS nombre_concepto, o.turno, o.administrador,
-                o.tipo, o.valor, o.fecha, o.concepto
+                o.tipo, o.valor, o.fecha, o.concepto, o.caja, o.forma_pago
          FROM operaciones o
          JOIN conceptos_operaciones c ON c.id_concepto_operacion = o.tipo_concepto
-         WHERE o.turno = ?1
+         WHERE o.turno = ?1 AND o.caja = 'Turno'
          ORDER BY o.id_operacion DESC",
     )
     .bind(id_turno)
@@ -884,11 +928,30 @@ pub async fn listar_operaciones(pool: State<'_, SqlitePool>, id_turno: i64) -> R
 
 #[tauri::command]
 pub async fn crear_operacion(pool: State<'_, SqlitePool>, operacion: NuevaOperacion) -> Result<Operacion, String> {
+    match operacion.caja.as_str() {
+        "Turno" => {}
+        // La caja general es solo del administrador y solo registra gastos.
+        "General" => {
+            verificar_admin(pool.inner(), operacion.administrador).await?;
+            if operacion.tipo != "Egreso" {
+                return Err("En la caja general solo se registran egresos.".to_string());
+            }
+        }
+        otra => return Err(format!("Caja inválida: {otra}")),
+    }
+    if operacion.forma_pago != "Efectivo" && operacion.forma_pago != "Transferencia" {
+        return Err(format!("Forma de pago inválida: {}", operacion.forma_pago));
+    }
+    // La caja del turno solo maneja efectivo.
+    if operacion.caja == "Turno" && operacion.forma_pago != "Efectivo" {
+        return Err("Las operaciones de la caja de turno son siempre en efectivo.".to_string());
+    }
+
     let fecha = chrono::Local::now().format("%Y-%m-%d %H:%M:%S").to_string();
 
     let id_operacion: i64 = sqlx::query_scalar(
-        "INSERT INTO operaciones (tipo_concepto, turno, administrador, tipo, valor, fecha, concepto)
-         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
+        "INSERT INTO operaciones (tipo_concepto, turno, administrador, tipo, valor, fecha, concepto, caja, forma_pago)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)
          RETURNING id_operacion",
     )
     .bind(operacion.tipo_concepto)
@@ -898,19 +961,172 @@ pub async fn crear_operacion(pool: State<'_, SqlitePool>, operacion: NuevaOperac
     .bind(operacion.valor)
     .bind(&fecha)
     .bind(&operacion.concepto)
+    .bind(&operacion.caja)
+    .bind(&operacion.forma_pago)
     .fetch_one(pool.inner())
     .await
     .map_err(|e| e.to_string())?;
 
     sqlx::query_as::<_, Operacion>(
         "SELECT o.id_operacion, o.tipo_concepto, c.nombre AS nombre_concepto, o.turno, o.administrador,
-                o.tipo, o.valor, o.fecha, o.concepto
+                o.tipo, o.valor, o.fecha, o.concepto, o.caja, o.forma_pago
          FROM operaciones o
          JOIN conceptos_operaciones c ON c.id_concepto_operacion = o.tipo_concepto
          WHERE o.id_operacion = ?1",
     )
     .bind(id_operacion)
     .fetch_one(pool.inner())
+    .await
+    .map_err(|e| e.to_string())
+}
+
+/// Gastos de la caja general en el rango [desde, hasta] (AAAA-MM-DD, inclusive).
+#[tauri::command]
+pub async fn listar_operaciones_caja_general(
+    pool: State<'_, SqlitePool>,
+    actor_id: i64,
+    desde: String,
+    hasta: String,
+) -> Result<Vec<Operacion>, String> {
+    verificar_admin(pool.inner(), actor_id).await?;
+    sqlx::query_as::<_, Operacion>(
+        "SELECT o.id_operacion, o.tipo_concepto, COALESCE(c.nombre, 'Sin concepto') AS nombre_concepto, o.turno,
+                o.administrador, o.tipo, o.valor, o.fecha, o.concepto, o.caja, o.forma_pago
+         FROM operaciones o
+         LEFT JOIN conceptos_operaciones c ON c.id_concepto_operacion = o.tipo_concepto
+         WHERE o.caja = 'General' AND substr(o.fecha, 1, 10) BETWEEN ?1 AND ?2
+         ORDER BY o.fecha DESC",
+    )
+    .bind(&desde)
+    .bind(&hasta)
+    .fetch_all(pool.inner())
+    .await
+    .map_err(|e| e.to_string())
+}
+
+/// Ventas pagadas (sin propinas) contra gastos de la caja general en el rango
+/// [desde, hasta]. Ganancia = ventas − gastos.
+#[tauri::command]
+pub async fn resumen_caja_general(
+    pool: State<'_, SqlitePool>,
+    actor_id: i64,
+    desde: String,
+    hasta: String,
+) -> Result<ResumenCajaGeneral, String> {
+    let pool = pool.inner();
+    verificar_admin(pool, actor_id).await?;
+
+    // Ventas sin propinas por forma de pago.
+    let ventas: Vec<(String, i64)> = sqlx::query_as(
+        "SELECT v.forma_pago, CAST(COALESCE(SUM(p.valor), 0) AS INTEGER)
+         FROM pedidos p JOIN ventas v ON v.id_venta = p.venta
+         WHERE v.estado = 'Pagada' AND substr(v.fecha, 1, 10) BETWEEN ?1 AND ?2
+         GROUP BY v.forma_pago",
+    )
+    .bind(&desde)
+    .bind(&hasta)
+    .fetch_all(pool)
+    .await
+    .map_err(|e| e.to_string())?;
+
+    let total_propinas: i64 = sqlx::query_scalar(
+        "SELECT CAST(ROUND(COALESCE(SUM(valor_propina), 0)) AS INTEGER)
+         FROM ventas WHERE estado = 'Pagada' AND substr(fecha, 1, 10) BETWEEN ?1 AND ?2",
+    )
+    .bind(&desde)
+    .bind(&hasta)
+    .fetch_one(pool)
+    .await
+    .map_err(|e| e.to_string())?;
+
+    let egresos: Vec<(String, i64)> = sqlx::query_as(
+        "SELECT forma_pago, COALESCE(SUM(valor), 0) FROM operaciones
+         WHERE caja = 'General' AND tipo = 'Egreso' AND substr(fecha, 1, 10) BETWEEN ?1 AND ?2
+         GROUP BY forma_pago",
+    )
+    .bind(&desde)
+    .bind(&hasta)
+    .fetch_all(pool)
+    .await
+    .map_err(|e| e.to_string())?;
+
+    let total_retiros: i64 = sqlx::query_scalar(
+        "SELECT COALESCE(SUM(valor_retirado), 0) FROM turnos
+         WHERE estado = 'Cerrado' AND substr(cierre, 1, 10) BETWEEN ?1 AND ?2",
+    )
+    .bind(&desde)
+    .bind(&hasta)
+    .fetch_one(pool)
+    .await
+    .map_err(|e| e.to_string())?;
+
+    let por_forma = |lista: &[(String, i64)], forma: &str| -> i64 {
+        lista.iter().filter(|(f, _)| f == forma).map(|(_, v)| v).sum()
+    };
+    let total_ventas: i64 = ventas.iter().map(|(_, v)| v).sum();
+    let total_egresos: i64 = egresos.iter().map(|(_, v)| v).sum();
+
+    Ok(ResumenCajaGeneral {
+        total_ventas,
+        ventas_efectivo: por_forma(&ventas, "Efectivo"),
+        ventas_transferencia: por_forma(&ventas, "Transferencia"),
+        total_propinas,
+        total_egresos,
+        egresos_efectivo: por_forma(&egresos, "Efectivo"),
+        egresos_transferencia: por_forma(&egresos, "Transferencia"),
+        total_retiros,
+        ganancia: total_ventas - total_egresos,
+    })
+}
+
+/// Retiros de efectivo hechos al cerrar turno en el rango [desde, hasta].
+#[tauri::command]
+pub async fn listar_retiros_caja_general(
+    pool: State<'_, SqlitePool>,
+    actor_id: i64,
+    desde: String,
+    hasta: String,
+) -> Result<Vec<RetiroTurno>, String> {
+    verificar_admin(pool.inner(), actor_id).await?;
+    sqlx::query_as::<_, RetiroTurno>(
+        "SELECT t.id_turno, t.cierre, (u.nombres || ' ' || u.apellidos) AS nombre_cerrado_por, t.valor_retirado
+         FROM turnos t
+         LEFT JOIN usuarios u ON u.id_usuario = t.cerrado_por
+         WHERE t.estado = 'Cerrado' AND t.valor_retirado > 0 AND substr(t.cierre, 1, 10) BETWEEN ?1 AND ?2
+         ORDER BY t.cierre DESC",
+    )
+    .bind(&desde)
+    .bind(&hasta)
+    .fetch_all(pool.inner())
+    .await
+    .map_err(|e| e.to_string())
+}
+
+/// Turnos del rango [desde, hasta] (por fecha de apertura) que abrieron o
+/// cerraron con diferencia de caja.
+#[tauri::command]
+pub async fn listar_alertas_caja(
+    pool: State<'_, SqlitePool>,
+    actor_id: i64,
+    desde: String,
+    hasta: String,
+) -> Result<Vec<AlertaCaja>, String> {
+    verificar_admin(pool.inner(), actor_id).await?;
+    sqlx::query_as::<_, AlertaCaja>(
+        "SELECT t.id_turno, t.apertura, t.cierre,
+                (ua.nombres || ' ' || ua.apellidos) AS nombre_abierto_por,
+                (uc.nombres || ' ' || uc.apellidos) AS nombre_cerrado_por,
+                t.base_esperada, t.valor_inicial, t.diferencia_apertura, t.motivo_apertura, t.diferencia
+         FROM turnos t
+         LEFT JOIN usuarios ua ON ua.id_usuario = t.abierto_por
+         LEFT JOIN usuarios uc ON uc.id_usuario = t.cerrado_por
+         WHERE (COALESCE(t.diferencia_apertura, 0) <> 0 OR COALESCE(t.diferencia, 0) <> 0)
+           AND substr(t.apertura, 1, 10) BETWEEN ?1 AND ?2
+         ORDER BY t.apertura DESC",
+    )
+    .bind(&desde)
+    .bind(&hasta)
+    .fetch_all(pool.inner())
     .await
     .map_err(|e| e.to_string())
 }
@@ -926,9 +1142,12 @@ pub async fn resumen_turno(pool: State<'_, SqlitePool>, id_turno: i64) -> Result
 pub async fn listar_turnos_dia(pool: State<'_, SqlitePool>, fecha: String) -> Result<Vec<Turno>, String> {
     sqlx::query_as::<_, Turno>(
         "SELECT t.id_turno, t.apertura, t.cierre, t.valor_inicial, t.estado, t.valor_final, t.diferencia,
-                t.cerrado_por, (u.nombres || ' ' || u.apellidos) AS nombre_cerrado_por
+                t.cerrado_por, (u.nombres || ' ' || u.apellidos) AS nombre_cerrado_por,
+                t.valor_retirado, t.base_esperada, t.diferencia_apertura,
+                t.abierto_por, (ua.nombres || ' ' || ua.apellidos) AS nombre_abierto_por, t.motivo_apertura
          FROM turnos t
          LEFT JOIN usuarios u ON u.id_usuario = t.cerrado_por
+         LEFT JOIN usuarios ua ON ua.id_usuario = t.abierto_por
          WHERE t.estado = 'Cerrado' AND substr(t.cierre, 1, 10) = ?1
          ORDER BY t.cierre",
     )
@@ -943,8 +1162,13 @@ pub async fn cerrar_turno(
     pool: State<'_, SqlitePool>,
     id_turno: i64,
     valor_final: i64,
+    valor_retirado: i64,
     actor_id: i64,
 ) -> Result<(), String> {
+    if valor_retirado < 0 || valor_retirado > valor_final {
+        return Err("El retiro no puede ser mayor que el efectivo contado en caja.".to_string());
+    }
+
     let ventas_abiertas = sqlx::query_scalar::<_, i64>(
         "SELECT COUNT(*) FROM ventas WHERE turno = ?1 AND estado = 'Abierta'",
     )
@@ -963,7 +1187,8 @@ pub async fn cerrar_turno(
     let cierre = chrono::Local::now().format("%Y-%m-%d %H:%M:%S").to_string();
 
     sqlx::query(
-        "UPDATE turnos SET cierre = ?1, estado = 'Cerrado', valor_final = ?2, diferencia = ?3, cerrado_por = ?4
+        "UPDATE turnos SET cierre = ?1, estado = 'Cerrado', valor_final = ?2, diferencia = ?3, cerrado_por = ?4,
+                           valor_retirado = ?6
          WHERE id_turno = ?5",
     )
     .bind(&cierre)
@@ -971,6 +1196,7 @@ pub async fn cerrar_turno(
     .bind(diferencia)
     .bind(actor_id)
     .bind(id_turno)
+    .bind(valor_retirado)
     .execute(pool.inner())
     .await
     .map_err(|e| e.to_string())?;

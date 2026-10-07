@@ -136,6 +136,28 @@ pub struct Turno {
     pub diferencia: Option<i64>,
     pub cerrado_por: Option<i64>,
     pub nombre_cerrado_por: Option<String>,
+    pub valor_retirado: Option<i64>,
+    pub base_esperada: Option<i64>,
+    pub diferencia_apertura: Option<i64>,
+    pub abierto_por: Option<i64>,
+    pub nombre_abierto_por: Option<String>,
+    pub motivo_apertura: String,
+}
+
+/// Turno con diferencia de caja al abrir (contra lo que dejó el anterior) o al
+/// cerrar (contado contra lo esperado). Se lista como alerta en la caja general.
+#[derive(Debug, Serialize, sqlx::FromRow)]
+pub struct AlertaCaja {
+    pub id_turno: i64,
+    pub apertura: String,
+    pub cierre: Option<String>,
+    pub nombre_abierto_por: Option<String>,
+    pub nombre_cerrado_por: Option<String>,
+    pub base_esperada: Option<i64>,
+    pub valor_inicial: i64,
+    pub diferencia_apertura: Option<i64>,
+    pub motivo_apertura: String,
+    pub diferencia: Option<i64>,
 }
 
 #[derive(Debug, Serialize, sqlx::FromRow)]
@@ -180,6 +202,8 @@ pub struct Operacion {
     pub valor: i64,
     pub fecha: String,
     pub concepto: String,
+    pub caja: String,
+    pub forma_pago: String,
 }
 
 #[derive(Debug, Deserialize)]
@@ -190,6 +214,44 @@ pub struct NuevaOperacion {
     pub tipo: String,
     pub valor: i64,
     pub concepto: String,
+    /// 'Turno' (por defecto) o 'General'.
+    #[serde(default = "caja_turno")]
+    pub caja: String,
+    /// 'Efectivo' (por defecto) o 'Transferencia'.
+    #[serde(default = "efectivo")]
+    pub forma_pago: String,
+}
+
+fn caja_turno() -> String {
+    "Turno".to_string()
+}
+
+fn efectivo() -> String {
+    "Efectivo".to_string()
+}
+
+/// Totales de la caja general en un rango de fechas: ventas (sin propinas)
+/// contra los gastos registrados por el administrador.
+#[derive(Debug, Serialize)]
+pub struct ResumenCajaGeneral {
+    pub total_ventas: i64,
+    pub ventas_efectivo: i64,
+    pub ventas_transferencia: i64,
+    pub total_propinas: i64,
+    pub total_egresos: i64,
+    pub egresos_efectivo: i64,
+    pub egresos_transferencia: i64,
+    pub total_retiros: i64,
+    pub ganancia: i64,
+}
+
+/// Efectivo que se llevó quien cerró un turno.
+#[derive(Debug, Serialize, sqlx::FromRow)]
+pub struct RetiroTurno {
+    pub id_turno: i64,
+    pub cierre: String,
+    pub nombre_cerrado_por: Option<String>,
+    pub valor_retirado: i64,
 }
 
 #[derive(Debug, Serialize, sqlx::FromRow)]

@@ -3,11 +3,13 @@ import { useState } from "react";
 interface Props {
   nombreProducto: string;
   valorUnitario: number;
+  /** Stock disponible (productos contables); sin límite si no se indica. */
+  maximo?: number;
   onConfirmar: (cantidad: number) => void;
   onCancelar: () => void;
 }
 
-export default function SeleccionCantidad({ nombreProducto, valorUnitario, onConfirmar, onCancelar }: Props) {
+export default function SeleccionCantidad({ nombreProducto, valorUnitario, maximo, onConfirmar, onCancelar }: Props) {
   const [cantidad, setCantidad] = useState("1");
 
   function presionar(digito: number) {
@@ -21,10 +23,11 @@ export default function SeleccionCantidad({ nombreProducto, valorUnitario, onCon
 
   function confirmar() {
     const valor = Number(cantidad) || 1;
-    if (valor > 0) onConfirmar(valor);
+    if (valor > 0 && !excede) onConfirmar(valor);
   }
 
   const total = (Number(cantidad) || 0) * valorUnitario;
+  const excede = maximo !== undefined && (Number(cantidad) || 1) > maximo;
 
   return (
     <div className="modal-fondo" onClick={onCancelar}>
@@ -34,6 +37,11 @@ export default function SeleccionCantidad({ nombreProducto, valorUnitario, onCon
 
         <div className="pin-display">{cantidad}</div>
         <p className="total-venta">Total: ${total.toLocaleString()}</p>
+        {maximo !== undefined && (
+          <p className={excede ? "error" : "ayuda"}>
+            {excede ? `Solo hay ${maximo} en stock.` : `Disponibles: ${maximo}`}
+          </p>
+        )}
 
         <div className="pin-pad">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
@@ -51,7 +59,9 @@ export default function SeleccionCantidad({ nombreProducto, valorUnitario, onCon
         </div>
 
         <div className="row-acciones">
-          <button onClick={confirmar}>Agregar</button>
+          <button onClick={confirmar} disabled={excede}>
+            Agregar
+          </button>
           <button className="btn-eliminar" onClick={onCancelar}>
             Cancelar
           </button>

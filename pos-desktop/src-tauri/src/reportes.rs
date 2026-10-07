@@ -60,6 +60,9 @@ pub struct OperacionReporte {
     pub valor: f64,
     pub administrador: String,
     pub turno: i64,
+    /// 'Turno' o 'General' (gastos del negocio).
+    pub caja: String,
+    pub forma_pago: String,
 }
 
 #[derive(Debug, Serialize, sqlx::FromRow)]
@@ -72,6 +75,11 @@ pub struct TurnoReporte {
     pub valor_final: Option<f64>,
     pub diferencia: Option<f64>,
     pub cerrado_por: Option<String>,
+    pub valor_retirado: Option<f64>,
+    pub base_esperada: Option<f64>,
+    pub diferencia_apertura: Option<f64>,
+    pub abierto_por: Option<String>,
+    pub motivo_apertura: String,
     pub n_ventas: i64,
     pub total: f64,
     pub propinas: f64,
@@ -195,7 +203,7 @@ pub async fn datos_reporte(pool: State<'_, SqlitePool>, desde: String, hasta: St
                 o.concepto AS observacion,
                 CAST(o.valor AS REAL) AS valor,
                 COALESCE(u.nombres || ' ' || u.apellidos, '') AS administrador,
-                o.turno
+                o.turno, o.caja, o.forma_pago
          FROM operaciones o
          LEFT JOIN conceptos_operaciones c ON c.id_concepto_operacion = o.tipo_concepto
          LEFT JOIN usuarios u ON u.id_usuario = o.administrador
@@ -214,6 +222,11 @@ pub async fn datos_reporte(pool: State<'_, SqlitePool>, desde: String, hasta: St
                 CAST(t.valor_final AS REAL) AS valor_final,
                 CAST(t.diferencia AS REAL) AS diferencia,
                 u.nombres || ' ' || u.apellidos AS cerrado_por,
+                CAST(t.valor_retirado AS REAL) AS valor_retirado,
+                CAST(t.base_esperada AS REAL) AS base_esperada,
+                CAST(t.diferencia_apertura AS REAL) AS diferencia_apertura,
+                ua.nombres || ' ' || ua.apellidos AS abierto_por,
+                t.motivo_apertura,
                 (SELECT COUNT(*) FROM ventas v WHERE v.turno = t.id_turno AND v.estado = 'Pagada') AS n_ventas,
                 CAST(COALESCE((SELECT SUM(p.valor) FROM pedidos p JOIN ventas v ON v.id_venta = p.venta
                                WHERE v.turno = t.id_turno AND v.estado = 'Pagada'), 0) AS REAL) AS total,
@@ -221,6 +234,7 @@ pub async fn datos_reporte(pool: State<'_, SqlitePool>, desde: String, hasta: St
                                WHERE v.turno = t.id_turno AND v.estado = 'Pagada'), 0) AS REAL) AS propinas
          FROM turnos t
          LEFT JOIN usuarios u ON u.id_usuario = t.cerrado_por
+         LEFT JOIN usuarios ua ON ua.id_usuario = t.abierto_por
          WHERE substr(t.apertura, 1, 10) BETWEEN ?1 AND ?2
          ORDER BY t.apertura",
     )

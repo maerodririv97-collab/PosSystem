@@ -15,6 +15,8 @@ import {
   DoorOpen,
   LogOut,
   X,
+  Wallet,
+  Landmark,
 } from "lucide-react";
 import Login, { UsuarioSesion } from "./components/Login";
 import AbrirTurno, { Turno } from "./components/AbrirTurno";
@@ -26,6 +28,7 @@ import Mesas from "./components/Mesas";
 import Ventas from "./components/Ventas";
 import CuadreTurno from "./components/CuadreTurno";
 import Operaciones from "./components/Operaciones";
+import CajaGeneral from "./components/CajaGeneral";
 import Inventario from "./components/Inventario";
 import Reportes from "./components/Reportes";
 import BaseDeDatos from "./components/BaseDeDatos";
@@ -62,6 +65,7 @@ const TABS_OPERATIVO: { id: Tab; label: string; icono: typeof Coffee }[] = [
 
 type SubTabCatalogo = "categorias" | "productos";
 type SubTabGestion = "mesas" | "usuarios";
+type SubTabOperaciones = "turno" | "general";
 
 function App() {
   const [usuario, setUsuario] = useState<UsuarioSesion | null>(null);
@@ -69,6 +73,7 @@ function App() {
   const [tab, setTab] = useState<Tab>("ventas");
   const [subTabCatalogo, setSubTabCatalogo] = useState<SubTabCatalogo>("categorias");
   const [subTabGestion, setSubTabGestion] = useState<SubTabGestion>("mesas");
+  const [subTabOperaciones, setSubTabOperaciones] = useState<SubTabOperaciones>("turno");
   const [error, setError] = useState("");
 
   // El aviso de error se oculta solo; si no, queda pegado aunque lo siguiente salga bien.
@@ -123,7 +128,7 @@ function App() {
   }
 
   if (turno === null) {
-    return <AbrirTurno onTurnoAbierto={setTurno} onError={setError} />;
+    return <AbrirTurno actorId={usuario.id_usuario} onTurnoAbierto={setTurno} onError={setError} />;
   }
 
   const esDesarrollador = usuario.perfil === "Desarrollador";
@@ -238,12 +243,37 @@ function App() {
         )}
 
         {tab === "operaciones" && (
-          <Operaciones
-            idTurno={turno.id_turno}
-            actorId={usuario.id_usuario}
-            puedeGestionarConceptos={esAdmin(usuario.perfil)}
-            onError={setError}
-          />
+          <section>
+            {/* La caja general (gastos del negocio) es solo del administrador. */}
+            {esAdmin(usuario.perfil) && (
+              <nav className="subtabs">
+                <button
+                  className={subTabOperaciones === "turno" ? "tab-activo" : ""}
+                  onClick={() => setSubTabOperaciones("turno")}
+                >
+                  <Wallet size={16} />
+                  Caja de turno
+                </button>
+                <button
+                  className={subTabOperaciones === "general" ? "tab-activo" : ""}
+                  onClick={() => setSubTabOperaciones("general")}
+                >
+                  <Landmark size={16} />
+                  Caja general
+                </button>
+              </nav>
+            )}
+            {esAdmin(usuario.perfil) && subTabOperaciones === "general" ? (
+              <CajaGeneral idTurno={turno.id_turno} actorId={usuario.id_usuario} onError={setError} />
+            ) : (
+              <Operaciones
+                idTurno={turno.id_turno}
+                actorId={usuario.id_usuario}
+                puedeGestionarConceptos={esAdmin(usuario.perfil)}
+                onError={setError}
+              />
+            )}
+          </section>
         )}
         {tab === "reportes" && <Reportes onError={setError} />}
         {tab === "base-de-datos" && esDesarrollador && (
@@ -256,6 +286,11 @@ function App() {
         <CuadreTurno
           idTurno={turno.id_turno}
           apertura={turno.apertura}
+          aperturaInfo={{
+            baseEsperada: turno.base_esperada,
+            diferenciaApertura: turno.diferencia_apertura,
+            motivoApertura: turno.motivo_apertura,
+          }}
           actorId={usuario.id_usuario}
           nombreUsuario={`${usuario.nombres} ${usuario.apellidos}`}
           onCerrado={() => {

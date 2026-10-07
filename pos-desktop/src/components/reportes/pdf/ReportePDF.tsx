@@ -13,8 +13,10 @@ import {
   fechaDia,
   fechaLarga,
   numero,
+  gastosGenerales,
   operacionesPorConcepto,
   operacionesPorMes,
+  operacionesTurno,
   porcentaje,
   productosPorQuincena,
   propinasPorQuincena,
@@ -616,18 +618,19 @@ function SeccionHorarios({ n, d }: { n: number; d: DatosReporte }) {
 }
 
 function SeccionOperaciones({ n, d, detallado }: { n: number; d: DatosReporte; detallado: boolean }) {
-  const conceptos = operacionesPorConcepto(d);
-  const meses = operacionesPorMes(d);
-  const ingresos = d.operaciones.filter((o) => o.tipo === "Ingreso").reduce((s, o) => s + o.valor, 0);
-  const egresos = d.operaciones.filter((o) => o.tipo !== "Ingreso").reduce((s, o) => s + o.valor, 0);
+  const ops = operacionesTurno(d);
+  const conceptos = operacionesPorConcepto(ops);
+  const meses = operacionesPorMes(d, ops);
+  const ingresos = ops.filter((o) => o.tipo === "Ingreso").reduce((s, o) => s + o.valor, 0);
+  const egresos = ops.filter((o) => o.tipo !== "Ingreso").reduce((s, o) => s + o.valor, 0);
   const cierres = conceptos.filter((c) => c.tipo !== "Ingreso" && /cierre/i.test(c.concepto)).reduce((s, c) => s + c.total, 0);
   return (
     <Seccion
       n={n}
-      titulo="Operaciones de Caja — Ingresos y Egresos"
-      descripcion="Movimientos manuales de caja (distintos de las ventas): aportes y abonos como ingresos; entregas de cierre de turno, pagos a proveedores y compras como egresos."
+      titulo="Operaciones de Caja de Turno — Ingresos y Egresos"
+      descripcion="Movimientos manuales de la caja del turno (distintos de las ventas), que entran al cuadre: aportes y abonos como ingresos; entregas de cierre de turno, pagos a proveedores y compras como egresos. Los gastos de la caja general se muestran en su propia sección."
     >
-      {d.operaciones.length === 0 ? (
+      {ops.length === 0 ? (
         <Text style={s.descripcion}>No se registraron operaciones de caja en el período.</Text>
       ) : (
         <>
@@ -689,7 +692,7 @@ function SeccionOperaciones({ n, d, detallado }: { n: number; d: DatosReporte; d
                   { titulo: "Registró", ancho: 1.5 },
                   { titulo: "Valor", ancho: 1.2, alinear: "right" },
                 ]}
-                filas={d.operaciones.map((o) => ({
+                filas={ops.map((o) => ({
                   celdas: [
                     `${fechaCorta(o.fecha)} ${o.fecha.slice(11, 16)}`,
                     o.tipo,
@@ -708,6 +711,136 @@ function SeccionOperaciones({ n, d, detallado }: { n: number; d: DatosReporte; d
   );
 }
 
+/** Turnos que abrieron o cerraron con diferencia de caja. Va en ambos reportes. */
+function SeccionAlertasCaja({ n, d }: { n: number; d: DatosReporte }) {
+  const alertas = d.turnos.filter((t) => t.diferencia_apertura || t.diferencia);
+  const faltaApertura = alertas.reduce((s, t) => s + Math.min(0, t.diferencia_apertura ?? 0), 0);
+  const faltaCierre = alertas.reduce((s, t) => s + Math.min(0, t.diferencia ?? 0), 0);
+  return (
+    <Seccion
+      n={n}
+      titulo="Alertas de Caja"
+      descripcion="Turnos que abrieron con un efectivo distinto al que dejó el turno anterior (diferencia de apertura) o que cerraron con un efectivo distinto al esperado (diferencia de cierre)."
+    >
+      <Tabla
+        columnas={[
+          { titulo: "N°", ancho: 0.5, alinear: "center" },
+          { titulo: "Apertura", ancho: 1.2 },
+          { titulo: "Abrió", ancho: 1.5 },
+          { titulo: "Dif. apertura", ancho: 1.2, alinear: "right" },
+          { titulo: "Motivo", ancho: 2.3 },
+          { titulo: "Cerró", ancho: 1.5 },
+          { titulo: "Dif. cierre", ancho: 1.2, alinear: "right" },
+        ]}
+        filas={alertas.map((t) => ({
+          celdas: [
+            String(t.id_turno),
+            fechaHoraCorta(t.apertura),
+            t.abierto_por ?? "—",
+            t.diferencia_apertura ? dinero(t.diferencia_apertura) : "—",
+            t.motivo_apertura || "—",
+            t.cerrado_por ?? "—",
+            t.diferencia ? dinero(t.diferencia) : "—",
+          ],
+          fondo: (t.diferencia_apertura ?? 0) < 0 || (t.diferencia ?? 0) < 0 ? COLOR.resaltadoMalo : undefined,
+        }))}
+      />
+      <Nota>{`Faltantes al abrir turno: ${dinero(faltaApertura)}. Faltantes al cerrar turno: ${dinero(
+        faltaCierre,
+      )}. Una diferencia de apertura indica que el dinero cambió entre el cierre de un turno y la apertura del siguiente.`}</Nota>
+    </Seccion>
+  );
+}
+
+function SeccionGastos({ n, d, detallado }: { n: number; d: DatosReporte; detallado: boolean }) {
+  const r = resumen(d);
+  const gastos = gastosGenerales(d);
+  const conceptos = operacionesPorConcepto(gastos);
+  const ventasForma = (f: string) => d.formas_pago.filter((x) => x.forma_pago === f).reduce((s, x) => s + x.total, 0);
+  const gastosForma = (f: string) => gastos.filter((o) => o.forma_pago === f).reduce((s, o) => s + o.valor, 0);
+  const retiros = d.turnos.reduce((s, t) => s + (t.valor_retirado ?? 0), 0);
+  return (
+    <Seccion
+      n={n}
+      titulo="Gastos y Ganancia — Caja General"
+      descripcion="Gastos del negocio registrados por el administrador en la caja general (no afectan el cuadre de los turnos). La ganancia es el total vendido sin propinas menos estos gastos."
+    >
+      <Tabla
+        columnas={[
+          { titulo: "Concepto", ancho: 3 },
+          { titulo: "Valor", ancho: 1.6, alinear: "right" },
+        ]}
+        filas={[
+          { celdas: ["Total vendido (sin propinas)", dinero(r.total)] },
+          { celdas: ["      Efectivo", dinero(ventasForma("Efectivo"))] },
+          { celdas: ["      Transferencia", dinero(ventasForma("Transferencia"))] },
+          { celdas: ["Total gastos", dinero(-r.gastos)] },
+          { celdas: ["      Pagados en efectivo", dinero(-gastosForma("Efectivo"))] },
+          { celdas: ["      Pagados por transferencia", dinero(-gastosForma("Transferencia"))] },
+          {
+            celdas: ["Ganancia", dinero(r.ganancia)],
+            total: true,
+            fondo: r.ganancia < 0 ? COLOR.resaltadoMalo : undefined,
+          },
+        ]}
+      />
+      <Nota>{`Al cerrar turno se retiraron ${dinero(retiros)} en efectivo; descontando los gastos pagados en efectivo (${dinero(
+        gastosForma("Efectivo"),
+      )}) deberían quedar ${dinero(retiros - gastosForma("Efectivo"))}. Por transferencia se recibieron ${dinero(
+        ventasForma("Transferencia"),
+      )} y se pagaron ${dinero(gastosForma("Transferencia"))}: deberían quedar ${dinero(
+        ventasForma("Transferencia") - gastosForma("Transferencia"),
+      )} en la cuenta (sin contar propinas).`}</Nota>
+      {gastos.length === 0 ? (
+        <Text style={s.descripcion}>No se registraron gastos en la caja general en el período.</Text>
+      ) : (
+        <>
+          <Text style={s.subtitulo2}>Gastos por concepto</Text>
+          <Tabla
+            columnas={[
+              { titulo: "Concepto", ancho: 3 },
+              { titulo: "N° gastos", ancho: 1.2, alinear: "center" },
+              { titulo: "% del gasto", ancho: 1.2, alinear: "right" },
+              { titulo: "Total", ancho: 1.6, alinear: "right" },
+            ]}
+            filas={[
+              ...conceptos.map((c) => ({
+                celdas: [c.concepto, numero(c.cantidad), porcentaje(c.total, r.gastos), dinero(c.total)],
+              })),
+              { celdas: ["Total", numero(gastos.length), "", dinero(r.gastos)], total: true },
+            ]}
+          />
+          {detallado && (
+            <>
+              <Text style={s.subtitulo2}>Listado de gastos</Text>
+              <Tabla
+                columnas={[
+                  { titulo: "Fecha", ancho: 1.5 },
+                  { titulo: "Concepto", ancho: 1.6 },
+                  { titulo: "Observación", ancho: 2.2 },
+                  { titulo: "Pago", ancho: 1.1 },
+                  { titulo: "Registró", ancho: 1.4 },
+                  { titulo: "Valor", ancho: 1.2, alinear: "right" },
+                ]}
+                filas={gastos.map((o) => ({
+                  celdas: [
+                    `${fechaCorta(o.fecha)} ${o.fecha.slice(11, 16)}`,
+                    o.concepto,
+                    o.observacion,
+                    o.forma_pago,
+                    o.administrador,
+                    dinero(o.valor),
+                  ],
+                }))}
+              />
+            </>
+          )}
+        </>
+      )}
+    </Seccion>
+  );
+}
+
 /** "01/08 10:14" */
 function fechaHoraCorta(f: string): string {
   return `${fechaCorta(f).slice(0, 5)} ${f.slice(11, 16)}`;
@@ -715,7 +848,7 @@ function fechaHoraCorta(f: string): string {
 
 function SeccionTurnos({ n, d }: { n: number; d: DatosReporte }) {
   // Turnos sin ventas ni cuadre (aperturas/cierres de prueba o de ajuste) no aportan al reporte.
-  const turnos = d.turnos.filter((t) => t.n_ventas > 0 || t.valor_final !== null);
+  const turnos = d.turnos.filter((t) => t.n_ventas > 0 || t.valor_final !== null || t.diferencia_apertura);
   const ocultos = d.turnos.length - turnos.length;
   const conDiferencia = turnos.filter((t) => t.diferencia);
   const faltante = conDiferencia.filter((t) => (t.diferencia ?? 0) < 0).reduce((s, t) => s + (t.diferencia ?? 0), 0);
@@ -733,12 +866,13 @@ function SeccionTurnos({ n, d }: { n: number; d: DatosReporte }) {
           { titulo: "N°", ancho: 0.6, alinear: "center" },
           { titulo: "Apertura", ancho: 1.4 },
           { titulo: "Cierre", ancho: 1.4 },
-          { titulo: "Cerró", ancho: 1.7 },
-          { titulo: "Ventas", ancho: 0.8, alinear: "center" },
-          { titulo: "Total", ancho: 1.3, alinear: "right" },
+          { titulo: "Cerró", ancho: 1.5 },
+          { titulo: "Ventas", ancho: 0.7, alinear: "center" },
+          { titulo: "Total", ancho: 1.2, alinear: "right" },
           { titulo: "Base", ancho: 1.1, alinear: "right" },
-          { titulo: "Contado", ancho: 1.2, alinear: "right" },
-          { titulo: "Diferencia", ancho: 1.2, alinear: "right" },
+          { titulo: "Contado", ancho: 1.1, alinear: "right" },
+          { titulo: "Diferencia", ancho: 1.1, alinear: "right" },
+          { titulo: "Retiro", ancho: 1.1, alinear: "right" },
         ]}
         filas={turnos.map((t) => ({
           celdas: [
@@ -751,8 +885,9 @@ function SeccionTurnos({ n, d }: { n: number; d: DatosReporte }) {
             dinero(t.valor_inicial),
             t.valor_final === null ? "—" : dinero(t.valor_final),
             t.diferencia === null ? "—" : dinero(t.diferencia),
+            t.valor_retirado === null ? "—" : dinero(t.valor_retirado),
           ],
-          fondo: (t.diferencia ?? 0) < 0 ? COLOR.resaltadoMalo : undefined,
+          fondo: (t.diferencia ?? 0) < 0 || (t.diferencia_apertura ?? 0) < 0 ? COLOR.resaltadoMalo : undefined,
         }))}
       />
       {conDiferencia.length > 0 && (
@@ -760,6 +895,7 @@ function SeccionTurnos({ n, d }: { n: number; d: DatosReporte }) {
           sobrante,
         )}. Los turnos con faltante están resaltados.`}</Nota>
       )}
+
     </Seccion>
   );
 }
@@ -811,6 +947,24 @@ function ReporteDocumento({ d, tipo }: { d: DatosReporte; tipo: TipoReporte }) {
           </View>
         </View>
 
+        <View style={[s.kpis, { marginTop: 0 }]}>
+          <View style={s.kpi}>
+            <Text style={s.kpiEtiqueta}>Gastos totales</Text>
+            <Text style={s.kpiValor}>{dinero(r.gastos)}</Text>
+            <Text style={s.kpiNota}>caja general</Text>
+          </View>
+          <View style={s.kpi}>
+            <Text style={s.kpiEtiqueta}>Ganancia</Text>
+            <Text style={[s.kpiValor, r.ganancia < 0 ? { color: COLOR.serie3 } : {}]}>{dinero(r.ganancia)}</Text>
+            <Text style={s.kpiNota}>ventas − gastos</Text>
+          </View>
+          <View style={[s.kpi, { marginRight: 0 }]}>
+            <Text style={s.kpiEtiqueta}>Margen</Text>
+            <Text style={s.kpiValor}>{porcentaje(r.ganancia, r.total)}</Text>
+            <Text style={s.kpiNota}>de lo vendido</Text>
+          </View>
+        </View>
+
         {r.n_ventas === 0 ? (
           <Text style={s.vacio}>No hay ventas pagadas registradas en este período.</Text>
         ) : (
@@ -825,13 +979,15 @@ function ReporteDocumento({ d, tipo }: { d: DatosReporte; tipo: TipoReporte }) {
             {detallado && <SeccionMeseros n={sig()} d={d} />}
             <SeccionDiaSemana n={sig()} d={d} />
             {detallado && <SeccionHorarios n={sig()} d={d} />}
+            {d.turnos.some((t) => t.diferencia_apertura || t.diferencia) && <SeccionAlertasCaja n={sig()} d={d} />}
+            <SeccionGastos n={sig()} d={d} detallado={detallado} />
             <SeccionOperaciones n={sig()} d={d} detallado={detallado} />
             {detallado && d.turnos.some((t) => t.n_ventas > 0 || t.valor_final !== null) && <SeccionTurnos n={sig()} d={d} />}
           </>
         )}
 
         <Text style={[s.nota, { marginTop: 18, fontSize: 7.5 }]}>
-          {`Fuente: base de datos del Sistema POS Maison du Café. Ventas con estado "Pagada"; los totales de venta no incluyen propinas. Generado el ${fechaLarga(
+          {`Fuente: base de datos del Sistema POS Maison du Café. Ventas con estado "Pagada"; los totales de venta no incluyen propinas; la ganancia es el total vendido menos los gastos de la caja general. Generado el ${fechaLarga(
             d.generado,
           )} a las ${d.generado.slice(11, 16)}.`}
         </Text>

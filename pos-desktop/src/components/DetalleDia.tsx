@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { construirTextoCierreTurno, ResumenTurno } from "./CuadreTurno";
 import { normalizarParaImpresora } from "../lib/textoImpresion";
+import ImprimirVentasDia from "./ImprimirVentasDia";
 
 interface DesglosePago {
   forma_pago: string;
@@ -36,6 +37,11 @@ interface TurnoDia {
   diferencia: number | null;
   cerrado_por: number | null;
   nombre_cerrado_por: string | null;
+  valor_retirado: number | null;
+  base_esperada: number | null;
+  diferencia_apertura: number | null;
+  nombre_abierto_por: string | null;
+  motivo_apertura: string;
 }
 
 interface Props {
@@ -48,6 +54,7 @@ export default function DetalleDia({ fecha, onCerrar, onError }: Props) {
   const [detalle, setDetalle] = useState<DetalleDiaData | null>(null);
   const [turnos, setTurnos] = useState<TurnoDia[]>([]);
   const [reimprimiendo, setReimprimiendo] = useState<number | null>(null);
+  const [mostrarImprimirVentas, setMostrarImprimirVentas] = useState(false);
 
   useEffect(() => {
     invoke<DetalleDiaData>("detalle_dia", { fecha })
@@ -71,6 +78,12 @@ export default function DetalleDia({ fecha, onCerrar, onError }: Props) {
           t.nombre_cerrado_por ?? "",
           resumen,
           t.valor_final ?? 0,
+          t.valor_retirado,
+          {
+            baseEsperada: t.base_esperada,
+            diferenciaApertura: t.diferencia_apertura,
+            motivoApertura: t.motivo_apertura,
+          },
         ),
       );
       await invoke("imprimir_recibo_termico", { texto, conLogo: true });
@@ -113,6 +126,20 @@ export default function DetalleDia({ fecha, onCerrar, onError }: Props) {
                 <span>
                   Turno #{t.id_turno} · {t.apertura} → {t.cierre}
                   {t.nombre_cerrado_por ? ` · ${t.nombre_cerrado_por}` : ""}
+                  {(t.diferencia_apertura ?? 0) !== 0 && (
+                    <small className="error" style={{ display: "block" }}>
+                      Abrió con ${(t.diferencia_apertura ?? 0).toLocaleString()}{" "}
+                      {(t.diferencia_apertura ?? 0) > 0 ? "de más" : "de menos"}
+                      {t.nombre_abierto_por ? ` (${t.nombre_abierto_por})` : ""}
+                      {t.motivo_apertura ? ` · ${t.motivo_apertura}` : ""}
+                    </small>
+                  )}
+                  {(t.diferencia ?? 0) !== 0 && (
+                    <small className="error" style={{ display: "block" }}>
+                      Cerró con diferencia de ${(t.diferencia ?? 0).toLocaleString()}{" "}
+                      {(t.diferencia ?? 0) > 0 ? "(sobra)" : "(falta)"}
+                    </small>
+                  )}
                 </span>
                 <button onClick={() => reimprimirReporte(t)} disabled={reimprimiendo === t.id_turno}>
                   Reimprimir reporte
@@ -123,8 +150,20 @@ export default function DetalleDia({ fecha, onCerrar, onError }: Props) {
         )}
 
         <div className="row-acciones">
+          <button onClick={() => setMostrarImprimirVentas(true)} disabled={!detalle}>
+            Imprimir reporte de ventas del día
+          </button>
           <button onClick={onCerrar}>Cerrar</button>
         </div>
+
+        {mostrarImprimirVentas && detalle && (
+          <ImprimirVentasDia
+            fecha={fecha}
+            ventas={detalle.ventas}
+            onCerrar={() => setMostrarImprimirVentas(false)}
+            onError={onError}
+          />
+        )}
       </div>
     </div>
   );
