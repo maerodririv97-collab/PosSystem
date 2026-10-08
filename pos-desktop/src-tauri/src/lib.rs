@@ -36,6 +36,8 @@ pub fn run() {
             commands::ajustar_stock,
             commands::dar_de_baja_stock,
             commands::listar_movimientos_inventario,
+            commands::historico_producto,
+            commands::inventario_dia,
             commands::listar_usuarios,
             commands::crear_usuario,
             commands::actualizar_usuario,

@@ -3,7 +3,7 @@ use sqlx::SqlitePool;
 use tauri::State;
 
 use crate::models::{
-    Categoria, CerrarVenta, ConceptoOperacion, DesglosePago, DetalleDia, Mesa, MovimientoInventario, NuevaCategoria,
+    Categoria, CerrarVenta, InventarioDiaProducto, VentaProductoDia, ConceptoOperacion, DesglosePago, DetalleDia, Mesa, MovimientoInventario, NuevaCategoria,
     NuevaMesa, NuevaOperacion, NuevoConceptoOperacion, NuevoProducto, NuevoUsuario, Operacion, Pedido, Producto,
     ResumenCajaGeneral, ResumenTurno, RetiroTurno, Turno, AlertaCaja, Usuario, Venta, VentaAbierta, VentaDetalle, VentaDia, VentaProducto,
 };
@@ -283,6 +283,60 @@ pub async fn listar_movimientos_inventario(pool: State<'_, SqlitePool>) -> Resul
          JOIN usuarios u ON u.id_usuario = m.usuario
          ORDER BY m.id_movimiento DESC",
     )
+    .fetch_all(pool.inner())
+    .await
+    .map_err(|e| e.to_string())
+}
+
+/// Histórico de ventas pagadas de un producto, agrupado por día (más reciente primero).
+#[tauri::command]
+pub async fn historico_producto(
+    pool: State<'_, SqlitePool>,
+    id_producto: i64,
+) -> Result<Vec<VentaProductoDia>, String> {
+    sqlx::query_as::<_, VentaProductoDia>(
+        "SELECT substr(v.fecha, 1, 10) AS dia, CAST(SUM(p.cantidad) AS REAL) AS cantidad,
+                CAST(SUM(p.valor) AS REAL) AS total, COUNT(DISTINCT v.id_venta) AS n_ventas
+         FROM pedidos p
+         JOIN ventas v ON v.id_venta = p.venta
+         WHERE p.producto = ?1 AND v.estado = 'Pagada'
+         GROUP BY substr(v.fecha, 1, 10)
+         ORDER BY dia DESC",
+    )
+    .bind(id_producto)
+    .fetch_all(pool.inner())
+    .await
+    .map_err(|e| e.to_string())
+}
+
+/// Inventario de los productos contables en un día. El stock al final del día se
+/// reconstruye desde el stock actual: se le suma lo vendido después de ese día
+/// (el stock se descuenta al agregar el pedido, por eso cuentan también las ventas
+/// abiertas) y se le resta lo que cambiaron los ajustes y bajas posteriores.
+#[tauri::command]
+pub async fn inventario_dia(
+    pool: State<'_, SqlitePool>,
+    fecha: String,
+) -> Result<Vec<InventarioDiaProducto>, String> {
+    sqlx::query_as::<_, InventarioDiaProducto>(
+        "SELECT p.id_producto, p.categoria, p.nombre,
+                CAST(COALESCE((SELECT SUM(pe.cantidad) FROM pedidos pe JOIN ventas v ON v.id_venta = pe.venta
+                     WHERE pe.producto = p.id_producto AND v.estado IN ('Pagada', 'Abierta')
+                       AND substr(v.fecha, 1, 10) = ?1), 0) AS REAL) AS vendidos,
+                CAST(COALESCE((SELECT SUM(m.stock_nuevo - m.stock_anterior) FROM movimientos_inventario m
+                     WHERE m.producto = p.id_producto AND substr(m.fecha, 1, 10) = ?1), 0) AS REAL) AS movimientos,
+                CAST(p.stock
+                     + COALESCE((SELECT SUM(pe.cantidad) FROM pedidos pe JOIN ventas v ON v.id_venta = pe.venta
+                         WHERE pe.producto = p.id_producto AND v.estado IN ('Pagada', 'Abierta')
+                           AND substr(v.fecha, 1, 10) > ?1), 0)
+                     - COALESCE((SELECT SUM(m.stock_nuevo - m.stock_anterior) FROM movimientos_inventario m
+                         WHERE m.producto = p.id_producto AND substr(m.fecha, 1, 10) > ?1), 0) AS REAL) AS stock_final
+         FROM productos p
+         JOIN categorias c ON c.id_categoria = p.categoria
+         WHERE c.tipo <> 'Sin Stock'
+         ORDER BY lower(p.nombre)",
+    )
+    .bind(&fecha)
     .fetch_all(pool.inner())
     .await
     .map_err(|e| e.to_string())

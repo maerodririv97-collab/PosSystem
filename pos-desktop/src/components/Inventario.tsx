@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import type { Categoria } from "./Categorias";
 import ImprimirInventario from "./ImprimirInventario";
+import ImprimirInventarioDia from "./ImprimirInventarioDia";
+import HistoricoProducto from "./HistoricoProducto";
 
 interface Producto {
   id_producto: number;
@@ -44,6 +46,8 @@ export default function Inventario({ actorId, onError }: Props) {
   const [categoriaActiva, setCategoriaActiva] = useState<number | null>(null);
   const [productoSeleccionado, setProductoSeleccionado] = useState<Producto | null>(null);
   const [mostrarImprimir, setMostrarImprimir] = useState(false);
+  const [mostrarImprimirDia, setMostrarImprimirDia] = useState(false);
+  const [productoHistorico, setProductoHistorico] = useState<Producto | null>(null);
 
   async function cargar() {
     try {
@@ -124,7 +128,10 @@ export default function Inventario({ actorId, onError }: Props) {
     <section>
       <div className="cabecera-venta">
         <h3>Inventario</h3>
-        <button onClick={() => setMostrarImprimir(true)}>Imprimir inventario</button>
+        <div className="row-acciones">
+          <button onClick={() => setMostrarImprimir(true)}>Imprimir inventario</button>
+          <button onClick={() => setMostrarImprimirDia(true)}>Imprimir inventario de un día</button>
+        </div>
       </div>
 
       <nav className="tabs">
@@ -167,6 +174,14 @@ export default function Inventario({ actorId, onError }: Props) {
             <h3>{productoSeleccionado.nombre}</h3>
             <p className="ayuda">Stock actual: {productoSeleccionado.stock}</p>
             <div className="row-acciones">
+              <button
+                onClick={() => {
+                  setProductoHistorico(productoSeleccionado);
+                  setProductoSeleccionado(null);
+                }}
+              >
+                Histórico de ventas
+              </button>
               <button
                 onClick={() => {
                   setNuevoStock(String(productoSeleccionado.stock));
@@ -256,6 +271,18 @@ export default function Inventario({ actorId, onError }: Props) {
             </form>
           </div>
         </div>
+      )}
+
+      {productoHistorico && (
+        <HistoricoProducto
+          idProducto={productoHistorico.id_producto}
+          nombre={productoHistorico.nombre}
+          onCerrar={() => setProductoHistorico(null)}
+        />
+      )}
+
+      {mostrarImprimirDia && (
+        <ImprimirInventarioDia categorias={categorias} onCerrar={() => setMostrarImprimirDia(false)} />
       )}
 
       {mostrarImprimir && (

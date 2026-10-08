@@ -1205,6 +1205,15 @@ button:disabled {
   text-align: right;
 }
 
+.recibo-col-valor.recibo-col-num {
+  width: 15%;
+}
+
+.historico-producto {
+  max-height: 55vh;
+  overflow-y: auto;
+}
+
 .recibo-totales {
   border-top: 1px dashed #000;
   margin-top: 6px;

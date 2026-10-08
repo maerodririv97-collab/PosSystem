@@ -268,6 +268,27 @@ pub struct MovimientoInventario {
     pub fecha: String,
 }
 
+/// Ventas pagadas de un producto en un día (histórico del producto).
+#[derive(Debug, Serialize, sqlx::FromRow)]
+pub struct VentaProductoDia {
+    pub dia: String,
+    pub cantidad: f64,
+    pub total: f64,
+    pub n_ventas: i64,
+}
+
+/// Inventario de un producto contable en un día: lo vendido, los ajustes/bajas
+/// y el stock con el que terminó ese día.
+#[derive(Debug, Serialize, sqlx::FromRow)]
+pub struct InventarioDiaProducto {
+    pub id_producto: i64,
+    pub categoria: i64,
+    pub nombre: String,
+    pub vendidos: f64,
+    pub movimientos: f64,
+    pub stock_final: f64,
+}
+
 #[derive(Debug, Serialize, sqlx::FromRow)]
 pub struct VentaDia {
     pub fecha: String,
